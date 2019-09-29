@@ -6,6 +6,7 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Header} from 'react-native-elements';
 import {iOSUIKit} from 'react-native-typography';
 import {SafeAreaView} from 'react-navigation';
+import {Avatar} from 'react-native-elements';
 
 export default class Dashboard extends React.Component {
   state = {
@@ -66,6 +67,7 @@ export default class Dashboard extends React.Component {
                   key={project.key}
                   onPress={() => this.goToProjectDetails(project.key)}>
                   <View style={styles.movieContainer}>
+                    <Avatar rounded title="MD" />
                     <Text
                       style={[
                         iOSUIKit.largeTitleEmphasizedObject,

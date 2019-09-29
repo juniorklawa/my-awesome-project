@@ -7,17 +7,21 @@ import {
   Button,
   StatusBar,
   Picker,
+  TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { CheckBox } from 'react-native-elements'
+import {CheckBox} from 'react-native-elements';
 import {iOSUIKit} from 'react-native-typography';
 import {SafeAreaView} from 'react-navigation';
 import {Header} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Entypo';
 
 export default class Details extends React.Component {
   state = {
+    projects: [],
     project: {},
     todo: [],
+    checked: false,
   };
 
   async componentDidMount() {
@@ -36,16 +40,19 @@ export default class Details extends React.Component {
     });
   }
 
-  async deleteProject(id) {
+  deleteProject(id) {
     const newProjects = this.state.projects.filter(obj => obj.key != id);
     this.setState({
       projects: newProjects,
     });
 
-    await AsyncStorage.setItem(
-      'projectss',
-      JSON.stringify(this.state.projects),
-    );
+    AsyncStorage.setItem('projectss', JSON.stringify(newProjects));
+
+    this.props.navigation.navigate('Dashboard');
+  };
+
+  goToDashBoard() {
+    this.props.navigation.navigate('Dashboard');
   }
 
   render() {
@@ -72,7 +79,18 @@ export default class Details extends React.Component {
             </Text>
           }
           statusBarProps={{barStyle: 'light-content'}}
-          leftComponent={{icon: 'star', style: {color: '#fff'}}}
+          leftComponent={
+            <TouchableOpacity onPress={() => this.goToDashBoard()}>
+              <Icon name="chevron-thin-left" size={23} color="#fff" solid />
+            </TouchableOpacity>
+          }
+          rightComponent={
+            <TouchableOpacity
+              style={{marginRight: 10}}
+              onPress={() => this.deleteProject(key)}>
+              <Icon name="trash" size={23} color="#fff" solid />
+            </TouchableOpacity>
+          }
           barStyle="light-content" // or directly
           containerStyle={{
             backgroundColor: '#7159c1',
@@ -104,21 +122,15 @@ export default class Details extends React.Component {
           <Text style={[iOSUIKit.bodyWhite, {color: '#363a3f', fontSize: 15}]}>
             Estimate to finish {worktime}
           </Text>
-          <View style={{flexDirection: 'row'}}>
+
+          <View>
             <Text style={[styles.category, {fontSize: 25}]}>To-do</Text>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              height: 100,
-              borderRadius: 5,
-              backgroundColor: 'white',
-            }}>
             {todo.map(task => (
-              <View>
-                <Text>{task.task}</Text>
-                <CheckBox title="Click Here"/>
-              </View>
+              <CheckBox
+                title={task.task}
+                checked={this.state.checked}
+                onPress={() => this.setState({checked: !this.state.checked})}
+              />
             ))}
           </View>
         </View>

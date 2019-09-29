@@ -10,9 +10,11 @@ import {
   TextInput,
   Image,
   StatusBar,
+  Picker,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-navigation';
+import Icon from 'react-native-vector-icons/Entypo';
 
 export default class New extends Component {
   state = {
@@ -44,7 +46,11 @@ export default class New extends Component {
       task: this.state.todoItem,
     });
 
-    console.log(this.state.todo)
+    this.setState({
+      todoItem: ''
+    })
+
+    console.log(this.state.todo);
   };
 
   handleSubmit = async () => {
@@ -84,6 +90,10 @@ export default class New extends Component {
     this.props.navigation.navigate('Dashboard');
   };
 
+  goToDashBoard() {
+    this.props.navigation.navigate('Dashboard');
+  }
+
   render() {
     StatusBar.setBarStyle('light-content', true);
     return (
@@ -97,7 +107,11 @@ export default class New extends Component {
             </Text>
           }
           statusBarProps={{barStyle: 'light-content'}}
-          leftComponent={{icon: 'star', style: {color: '#fff'}}}
+          leftComponent={
+            <TouchableOpacity onPress={() => this.goToDashBoard()}>
+              <Icon name="chevron-thin-left" size={23} color="#fff" solid />
+            </TouchableOpacity>
+          }
           barStyle="light-content" // or directly
           containerStyle={{
             backgroundColor: '#7159c1',
@@ -121,7 +135,6 @@ export default class New extends Component {
             <TextInput
               style={styles.input}
               autoCorrect={false}
-              autoCapitalize="none"
               placeholder="Project name"
               placeholderTextColor="#999"
               value={this.state.title}
@@ -169,7 +182,12 @@ export default class New extends Component {
               value={this.state.category}
               onChangeText={category => this.setState({category})}
             />
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <TextInput
                 style={[styles.input, {flex: 5}]}
                 autoCorrect={false}
@@ -181,20 +199,36 @@ export default class New extends Component {
               />
               <TouchableOpacity
                 onPress={() => this.addTodo()}
-                style={{flex: 1}}>
-                <View
-                  style={{
-                    width: 50,
-                    height: 50,
-                    backgroundColor: 'blue',
-                  }}></View>
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: 10,
+                }}>
+                <Icon name="plus" size={40} color="#7159c1" solid />
               </TouchableOpacity>
+            </View>
+            <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+              <Text style={{color:'#666'}}>Category</Text>
+              <Picker
+                selectedValue={this.state.language}
+                placeholder="Teste"
+                style={{height: 50, width: 300}}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({language: itemValue})
+                }>
+                <Picker.Item label="Mobile App" value="Mobile App" />
+                <Picker.Item label="Desktop App" value="Desktop App" />
+                <Picker.Item label="Tool" value="Tool" />
+                <Picker.Item label="Bot" value="Bot" />
+                <Picker.Item label="Other" value="Other" />
+              </Picker>
             </View>
 
             <TouchableOpacity
               style={styles.shareButton}
               onPress={() => this.handleSubmit()}>
-              <Text style={styles.shareButtonText}>Adicionar</Text>
+              <Text style={styles.shareButtonText}>Add</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
