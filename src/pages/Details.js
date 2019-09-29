@@ -1,15 +1,23 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button, StatusBar, Picker } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Button,
+  StatusBar,
+  Picker,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { iOSUIKit } from 'react-native-typography';
-import { SafeAreaView } from 'react-navigation';
+import { CheckBox } from 'react-native-elements'
+import {iOSUIKit} from 'react-native-typography';
+import {SafeAreaView} from 'react-navigation';
+import {Header} from 'react-native-elements';
 
 export default class Details extends React.Component {
   state = {
-    projects: [],
-    project: null,
-    teste: ['0', '1', '2'],
+    project: {},
+    todo: [],
   };
 
   async componentDidMount() {
@@ -20,15 +28,12 @@ export default class Details extends React.Component {
       projects: projects,
     });
 
-    const Detail = await this.state.projects.filter(
-      obj => obj.key === projectId,
-    );
+    const detail = await this.state.projects.find(obj => obj.key === projectId);
+    const todoDetail = await detail.todo;
     await this.setState({
-      projects: Detail,
-      project: projects[0],
+      project: detail,
+      todo: todoDetail,
     });
-
-    console.table(projects[0]);
   }
 
   async deleteProject(id) {
@@ -44,69 +49,79 @@ export default class Details extends React.Component {
   }
 
   render() {
+    const {todo} = this.state;
+    todo.map(task => console.log(task.task));
     StatusBar.setBarStyle('light-content', true);
+    const {
+      key,
+      title,
+      shortDescription,
+      tags,
+      category,
+      worktime,
+      date,
+    } = this.state.project;
     return (
       <SafeAreaView>
-        {this.state.projects.map(project => (
-
-
-
-          <View key={project.key} style={styles.movieContainer}>
+        <Header
+          placement="left"
+          centerComponent={
             <Text
-              style={[
-                iOSUIKit.largeTitleEmphasizedObject,
-                {
-                  color: '#363a3f',
-                  fontSize: 23,
-                  marginTop: -5,
-                  padding: 0,
-                },
-              ]}>
-
-              {project.title}
-
+              style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
+              {this.state.project.title}
             </Text>
-            <Text
-              style={[
-                iOSUIKit.subheadEmphasized,
-                { color: '#929699', fontSize: 14, marginTop: -10 },
-              ]}>
-              Created at {project.date}
-            </Text>
-            <Text
-              style={[
-                iOSUIKit.bodyWhite,
-                { color: '#363a3f', fontSize: 15, marginTop: 10 },
-              ]}>
-              Description: {project.shortDescription}
-            </Text>
+          }
+          statusBarProps={{barStyle: 'light-content'}}
+          leftComponent={{icon: 'star', style: {color: '#fff'}}}
+          barStyle="light-content" // or directly
+          containerStyle={{
+            backgroundColor: '#7159c1',
+            justifyContent: 'space-around',
+          }}
+        />
 
-            <Text style={styles.tags}>Tags: {project.tags}</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.category}>Category: {project.category}</Text>
-            </View>
+        <View key={key} style={styles.container}>
+          <Text
+            style={[
+              iOSUIKit.subheadEmphasized,
+              {color: '#929699', fontSize: 14, marginTop: -10},
+            ]}>
+            Created at {date}
+          </Text>
+          <Text
+            style={[
+              iOSUIKit.bodyWhite,
+              {color: '#363a3f', fontSize: 15, marginTop: 10},
+            ]}>
+            Description: {shortDescription}
+          </Text>
 
-            <Text
-              style={[
-                iOSUIKit.bodyWhite,
-                { color: '#363a3f', fontSize: 15 },
-              ]}>
-              Estimate to finish {project.worktime}
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[styles.category, { fontSize: 25 }]}>To-do</Text>
-            </View>
-            <View style={{ width: "100%", height: 100, borderRadius: 5, backgroundColor: '#7159c1' }}>
-
-            </View>
-            <View style={{ width: "100%", height: 100, borderRadius: 5, backgroundColor: '#7159c1', marginTop: 10 }}>
-              <Text>
-                2: FEATURES
-                </Text>
-            </View>
+          <Text style={styles.tags}>Tags: {tags}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.category}>Category: {category}</Text>
           </View>
 
-        ))}
+          <Text style={[iOSUIKit.bodyWhite, {color: '#363a3f', fontSize: 15}]}>
+            Estimate to finish {worktime}
+          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={[styles.category, {fontSize: 25}]}>To-do</Text>
+          </View>
+          <View
+            style={{
+              width: '100%',
+              height: 100,
+              borderRadius: 5,
+              backgroundColor: 'white',
+            }}>
+            {todo.map(task => (
+              <View>
+                <Text>{task.task}</Text>
+                <CheckBox title="Click Here"/>
+              </View>
+            ))}
+          </View>
+        </View>
       </SafeAreaView>
     );
   }

@@ -3,6 +3,7 @@ import {View, Text, Image, StyleSheet, Button, StatusBar} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {Header} from 'react-native-elements';
 import {iOSUIKit} from 'react-native-typography';
 import {SafeAreaView} from 'react-navigation';
 
@@ -34,24 +35,29 @@ export default class Dashboard extends React.Component {
 
   async goToProjectDetails(id) {
     //console.log(id);
-    this.props.navigation.navigate('Details', {projectId: id, otherParam: id,});
+    this.props.navigation.navigate('Details', {projectId: id, otherParam: id});
   }
 
   render() {
     StatusBar.setBarStyle('light-content', true);
     return (
-      <SafeAreaView style={{backgroundColor: '#000', flex: 1}}>
-        <View
-          style={{
-            padding: 12,
-            height: 100,
-            backgroundColor: '#000',
-            justifyContent: 'flex-end',
-          }}>
-          <Text style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
-            My ideas
-          </Text>
-        </View>
+      <SafeAreaView style={{flex: 1}}>
+        <Header
+          placement="left"
+          centerComponent={
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
+              My ideas
+            </Text>
+          }
+          statusBarProps={{barStyle: 'light-content'}}
+          barStyle="light-content" // or directly
+          containerStyle={{
+            backgroundColor: '#7159c1',
+            justifyContent: 'space-around',
+          }}
+        />
+
         <ScrollView>
           <View style={styles.container}>
             {this.state.projects.length > 0 ? (
