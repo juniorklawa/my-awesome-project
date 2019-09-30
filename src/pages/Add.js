@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {iOSUIKit} from 'react-native-typography';
-import {Header} from 'react-native-elements';
+import {Header,ListItem} from 'react-native-elements';
 import {
   View,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
   Image,
   StatusBar,
   Picker,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -27,6 +27,8 @@ export default class New extends Component {
     date: new Date(),
     todo: [],
     projects: [],
+    estimatedTime: '',
+    estimatedInterval: '',
   };
 
   componentDidMount = async () => {
@@ -47,8 +49,8 @@ export default class New extends Component {
     });
 
     this.setState({
-      todoItem: ''
-    })
+      todoItem: '',
+    });
 
     console.log(this.state.todo);
   };
@@ -74,7 +76,7 @@ export default class New extends Component {
       shortDescription: this.state.shortDescription,
       category: this.state.category,
       tags: this.state.tags,
-      worktime: this.state.worktime,
+      worktime: `${this.state.estimatedTime} ${this.state.estimatedInterval}`,
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
@@ -96,6 +98,9 @@ export default class New extends Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
+
+
+
     return (
       <SafeAreaView style={{flex: 1}}>
         <Header
@@ -163,25 +168,68 @@ export default class New extends Component {
               onChangeText={tags => this.setState({tags})}
             />
 
-            <TextInput
-              style={styles.input}
-              autoCorrect={false}
-              autoCapitalize="none"
-              placeholder="Duration preview"
-              placeholderTextColor="#999"
-              value={this.state.worktime}
-              onChangeText={worktime => this.setState({worktime})}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginStart: 5,
+              }}>
+              <Text style={{color: '#666', fontSize: 15}}>Estimate time: </Text>
 
-            <TextInput
-              style={styles.input}
-              autoCorrect={false}
-              autoCapitalize="none"
-              placeholder="Category"
-              placeholderTextColor="#999"
-              value={this.state.category}
-              onChangeText={category => this.setState({category})}
-            />
+              <Picker
+                selectedValue={this.state.estimatedTime}
+                style={{height: 50, width: 100}}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({estimatedTime: itemValue})
+                }>
+                <Picker.Item label="1" value="1" />
+                <Picker.Item label="2" value="2" />
+                <Picker.Item label="3" value="3" />
+                <Picker.Item label="4" value="4" />
+                <Picker.Item label="5" value="5" />
+                <Picker.Item label="6" value="6" />
+                <Picker.Item label="7" value="7" />
+                <Picker.Item label="8" value="8" />
+                <Picker.Item label="9" value="9" />
+                <Picker.Item label="10" value="10" />
+              </Picker>
+
+              <Picker
+                selectedValue={this.state.estimatedInterval}
+                style={{height: 50, width: 100}}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({estimatedInterval: itemValue})
+                }>
+                <Picker.Item label="days" value="days" />
+                <Picker.Item label="weeks" value="weeks" />
+                <Picker.Item label="months" value="months" />
+                <Picker.Item label="years" value="years" />
+              </Picker>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginStart: 5,
+              }}>
+              <Text style={{color: '#666', fontSize: 15}}>Category</Text>
+              <Picker
+                selectedValue={this.state.category}
+                placeholder="Teste"
+                style={{height: 50, width: 150}}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({category: itemValue})
+                }>
+                <Picker.Item label="Mobile App" value="Mobile App" />
+                <Picker.Item label="Desktop App" value="Desktop App" />
+                <Picker.Item label="Tool" value="Tool" />
+                <Picker.Item label="Bot" value="Bot" />
+                <Picker.Item label="Other" value="Other" />
+              </Picker>
+            </View>
             <View
               style={{
                 flexDirection: 'row',
@@ -208,21 +256,15 @@ export default class New extends Component {
                 <Icon name="plus" size={40} color="#7159c1" solid />
               </TouchableOpacity>
             </View>
-            <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-              <Text style={{color:'#666'}}>Category</Text>
-              <Picker
-                selectedValue={this.state.language}
-                placeholder="Teste"
-                style={{height: 50, width: 300}}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({language: itemValue})
-                }>
-                <Picker.Item label="Mobile App" value="Mobile App" />
-                <Picker.Item label="Desktop App" value="Desktop App" />
-                <Picker.Item label="Tool" value="Tool" />
-                <Picker.Item label="Bot" value="Bot" />
-                <Picker.Item label="Other" value="Other" />
-              </Picker>
+
+            <View>
+              {this.state.todo.map((l, i) => (
+                <ListItem
+                  key={i}
+                  subtitle={l.task}
+                  rightIcon={  <Icon name="trash" size={23} color="#666" solid />}
+                />
+              ))}
             </View>
 
             <TouchableOpacity

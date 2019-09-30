@@ -67,7 +67,6 @@ export default class Dashboard extends React.Component {
                   key={project.key}
                   onPress={() => this.goToProjectDetails(project.key)}>
                   <View style={styles.movieContainer}>
-                    <Avatar rounded title="MD" />
                     <Text
                       style={[
                         iOSUIKit.largeTitleEmphasizedObject,
