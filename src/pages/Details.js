@@ -35,6 +35,8 @@ export default class Details extends React.Component {
       project: detail,
       todo: todoDetail,
     });
+
+    console.log(this.state.todo)
   }
 
   deleteProject(id) {
@@ -66,7 +68,7 @@ export default class Details extends React.Component {
       date,
     } = this.state.project;
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{backgroundColor:'#fff'}}>
         <Header
           placement="left"
           centerComponent={
@@ -125,8 +127,8 @@ export default class Details extends React.Component {
             {todo.map(task => (
               <CheckBox
                 title={task.task}
-                checked={this.state.checked}
-                onPress={() => this.setState({checked: !this.state.checked})}
+                checked={task.checked}
+                onPress={() => this.setState({checked: !task.checked})}
               />
             ))}
           </View>
@@ -140,7 +142,6 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
     padding: 12,
-    backgroundColor: '#ECEFF1',
     minHeight: '100%',
     height: 500,
   },

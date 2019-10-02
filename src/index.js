@@ -8,12 +8,14 @@ import {
 import Dashboard from './pages/Dashboard';
 import Add from './pages/Add';
 import Details from './pages/Details'
+import Edit from './pages/Edit'
 
 const RootStack = createSwitchNavigator(
   {
     Dashboard: Dashboard,
     Add: Add,
-    Details: Details
+    Details: Details,
+    Edit: Edit
   }
 );
 

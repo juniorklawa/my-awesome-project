@@ -6,7 +6,10 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Header} from 'react-native-elements';
 import {iOSUIKit} from 'react-native-typography';
 import {SafeAreaView} from 'react-navigation';
-import {Avatar} from 'react-native-elements';
+import {Dimensions} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+const height = Dimensions.get('window').height;
 
 export default class Dashboard extends React.Component {
   state = {
@@ -35,14 +38,18 @@ export default class Dashboard extends React.Component {
   }
 
   async goToProjectDetails(id) {
-    //console.log(id);
     this.props.navigation.navigate('Details', {projectId: id, otherParam: id});
+  }
+
+  async goToEdit(id){
+    this.props.navigation.navigate('Edit', {projectId: id});
   }
 
   render() {
     StatusBar.setBarStyle('light-content', true);
+
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: '#ECEFF1'}}>
         <Header
           placement="left"
           centerComponent={
@@ -67,18 +74,30 @@ export default class Dashboard extends React.Component {
                   key={project.key}
                   onPress={() => this.goToProjectDetails(project.key)}>
                   <View style={styles.movieContainer}>
-                    <Text
-                      style={[
-                        iOSUIKit.largeTitleEmphasizedObject,
-                        {
-                          color: '#363a3f',
-                          fontSize: 23,
-                          marginTop: -5,
-                          padding: 0,
-                        },
-                      ]}>
-                      {project.title}
-                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={[
+                          iOSUIKit.largeTitleEmphasizedObject,
+                          {
+                            color: '#363a3f',
+                            fontSize: 23,
+                            marginTop: -5,
+                            padding: 0,
+                          },
+                        ]}>
+                        {project.title}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => this.goToEdit(project.key)}>
+                        <View>
+                          <Icon name="edit" size={23} color="#666" solid />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                     <Text
                       style={[
                         iOSUIKit.subheadEmphasized,
@@ -150,7 +169,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: '#ECEFF1',
     minHeight: '100%',
-    height: 500,
+    //height: height,
   },
   category: {
     fontWeight: 'bold',

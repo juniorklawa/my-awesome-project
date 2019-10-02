@@ -16,7 +16,7 @@ import {
 import {SafeAreaView} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 
-export default class New extends Component {
+export default class Edit extends Component {
   state = {
     title: '',
     shortDescription: '',
@@ -32,12 +32,30 @@ export default class New extends Component {
   };
 
   componentDidMount = async () => {
+    const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('projectss');
-    this.state.projects = (await JSON.parse(data)) || [];
+    const projects = (await JSON.parse(data)) || [];
     await this.setState({
       projects: projects,
     });
-    console.log(this.state.projects);
+
+    const detail = await this.state.projects.find(obj => obj.key === projectId);
+    const todoDetail = await detail.todo;
+    await this.setState({
+      project: detail,
+      todo: todoDetail,
+    });
+
+    await this.setState({
+      title: this.state.project.title,
+      shortDescription: this.state.project.shortDescription,
+      tags: this.state.project.tags,
+      estimatedTime: this.state.project.estimatedTime,
+      estimatedInterval: this.state.project.estimatedInterval,
+      category: this.state.category,
+    });
+
+    console.log(this.state.title);
   };
 
   addTodo = async () => {
@@ -46,14 +64,11 @@ export default class New extends Component {
 
     this.state.todo.push({
       task: this.state.todoItem,
-      checked: false
     });
 
     this.setState({
       todoItem: '',
     });
-
-    console.log(this.state.todo);
   };
 
   handleSubmit = async () => {
@@ -65,12 +80,29 @@ export default class New extends Component {
     data.append('worktime', this.state.worktime);
     data.append('tags', this.state.tags);
 
-    this.state.date =
+    /* this.state.date =
       this.state.date.getDate() +
       '/' +
       (this.state.date.getMonth() + 1) +
       '/' +
-      this.state.date.getFullYear();
+      this.state.date.getFullYear();*/
+
+    this.state.projects = this.state.projects
+      .filter(project => {
+        return this.state.projects.key === project.key;
+      })
+      .map(project => {
+        console.log('found', project);
+      });
+
+    /*      data = data.filter(obj => {
+        return this.state.objToFind === obj.title;   
+        }).map(obj, idx) => {
+           console.log("found " + obj.title);
+           obj.menu = this.state.menu;
+           obj.title = this.state.title;
+           obj.content = this.state.content;
+      });  
 
     this.state.projects.push({
       title: this.state.title,
@@ -91,6 +123,7 @@ export default class New extends Component {
     console.log(this.state.projects);
 
     this.props.navigation.navigate('Dashboard');
+    */
   };
 
   goToDashBoard() {
@@ -107,7 +140,7 @@ export default class New extends Component {
           centerComponent={
             <Text
               style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
-              What's your idea?
+              Edit your idea
             </Text>
           }
           statusBarProps={{barStyle: 'light-content'}}
@@ -234,40 +267,7 @@ export default class New extends Component {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-              }}>
-              <TextInput
-                style={[styles.input, {flex: 5}]}
-                autoCorrect={false}
-                autoCapitalize="none"
-                placeholder="To-do"
-                placeholderTextColor="#999"
-                value={this.state.todoItem}
-                onChangeText={todoItem => this.setState({todoItem})}
-              />
-              <TouchableOpacity
-                onPress={() => this.addTodo()}
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginTop: 10,
-                }}>
-                <Icon name="plus" size={40} color="#7159c1" solid />
-              </TouchableOpacity>
-            </View>
-
-            <View style={{marginTop: 10}}>
-              {this.state.todo.map((l, i) => (
-                <ListItem
-                  bottomDivider
-                  containerStyle={{marginRight: 50, backgroundColor: '#ECEFF1'}}
-                  key={i}
-                  title={l.task}
-                  rightIcon={<Icon name="trash" size={23} color="#666" solid />}
-                />
-              ))}
-            </View>
-
+              }}></View>
             <TouchableOpacity
               style={styles.shareButton}
               onPress={() => this.handleSubmit()}>
