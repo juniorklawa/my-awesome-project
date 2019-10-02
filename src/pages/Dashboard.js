@@ -8,6 +8,7 @@ import {iOSUIKit} from 'react-native-typography';
 import {SafeAreaView} from 'react-navigation';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ProgressCircle from 'react-native-progress-circle';
 
 const height = Dimensions.get('window').height;
 
@@ -41,7 +42,7 @@ export default class Dashboard extends React.Component {
     this.props.navigation.navigate('Details', {projectId: id, otherParam: id});
   }
 
-  async goToEdit(id){
+  async goToEdit(id) {
     this.props.navigation.navigate('Edit', {projectId: id});
   }
 
@@ -117,26 +118,27 @@ export default class Dashboard extends React.Component {
                     <View style={{flexDirection: 'row'}}>
                       <Text style={styles.category}>{project.category}</Text>
                     </View>
+                    <View style={{position: 'absolute', left: 200, top:20}}>
+                      <ProgressCircle
+                        percent={30}
+                        radius={50}
+                        borderWidth={8}
+                        color="#7159c1"
+                        shadowColor="#f0f0f0"
+                        bgColor="#fff">
+                        <Text style={{fontSize: 18}}>{'30%'}</Text>
+                      </ProgressCircle>
+                    </View>
                   </View>
                 </TouchableOpacity>
               ))
             ) : (
-              <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text
-                  style={[
-                    iOSUIKit.subheadEmphasized,
-                    {
-                      color: '#929699',
-                      fontSize: 20,
-                      marginTop: 20,
-                      padding: 0,
-                      alignContent: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                    },
-                  ]}>
-                  Press the + button to create your new awesome idea!
-                </Text>
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: height,
+                }}>
                 <Image
                   style={{
                     width: '100%',
@@ -147,6 +149,21 @@ export default class Dashboard extends React.Component {
                     marginTop: 16,
                   }}
                   source={require('../icons/astronaut.png')}></Image>
+                <Text
+                  style={[
+                    iOSUIKit.subheadEmphasized,
+                    {
+                      color: '#929699',
+                      fontSize: 18,
+                      marginTop: 20,
+                      margin: 20,
+                      alignContent: 'center',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                    },
+                  ]}>
+                  Press the + button to create your new awesome idea!
+                </Text>
               </View>
             )}
           </View>
