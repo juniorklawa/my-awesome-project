@@ -1,9 +1,11 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
 import { Header, ListItem } from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select';
 import {
   View,
   StyleSheet,
@@ -29,8 +31,10 @@ export default class Edit extends Component {
     date: new Date(),
     todo: [],
     projects: [],
+    project: {},
     estimatedTime: '',
     estimatedInterval: '',
+    projectId: null,
   };
 
   componentDidMount = async () => {
@@ -39,6 +43,7 @@ export default class Edit extends Component {
     const projects = (await JSON.parse(data)) || [];
     await this.setState({
       projects: projects,
+      projectId: projectId,
     });
 
     const detail = await this.state.projects.find(obj => obj.key === projectId);
@@ -56,8 +61,6 @@ export default class Edit extends Component {
       estimatedInterval: this.state.project.estimatedInterval,
       category: this.state.category,
     });
-
-    console.log(this.state.title);
   };
 
   addTodo = async () => {
@@ -88,14 +91,31 @@ export default class Edit extends Component {
       (this.state.date.getMonth() + 1) +
       '/' +
       this.state.date.getFullYear();*/
-
-    this.state.projects = this.state.projects
+    this.state.projects
       .filter(project => {
-        return this.state.projects.key === project.key;
+        console.log('project key', project.key)
+        console.log('projectId', this.state.projectId)
+        return project.key === this.state.projectId
       })
       .map(project => {
-        console.log('found', project);
+        project.title = this.state.title
+        project.shortDescription = this.state.shortDescription,
+        project.category = this.state.category,
+        project.tags = this.state.tags,
+        project.worktime = `${this.state.estimatedTime} ${this.state.estimatedInterval}`,  
+        console.log('updated project', project)
       });
+
+
+
+    await AsyncStorage.setItem(
+      'projectss',
+      JSON.stringify(this.state.projects),
+    );
+
+    console.log('all projects', this.state.projects)
+
+    this.props.navigation.navigate('Dashboard');
 
     /*      data = data.filter(obj => {
         return this.state.objToFind === obj.title;   
@@ -117,14 +137,7 @@ export default class Edit extends Component {
       todo: this.state.todo,
     });
 
-    await AsyncStorage.setItem(
-      'projectss',
-      JSON.stringify(this.state.projects),
-    );
 
-    console.log(this.state.projects);
-
-    this.props.navigation.navigate('Dashboard');
     */
   };
 
@@ -161,7 +174,7 @@ export default class Edit extends Component {
         <ScrollView>
           <View style={styles.container}>
             <Image
-             
+
               style={{
                 width: '100%',
                 height: 180,
@@ -212,35 +225,31 @@ export default class Edit extends Component {
               }}>
               <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
 
-              <Picker
-                selectedValue={this.state.estimatedTime}
-                style={{ height: 50, width: 100 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ estimatedTime: itemValue })
-                }>
-                <Picker.Item label="1" value="1" />
-                <Picker.Item label="2" value="2" />
-                <Picker.Item label="3" value="3" />
-                <Picker.Item label="4" value="4" />
-                <Picker.Item label="5" value="5" />
-                <Picker.Item label="6" value="6" />
-                <Picker.Item label="7" value="7" />
-                <Picker.Item label="8" value="8" />
-                <Picker.Item label="9" value="9" />
-                <Picker.Item label="10" value="10" />
-              </Picker>
+              <RNPickerSelect
+                onValueChange={(value) => this.setState({ estimatedTime: value })}
+                items={[
+                  { label: '1', value: '1' },
+                  { label: '2', value: '2' },
+                  { label: '3', value: '3' },
+                  { label: '4', value: '4' },
+                  { label: '5', value: '5' },
+                  { label: '6', value: '6' },
+                  { label: '7', value: '7' },
+                  { label: '8', value: '8' },
+                  { label: '9', value: '9' },
+                  { label: '10', value: '10' },
+                ]}
+              />
 
-              <Picker
-                selectedValue={this.state.estimatedInterval}
-                style={{ height: 50, width: 100 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ estimatedInterval: itemValue })
-                }>
-                <Picker.Item label="days" value="days" />
-                <Picker.Item label="weeks" value="weeks" />
-                <Picker.Item label="months" value="months" />
-                <Picker.Item label="years" value="years" />
-              </Picker>
+              <RNPickerSelect
+                onValueChange={(value) => this.setState({ estimatedInterval: value })}
+                items={[
+                  { label: 'days', value: 'days' },
+                  { label: 'weeks', value: 'weeks' },
+                  { label: 'months', value: 'months' },
+                  { label: 'years', value: 'years' },
+                ]}
+              />
             </View>
 
             <View
@@ -251,19 +260,16 @@ export default class Edit extends Component {
                 marginStart: 5,
               }}>
               <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
-              <Picker
-                selectedValue={this.state.category}
-                placeholder="Teste"
-                style={{ height: 50, width: 150 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ category: itemValue })
-                }>
-                <Picker.Item label="Mobile App" value="Mobile App" />
-                <Picker.Item label="Desktop App" value="Desktop App" />
-                <Picker.Item label="Tool" value="Tool" />
-                <Picker.Item label="Bot" value="Bot" />
-                <Picker.Item label="Other" value="Other" />
-              </Picker>
+              <RNPickerSelect
+                onValueChange={(value) => this.setState({ category: value })}
+                items={[
+                  { label: 'Mobile App', value: 'Mobile App' },
+                  { label: 'Desktop App', value: 'Desktop App' },
+                  { label: 'Tool', value: 'Tool' },
+                  { label: 'Bot', value: 'Bot' },
+                  { label: 'Other', value: 'Other' },
+                ]}
+              />
             </View>
             <View
               style={{

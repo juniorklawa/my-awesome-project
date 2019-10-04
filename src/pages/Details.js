@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/no-did-mount-set-state */
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   View,
@@ -25,13 +28,13 @@ export default class Details extends React.Component {
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('projectss');
     const projects = (await JSON.parse(data)) || [];
-    await this.setState({
+    this.setState({
       projects: projects,
     });
 
     const detail = await this.state.projects.find(obj => obj.key === projectId);
     const todoDetail = await detail.todo;
-    await this.setState({
+    this.setState({
       project: detail,
       todo: todoDetail,
     });

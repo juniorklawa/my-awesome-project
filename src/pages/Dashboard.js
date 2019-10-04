@@ -90,6 +90,8 @@ export default class Dashboard extends React.Component {
                             fontSize: 23,
                             marginTop: -5,
                             padding: 0,
+                            width: '80%',
+                            lineHeight: 24
                           },
                         ]}>
                         {project.title}
@@ -104,7 +106,7 @@ export default class Dashboard extends React.Component {
                     <Text
                       style={[
                         iOSUIKit.subheadEmphasized,
-                        { color: '#929699', fontSize: 14, marginTop: -10 },
+                        { color: '#929699', fontSize: 14, marginTop: 3 },
                       ]}>
                       {project.date}
                     </Text>
