@@ -68,7 +68,7 @@ export default class Details extends React.Component {
       date,
     } = this.state.project;
     return (
-      <SafeAreaView style={{backgroundColor:'#fff'}}>
+      <SafeAreaView style={{backgroundColor: '#7159c1'}}>
         <Header
           placement="left"
           centerComponent={
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     padding: 12,
     minHeight: '100%',
     height: 500,
+    backgroundColor: '#fff'
   },
   category: {
     fontWeight: 'bold',

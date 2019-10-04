@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
+import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {iOSUIKit} from 'react-native-typography';
-import {Header, ListItem} from 'react-native-elements';
+import { iOSUIKit } from 'react-native-typography';
+import { Header, ListItem } from 'react-native-elements';
 import {
   View,
   StyleSheet,
@@ -13,7 +15,7 @@ import {
   Picker,
   ScrollView,
 } from 'react-native';
-import {SafeAreaView} from 'react-navigation';
+import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 
 export default class Edit extends Component {
@@ -134,16 +136,16 @@ export default class Edit extends Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
         <Header
           placement="left"
           centerComponent={
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white' }]}>
               Edit your idea
             </Text>
           }
-          statusBarProps={{barStyle: 'light-content'}}
+          statusBarProps={{ barStyle: 'light-content' }}
           leftComponent={
             <TouchableOpacity onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
@@ -159,6 +161,7 @@ export default class Edit extends Component {
         <ScrollView>
           <View style={styles.container}>
             <Image
+             
               style={{
                 width: '100%',
                 height: 180,
@@ -167,7 +170,7 @@ export default class Edit extends Component {
                 marginBottom: 16,
                 marginTop: 16,
               }}
-              source={require('../icons/newidea.png')}></Image>
+              source={require('../icons/newidea.png')} />
 
             <TextInput
               style={styles.input}
@@ -175,7 +178,7 @@ export default class Edit extends Component {
               placeholder="Project name"
               placeholderTextColor="#999"
               value={this.state.title}
-              onChangeText={title => this.setState({title})}
+              onChangeText={title => this.setState({ title })}
             />
 
             <TextInput
@@ -186,7 +189,7 @@ export default class Edit extends Component {
               placeholderTextColor="#999"
               value={this.state.shortDescription}
               onChangeText={shortDescription =>
-                this.setState({shortDescription})
+                this.setState({ shortDescription })
               }
             />
 
@@ -197,7 +200,7 @@ export default class Edit extends Component {
               placeholder="Tags"
               placeholderTextColor="#999"
               value={this.state.tags}
-              onChangeText={tags => this.setState({tags})}
+              onChangeText={tags => this.setState({ tags })}
             />
 
             <View
@@ -207,13 +210,13 @@ export default class Edit extends Component {
                 alignItems: 'center',
                 marginStart: 5,
               }}>
-              <Text style={{color: '#666', fontSize: 15}}>Estimate time: </Text>
+              <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
 
               <Picker
                 selectedValue={this.state.estimatedTime}
-                style={{height: 50, width: 100}}
+                style={{ height: 50, width: 100 }}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({estimatedTime: itemValue})
+                  this.setState({ estimatedTime: itemValue })
                 }>
                 <Picker.Item label="1" value="1" />
                 <Picker.Item label="2" value="2" />
@@ -229,9 +232,9 @@ export default class Edit extends Component {
 
               <Picker
                 selectedValue={this.state.estimatedInterval}
-                style={{height: 50, width: 100}}
+                style={{ height: 50, width: 100 }}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({estimatedInterval: itemValue})
+                  this.setState({ estimatedInterval: itemValue })
                 }>
                 <Picker.Item label="days" value="days" />
                 <Picker.Item label="weeks" value="weeks" />
@@ -247,13 +250,13 @@ export default class Edit extends Component {
                 alignItems: 'center',
                 marginStart: 5,
               }}>
-              <Text style={{color: '#666', fontSize: 15}}>Category</Text>
+              <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
               <Picker
                 selectedValue={this.state.category}
                 placeholder="Teste"
-                style={{height: 50, width: 150}}
+                style={{ height: 50, width: 150 }}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({category: itemValue})
+                  this.setState({ category: itemValue })
                 }>
                 <Picker.Item label="Mobile App" value="Mobile App" />
                 <Picker.Item label="Desktop App" value="Desktop App" />

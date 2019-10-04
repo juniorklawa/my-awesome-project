@@ -1,7 +1,12 @@
-import React, {Component} from 'react';
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-undef */
+import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {iOSUIKit} from 'react-native-typography';
-import {Header, ListItem} from 'react-native-elements';
+import { iOSUIKit } from 'react-native-typography';
+import { Header, ListItem } from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select';
 import {
   View,
   StyleSheet,
@@ -13,7 +18,7 @@ import {
   Picker,
   ScrollView,
 } from 'react-native';
-import {SafeAreaView} from 'react-navigation';
+import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 
 export default class New extends Component {
@@ -46,7 +51,7 @@ export default class New extends Component {
 
     this.state.todo.push({
       task: this.state.todoItem,
-      checked: false
+      checked: false,
     });
 
     this.setState({
@@ -101,16 +106,16 @@ export default class New extends Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
         <Header
           placement="left"
           centerComponent={
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white' }]}>
               What's your idea?
             </Text>
           }
-          statusBarProps={{barStyle: 'light-content'}}
+          statusBarProps={{ barStyle: 'light-content' }}
           leftComponent={
             <TouchableOpacity onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
@@ -134,6 +139,7 @@ export default class New extends Component {
                 marginBottom: 16,
                 marginTop: 16,
               }}
+
               source={require('../icons/newidea.png')}></Image>
 
             <TextInput
@@ -142,7 +148,7 @@ export default class New extends Component {
               placeholder="Project name"
               placeholderTextColor="#999"
               value={this.state.title}
-              onChangeText={title => this.setState({title})}
+              onChangeText={title => this.setState({ title })}
             />
 
             <TextInput
@@ -153,7 +159,7 @@ export default class New extends Component {
               placeholderTextColor="#999"
               value={this.state.shortDescription}
               onChangeText={shortDescription =>
-                this.setState({shortDescription})
+                this.setState({ shortDescription })
               }
             />
 
@@ -164,7 +170,7 @@ export default class New extends Component {
               placeholder="Tags"
               placeholderTextColor="#999"
               value={this.state.tags}
-              onChangeText={tags => this.setState({tags})}
+              onChangeText={tags => this.setState({ tags })}
             />
 
             <View
@@ -174,37 +180,36 @@ export default class New extends Component {
                 alignItems: 'center',
                 marginStart: 5,
               }}>
-              <Text style={{color: '#666', fontSize: 15}}>Estimate time: </Text>
+              <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <RNPickerSelect
+                  onValueChange={(value) => this.setState({ estimatedTime: value })}
+                  items={[
+                    { label: '1', value: '1' },
+                    { label: '2', value: '2' },
+                    { label: '3', value: '3' },
+                    { label: '4', value: '4' },
+                    { label: '5', value: '5' },
+                    { label: '6', value: '6' },
+                    { label: '7', value: '7' },
+                    { label: '8', value: '8' },
+                    { label: '9', value: '9' },
+                    { label: '10', value: '10' },
+                  ]}
+                />
 
-              <Picker
-                selectedValue={this.state.estimatedTime}
-                style={{height: 50, width: 100}}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({estimatedTime: itemValue})
-                }>
-                <Picker.Item label="1" value="1" />
-                <Picker.Item label="2" value="2" />
-                <Picker.Item label="3" value="3" />
-                <Picker.Item label="4" value="4" />
-                <Picker.Item label="5" value="5" />
-                <Picker.Item label="6" value="6" />
-                <Picker.Item label="7" value="7" />
-                <Picker.Item label="8" value="8" />
-                <Picker.Item label="9" value="9" />
-                <Picker.Item label="10" value="10" />
-              </Picker>
 
-              <Picker
-                selectedValue={this.state.estimatedInterval}
-                style={{height: 50, width: 100}}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({estimatedInterval: itemValue})
-                }>
-                <Picker.Item label="days" value="days" />
-                <Picker.Item label="weeks" value="weeks" />
-                <Picker.Item label="months" value="months" />
-                <Picker.Item label="years" value="years" />
-              </Picker>
+                <RNPickerSelect
+                  onValueChange={(value) => this.setState({ estimatedInterval: value })}
+                  items={[
+                    { label: 'days', value: 'days' },
+                    { label: 'weeks', value: 'weeks' },
+                    { label: 'months', value: 'months' },
+                    { label: 'years', value: 'years' },
+                  ]}
+                />
+              </View>
+
             </View>
 
             <View
@@ -214,20 +219,19 @@ export default class New extends Component {
                 alignItems: 'center',
                 marginStart: 5,
               }}>
-              <Text style={{color: '#666', fontSize: 15}}>Category</Text>
-              <Picker
-                selectedValue={this.state.category}
-                placeholder="Teste"
-                style={{height: 50, width: 150}}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({category: itemValue})
-                }>
-                <Picker.Item label="Mobile App" value="Mobile App" />
-                <Picker.Item label="Desktop App" value="Desktop App" />
-                <Picker.Item label="Tool" value="Tool" />
-                <Picker.Item label="Bot" value="Bot" />
-                <Picker.Item label="Other" value="Other" />
-              </Picker>
+              <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
+              <View style={{ marginLeft: 20 }}>
+                <RNPickerSelect
+                  onValueChange={(value) => this.setState({ category: value })}
+                  items={[
+                    { label: 'Mobile App', value: 'Mobile App' },
+                    { label: 'Desktop App', value: 'Desktop App' },
+                    { label: 'Tool', value: 'Tool' },
+                    { label: 'Bot', value: 'Bot' },
+                    { label: 'Other', value: 'Other' },
+                  ]}
+                />
+              </View>
             </View>
             <View
               style={{
@@ -236,13 +240,13 @@ export default class New extends Component {
                 justifyContent: 'center',
               }}>
               <TextInput
-                style={[styles.input, {flex: 5}]}
+                style={[styles.input, { flex: 5 }]}
                 autoCorrect={false}
                 autoCapitalize="none"
                 placeholder="To-do"
                 placeholderTextColor="#999"
                 value={this.state.todoItem}
-                onChangeText={todoItem => this.setState({todoItem})}
+                onChangeText={todoItem => this.setState({ todoItem })}
               />
               <TouchableOpacity
                 onPress={() => this.addTodo()}
@@ -256,11 +260,11 @@ export default class New extends Component {
               </TouchableOpacity>
             </View>
 
-            <View style={{marginTop: 10}}>
+            <View style={{ marginTop: 10 }}>
               {this.state.todo.map((l, i) => (
                 <ListItem
                   bottomDivider
-                  containerStyle={{marginRight: 50, backgroundColor: '#ECEFF1'}}
+                  containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1' }}
                   key={i}
                   title={l.task}
                   rightIcon={<Icon name="trash" size={23} color="#666" solid />}

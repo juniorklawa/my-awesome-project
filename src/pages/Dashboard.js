@@ -52,7 +52,7 @@ export default class Dashboard extends React.Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
         <Header
           placement="left"
           centerComponent={
@@ -176,7 +176,7 @@ export default class Dashboard extends React.Component {
           onPress={() => {
             this.props.navigation.navigate('Add');
           }}
-          style={{ marginBottom: 5 }}
+          style={{ marginBottom: 15 }}
           buttonColor="#7159c1"
         />
       </SafeAreaView>
