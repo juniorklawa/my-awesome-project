@@ -1,12 +1,14 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, Image, StyleSheet, Button, StatusBar} from 'react-native';
+import { View, Text, Image, StyleSheet, Button, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {Header} from 'react-native-elements';
-import {iOSUIKit} from 'react-native-typography';
-import {SafeAreaView} from 'react-navigation';
-import {Dimensions} from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { Header } from 'react-native-elements';
+import { iOSUIKit } from 'react-native-typography';
+import { SafeAreaView } from 'react-navigation';
+import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProgressCircle from 'react-native-progress-circle';
 
@@ -39,27 +41,27 @@ export default class Dashboard extends React.Component {
   }
 
   async goToProjectDetails(id) {
-    this.props.navigation.navigate('Details', {projectId: id, otherParam: id});
+    this.props.navigation.navigate('Details', { projectId: id, otherParam: id });
   }
 
   async goToEdit(id) {
-    this.props.navigation.navigate('Edit', {projectId: id});
+    this.props.navigation.navigate('Edit', { projectId: id });
   }
 
   render() {
     StatusBar.setBarStyle('light-content', true);
 
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: '#ECEFF1'}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
         <Header
           placement="left"
           centerComponent={
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white' }]}>
               My ideas
             </Text>
           }
-          statusBarProps={{barStyle: 'light-content'}}
+          statusBarProps={{ barStyle: 'light-content' }}
           barStyle="light-content" // or directly
           containerStyle={{
             backgroundColor: '#7159c1',
@@ -102,70 +104,71 @@ export default class Dashboard extends React.Component {
                     <Text
                       style={[
                         iOSUIKit.subheadEmphasized,
-                        {color: '#929699', fontSize: 14, marginTop: -10},
+                        { color: '#929699', fontSize: 14, marginTop: -10 },
                       ]}>
                       {project.date}
                     </Text>
                     <Text
                       style={[
                         iOSUIKit.bodyWhite,
-                        {color: '#363a3f', fontSize: 15, marginTop: 10},
+                        { color: '#363a3f', fontSize: 15, marginTop: 10, width: '80%' },
                       ]}>
                       {project.shortDescription}
                     </Text>
 
                     <Text style={styles.tags}>{project.tags}</Text>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <Text style={styles.category}>{project.category}</Text>
                     </View>
-                    <View style={{position: 'absolute', left: 200, top:20}}>
+                    <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                       <ProgressCircle
-                        percent={30}
-                        radius={50}
-                        borderWidth={8}
+                        percent={project.key * 100}
+                        radius={40}
+                        borderWidth={5}
                         color="#7159c1"
                         shadowColor="#f0f0f0"
                         bgColor="#fff">
-                        <Text style={{fontSize: 18}}>{'30%'}</Text>
+                        <Text style={{ fontSize: 18 }}>{`${(project.key * 100).toFixed(0)}%`}</Text>
                       </ProgressCircle>
                     </View>
                   </View>
                 </TouchableOpacity>
               ))
             ) : (
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: height,
-                }}>
-                <Image
+                <View
                   style={{
-                    width: '100%',
-                    height: 180,
-                    justifyContent: 'flex-end',
                     alignItems: 'center',
-                    marginBottom: 16,
-                    marginTop: 16,
-                  }}
-                  source={require('../icons/astronaut.png')}></Image>
-                <Text
-                  style={[
-                    iOSUIKit.subheadEmphasized,
-                    {
-                      color: '#929699',
-                      fontSize: 18,
-                      marginTop: 20,
-                      margin: 20,
-                      alignContent: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                    },
-                  ]}>
-                  Press the + button to create your new awesome idea!
+                    justifyContent: 'center',
+                    height: height,
+                  }}>
+                  <Image
+                    style={{
+                      width: '100%',
+                      height: 180,
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      marginBottom: 16,
+                      marginTop: 16,
+                    }}
+                    source={require('../icons/astronaut.png')}
+                  />
+                  <Text
+                    style={[
+                      iOSUIKit.subheadEmphasized,
+                      {
+                        color: '#929699',
+                        fontSize: 18,
+                        marginTop: 20,
+                        margin: 20,
+                        alignContent: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                      },
+                    ]}>
+                    Press the + button to create your new awesome idea!
                 </Text>
-              </View>
-            )}
+                </View>
+              )}
           </View>
         </ScrollView>
 
@@ -173,8 +176,9 @@ export default class Dashboard extends React.Component {
           onPress={() => {
             this.props.navigation.navigate('Add');
           }}
-          style={{marginBottom: 5}}
-          buttonColor="#7159c1"></ActionButton>
+          style={{ marginBottom: 5 }}
+          buttonColor="#7159c1"
+        />
       </SafeAreaView>
     );
   }
