@@ -4,7 +4,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, Button, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
