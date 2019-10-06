@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button, StatusBar } from 'react-native';
+import { View, Text, Image, StyleSheet, Button, StatusBar, ScrollView, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
-import { ScrollView, TouchableOpacity } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
@@ -72,9 +71,9 @@ export default class Dashboard extends React.Component {
         <ScrollView>
           <View style={styles.container}>
             {this.state.projects.length > 0 ? (
-              this.state.projects.map(project => (
+              this.state.projects.map((project, i) => (
                 <TouchableOpacity
-                  key={project.key}
+                  key={i}
                   onPress={() => this.goToProjectDetails(project.key)}>
                   <View style={styles.movieContainer}>
                     <View
@@ -124,13 +123,13 @@ export default class Dashboard extends React.Component {
                     </View>
                     <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                       <ProgressCircle
-                        percent={project.key * 100}
+                        percent={project.doneTasks/project.todo.length * 100}
                         radius={40}
                         borderWidth={5}
                         color="#7159c1"
                         shadowColor="#f0f0f0"
                         bgColor="#fff">
-                        <Text style={{ fontSize: 18 }}>{`${(project.key * 100).toFixed(0)}%`}</Text>
+                        <Text style={{ fontSize: 18 }}>{project.doneTasks > 0 ? `${(project.doneTasks/project.todo.length * 100).toFixed(0)}%` : `${0}%` }</Text>
                       </ProgressCircle>
                     </View>
                   </View>

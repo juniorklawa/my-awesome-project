@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
 import { Header, ListItem } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
+import { Input as RInput } from 'react-native-elements'
 import {
   View,
   StyleSheet,
@@ -34,6 +35,7 @@ export default class New extends Component {
     projects: [],
     estimatedTime: '',
     estimatedInterval: '',
+    doneTasks: 0
   };
 
   componentDidMount = async () => {
@@ -86,6 +88,7 @@ export default class New extends Component {
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
+      doneTasks: this.state.doneTasks
     });
 
     await AsyncStorage.setItem(
@@ -183,6 +186,7 @@ export default class New extends Component {
               <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <RNPickerSelect
+                style={{width: '100%'}}
                   onValueChange={(value) => this.setState({ estimatedTime: value })}
                   items={[
                     { label: '1', value: '1' },
@@ -200,6 +204,7 @@ export default class New extends Component {
 
 
                 <RNPickerSelect
+                style={{width: '100%'}}
                   onValueChange={(value) => this.setState({ estimatedInterval: value })}
                   items={[
                     { label: 'days', value: 'days' },
@@ -222,6 +227,7 @@ export default class New extends Component {
               <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
               <View style={{ marginLeft: 20 }}>
                 <RNPickerSelect
+                style={{width: '100%'}}
                   onValueChange={(value) => this.setState({ category: value })}
                   items={[
                     { label: 'Mobile App', value: 'Mobile App' },

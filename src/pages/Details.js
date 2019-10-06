@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {CheckBox} from 'react-native-elements';
-import {iOSUIKit} from 'react-native-typography';
-import {SafeAreaView} from 'react-navigation';
-import {Header} from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
+import { iOSUIKit } from 'react-native-typography';
+import { SafeAreaView } from 'react-navigation';
+import { Header } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
 
 export default class Details extends React.Component {
@@ -22,6 +22,7 @@ export default class Details extends React.Component {
     project: {},
     todo: [],
     checked: false,
+    doneTasks: 0
   };
 
   async componentDidMount() {
@@ -38,8 +39,6 @@ export default class Details extends React.Component {
       project: detail,
       todo: todoDetail,
     });
-
-    console.log(this.state.todo)
   }
 
   deleteProject(id) {
@@ -58,8 +57,7 @@ export default class Details extends React.Component {
   }
 
   render() {
-    const {todo} = this.state;
-    todo.map(task => console.log(task.task));
+    const { todo } = this.state;
     StatusBar.setBarStyle('light-content', true);
     const {
       key,
@@ -71,16 +69,16 @@ export default class Details extends React.Component {
       date,
     } = this.state.project;
     return (
-      <SafeAreaView style={{backgroundColor: '#7159c1'}}>
+      <SafeAreaView style={{ backgroundColor: '#7159c1' }}>
         <Header
           placement="left"
           centerComponent={
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, {color: 'white'}]}>
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white' }]}>
               {this.state.project.title}
             </Text>
           }
-          statusBarProps={{barStyle: 'light-content'}}
+          statusBarProps={{ barStyle: 'light-content' }}
           leftComponent={
             <TouchableOpacity onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
@@ -88,7 +86,7 @@ export default class Details extends React.Component {
           }
           rightComponent={
             <TouchableOpacity
-              style={{marginRight: 10}}
+              style={{ marginRight: 10 }}
               onPress={() => this.deleteProject(key)}>
               <Icon name="trash" size={23} color="#fff" solid />
             </TouchableOpacity>
@@ -104,36 +102,63 @@ export default class Details extends React.Component {
           <Text
             style={[
               iOSUIKit.subheadEmphasized,
-              {color: '#929699', fontSize: 14, marginTop: -10},
+              { color: '#929699', fontSize: 14, marginTop: -10 },
             ]}>
             Created at {date}
           </Text>
           <Text
             style={[
               iOSUIKit.bodyWhite,
-              {color: '#363a3f', fontSize: 15, marginTop: 10},
+              { color: '#363a3f', fontSize: 15, marginTop: 10 },
             ]}>
             Description: {shortDescription}
           </Text>
 
           <Text style={styles.tags}>Tags: {tags}</Text>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <Text style={styles.category}>Category: {category}</Text>
           </View>
 
-          <Text style={[iOSUIKit.bodyWhite, {color: '#363a3f', fontSize: 15}]}>
+          <Text style={[iOSUIKit.bodyWhite, { color: '#363a3f', fontSize: 15 }]}>
             Estimate to finish {worktime}
           </Text>
 
           <View>
-            <Text style={[styles.category, {fontSize: 25}]}>To-do</Text>
-            {todo.map(task => (
+            <Text style={[styles.category, { fontSize: 25 }]}>To-do</Text>
+            {todo.map((task, i) => (
               <CheckBox
-                title={task.task}
-                checked={task.checked}
-                onPress={() => this.setState({checked: !task.checked})}
+                key={i}
+                title={this.state.project.todo[i].task}
+                checked={this.state.project.todo[i].checked}
+                onPress={() => {
+                  this.state.project.todo[i].checked = !this.state.project.todo[i].checked
+                  this.forceUpdate()
+
+                  const trueArray = this.state.project.todo.filter(doneTasks => doneTasks.checked).length
+
+
+
+
+
+
+                  this.state.projects
+                    .filter(project => {
+                      return project.key === this.state.project.key
+                    })
+                    .map(project => {
+                      project.todo = this.state.project.todo
+                      project.doneTasks = trueArray
+                    });
+
+                  AsyncStorage.setItem(
+                    'projectss',
+                    JSON.stringify(this.state.projects),
+                  );
+
+                }}
               />
-            ))}
+            ))
+            }
           </View>
         </View>
       </SafeAreaView>
