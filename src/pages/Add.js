@@ -18,6 +18,7 @@ import {
   StatusBar,
   Picker,
   ScrollView,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -51,6 +52,19 @@ export default class New extends Component {
     const data = new FormData();
     data.append('todoItem', this.state.todoItem);
 
+
+    if (!this.state.todoItem) {
+      Alert.alert(
+        'Ops!',
+        'This field is obligatory',
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ],
+        { cancelable: false },
+      );
+      return
+    }
+
     this.state.todo.push({
       task: this.state.todoItem,
       checked: false,
@@ -71,6 +85,19 @@ export default class New extends Component {
     data.append('category', this.state.category);
     data.append('worktime', this.state.worktime);
     data.append('tags', this.state.tags);
+
+
+    if (!this.state.title || !this.state.shortDescription) {
+      Alert.alert(
+        'Ops!',
+        'Title and description are obligatory',
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ],
+        { cancelable: false },
+      );
+      return
+    }
 
     this.state.date =
       this.state.date.getDate() +
@@ -133,6 +160,18 @@ export default class New extends Component {
 
         <ScrollView>
           <View style={styles.container}>
+
+          <RNPickerSelect
+                  style={{ width: '100%' }}
+                  onValueChange={(value) => this.setState({ category: value })}
+                  items={[
+                    { label: 'Mobile App', value: 'Mobile App' },
+                    { label: 'Desktop App', value: 'Desktop App' },
+                    { label: 'Tool', value: 'Tool' },
+                    { label: 'Bot', value: 'Bot' },
+                    { label: 'Other', value: 'Other' },
+                  ]}
+                />
             <Image
               style={{
                 width: '100%',
@@ -186,7 +225,7 @@ export default class New extends Component {
               <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <RNPickerSelect
-                style={{width: '100%'}}
+                  style={{ width: '100%' }}
                   onValueChange={(value) => this.setState({ estimatedTime: value })}
                   items={[
                     { label: '1', value: '1' },
@@ -204,7 +243,7 @@ export default class New extends Component {
 
 
                 <RNPickerSelect
-                style={{width: '100%'}}
+                  style={{ width: '100%' }}
                   onValueChange={(value) => this.setState({ estimatedInterval: value })}
                   items={[
                     { label: 'days', value: 'days' },
@@ -227,7 +266,7 @@ export default class New extends Component {
               <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
               <View style={{ marginLeft: 20 }}>
                 <RNPickerSelect
-                style={{width: '100%'}}
+                  style={{ width: '100%' }}
                   onValueChange={(value) => this.setState({ category: value })}
                   items={[
                     { label: 'Mobile App', value: 'Mobile App' },
@@ -292,7 +331,6 @@ export default class New extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
     padding: 12,
     backgroundColor: '#ECEFF1',
     flex: 1,

@@ -85,6 +85,19 @@ export default class Edit extends Component {
     data.append('worktime', this.state.worktime);
     data.append('tags', this.state.tags);
 
+
+    if (!this.state.title || !this.state.shortDescription) {
+      Alert.alert(
+        'Ops!',
+        'Title and description are obligatory',
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ],
+        { cancelable: false },
+      );
+      return
+    }
+
     /* this.state.date =
       this.state.date.getDate() +
       '/' +
@@ -100,10 +113,10 @@ export default class Edit extends Component {
       .map(project => {
         project.title = this.state.title
         project.shortDescription = this.state.shortDescription,
-        project.category = this.state.category,
-        project.tags = this.state.tags,
-        project.worktime = `${this.state.estimatedTime} ${this.state.estimatedInterval}`,  
-        console.log('updated project', project)
+          project.category = this.state.category,
+          project.tags = this.state.tags,
+          project.worktime = `${this.state.estimatedTime} ${this.state.estimatedInterval}`,
+          console.log('updated project', project)
       });
 
 
@@ -146,10 +159,11 @@ export default class Edit extends Component {
   }
 
   render() {
-    StatusBar.setBarStyle('light-content', true);
 
     return (
+
       <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
+        <StatusBar backgroundColor="#7159c1" barStyle="light-content" />
         <Header
           placement="left"
           centerComponent={
@@ -291,7 +305,6 @@ export default class Edit extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
     padding: 12,
     backgroundColor: '#ECEFF1',
     flex: 1,

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button, StatusBar, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, Button, StatusBar, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
 import { Header } from 'react-native-elements';
@@ -51,7 +51,7 @@ export default class Dashboard extends React.Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
         <Header
           placement="left"
           centerComponent={
@@ -72,10 +72,10 @@ export default class Dashboard extends React.Component {
           <View style={styles.container}>
             {this.state.projects.length > 0 ? (
               this.state.projects.map((project, i) => (
-                <TouchableOpacity
+                <TouchableWithoutFeedback
                   key={i}
                   onPress={() => this.goToProjectDetails(project.key)}>
-                  <View style={styles.movieContainer}>
+                  <View style={styles.projectContainer}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -123,17 +123,17 @@ export default class Dashboard extends React.Component {
                     </View>
                     <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                       <ProgressCircle
-                        percent={project.doneTasks/project.todo.length * 100}
+                        percent={project.doneTasks / project.todo.length * 100}
                         radius={40}
                         borderWidth={5}
                         color="#7159c1"
                         shadowColor="#f0f0f0"
                         bgColor="#fff">
-                        <Text style={{ fontSize: 18 }}>{project.doneTasks > 0 ? `${(project.doneTasks/project.todo.length * 100).toFixed(0)}%` : `${0}%` }</Text>
+                        <Text style={[iOSUIKit.bodyEmphasized,{ fontSize: 18, color: '#7159c1' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
                       </ProgressCircle>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </TouchableWithoutFeedback>
               ))
             ) : (
                 <View
@@ -187,7 +187,6 @@ export default class Dashboard extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
     padding: 12,
     backgroundColor: '#ECEFF1',
     minHeight: '100%',
@@ -196,11 +195,11 @@ const styles = StyleSheet.create({
   category: {
     fontWeight: 'bold',
   },
-  movieContainer: {
+  projectContainer: {
     backgroundColor: '#ffffff',
     padding: 20,
     borderRadius: 10,
-    marginBottom: 20,
+    margin: 5,
   },
   movieTitle: {
     fontSize: 18,

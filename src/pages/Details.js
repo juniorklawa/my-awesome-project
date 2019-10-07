@@ -168,7 +168,6 @@ export default class Details extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
     padding: 12,
     minHeight: '100%',
     height: 500,
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
   category: {
     fontWeight: 'bold',
   },
-  movieContainer: {
+  projectContainer: {
     backgroundColor: '#ffffff',
     padding: 20,
     borderRadius: 10,
