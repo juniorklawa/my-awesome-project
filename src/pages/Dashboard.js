@@ -129,7 +129,7 @@ export default class Dashboard extends React.Component {
                         color="#7159c1"
                         shadowColor="#f0f0f0"
                         bgColor="#fff">
-                        <Text style={[iOSUIKit.bodyEmphasized,{ fontSize: 18, color: '#7159c1' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
+                        <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 18, color: '#7159c1' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
                       </ProgressCircle>
                     </View>
                   </View>

@@ -161,17 +161,17 @@ export default class New extends Component {
         <ScrollView>
           <View style={styles.container}>
 
-          <RNPickerSelect
-                  style={{ width: '100%' }}
-                  onValueChange={(value) => this.setState({ category: value })}
-                  items={[
-                    { label: 'Mobile App', value: 'Mobile App' },
-                    { label: 'Desktop App', value: 'Desktop App' },
-                    { label: 'Tool', value: 'Tool' },
-                    { label: 'Bot', value: 'Bot' },
-                    { label: 'Other', value: 'Other' },
-                  ]}
-                />
+            <RNPickerSelect
+              style={{ width: '100%' }}
+              onValueChange={(value) => this.setState({ category: value })}
+              items={[
+                { label: 'Mobile App', value: 'Mobile App' },
+                { label: 'Desktop App', value: 'Desktop App' },
+                { label: 'Tool', value: 'Tool' },
+                { label: 'Bot', value: 'Bot' },
+                { label: 'Other', value: 'Other' },
+              ]}
+            />
             <Image
               style={{
                 width: '100%',

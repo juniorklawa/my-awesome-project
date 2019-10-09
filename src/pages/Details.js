@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/no-did-mount-set-state */
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   View,
@@ -8,19 +5,23 @@ import {
   StyleSheet,
   StatusBar,
   TouchableOpacity,
+  TextInput,
+  Alert
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Input } from 'react-native-elements';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class Details extends React.Component {
   state = {
     projects: [],
     project: {},
     todo: [],
+    todoItem: '',
     checked: false,
     doneTasks: 0
   };
@@ -52,9 +53,55 @@ export default class Details extends React.Component {
     this.props.navigation.navigate('Dashboard');
   };
 
+  deleteTodo(task) {
+    console.log(task)
+    this.setState({
+      todo: this.state.project.todo.filter((obj, i) => obj.task != task.task)
+    })
+    
+    AsyncStorage.setItem(
+      'projectss',
+      JSON.stringify(this.state.projects),
+    );
+    this.forceUpdate()
+  }
+
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
   }
+
+
+  addTodo = async () => {
+    const data = new FormData();
+    data.append('todoItem', this.state.todoItem);
+
+
+    if (!this.state.todoItem) {
+      Alert.alert(
+        'Ops!',
+        'This field is obligatory',
+        [
+          { text: 'OK' },
+        ],
+        { cancelable: false },
+      );
+      return
+    }
+
+    this.state.todo.push({
+      task: this.state.todoItem,
+      checked: false,
+    });
+
+    this.setState({
+      todoItem: '',
+    });
+
+    AsyncStorage.setItem(
+      'projectss',
+      JSON.stringify(this.state.projects),
+    );
+  };
 
   render() {
     const { todo } = this.state;
@@ -69,7 +116,7 @@ export default class Details extends React.Component {
       date,
     } = this.state.project;
     return (
-      <SafeAreaView style={{ backgroundColor: '#7159c1' }}>
+      <SafeAreaView style={{ backgroundColor: '#7159c1', flex: 1 }}>
         <Header
           placement="left"
           centerComponent={
@@ -97,69 +144,93 @@ export default class Details extends React.Component {
             justifyContent: 'space-around',
           }}
         />
+        <ScrollView style={{ flex: 1 }}>
+          <View key={key} style={styles.container}>
+            <Text
+              style={[
+                iOSUIKit.subheadEmphasized,
+                { color: '#929699', fontSize: 14, marginTop: -10 },
+              ]}>
+              Created at {date}
+            </Text>
+            <Text
+              style={[
+                iOSUIKit.bodyWhite,
+                { color: '#363a3f', fontSize: 15, marginTop: 10 },
+              ]}>
+              Description: {shortDescription}
+            </Text>
 
-        <View key={key} style={styles.container}>
-          <Text
-            style={[
-              iOSUIKit.subheadEmphasized,
-              { color: '#929699', fontSize: 14, marginTop: -10 },
-            ]}>
-            Created at {date}
-          </Text>
-          <Text
-            style={[
-              iOSUIKit.bodyWhite,
-              { color: '#363a3f', fontSize: 15, marginTop: 10 },
-            ]}>
-            Description: {shortDescription}
-          </Text>
+            <Text style={styles.tags}>Tags: {tags}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.category}>Category: {category}</Text>
+            </View>
 
-          <Text style={styles.tags}>Tags: {tags}</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.category}>Category: {category}</Text>
+            <Text style={[iOSUIKit.bodyWhite, { color: '#363a3f', fontSize: 15 }]}>
+              Estimate to finish {worktime}
+            </Text>
+
+            <View>
+              <Text style={[styles.category, { fontSize: 25 }]}>To-do</Text>
+              {todo.map((task, i) => (
+                <CheckBox
+                  key={i}
+                  title={this.state.project.todo[i].task}
+                  checked={this.state.project.todo[i].checked}
+                  onLongPress={() => this.deleteTodo(task)}
+                  onPress={() => {
+                    this.state.project.todo[i].checked = !this.state.project.todo[i].checked
+                    this.forceUpdate()
+
+                    const trueArray = this.state.project.todo.filter(doneTasks => doneTasks.checked).length
+
+                    this.state.projects
+                      .filter(project => {
+                        return project.key === this.state.project.key
+                      })
+                      .map(project => {
+                        project.todo = this.state.project.todo
+                        project.doneTasks = trueArray
+                      });
+
+                    AsyncStorage.setItem(
+                      'projectss',
+                      JSON.stringify(this.state.projects),
+                    );
+
+                  }}
+                />
+              ))
+              }
+            </View>
           </View>
-
-          <Text style={[iOSUIKit.bodyWhite, { color: '#363a3f', fontSize: 15 }]}>
-            Estimate to finish {worktime}
-          </Text>
-
-          <View>
-            <Text style={[styles.category, { fontSize: 25 }]}>To-do</Text>
-            {todo.map((task, i) => (
-              <CheckBox
-                key={i}
-                title={this.state.project.todo[i].task}
-                checked={this.state.project.todo[i].checked}
-                onPress={() => {
-                  this.state.project.todo[i].checked = !this.state.project.todo[i].checked
-                  this.forceUpdate()
-
-                  const trueArray = this.state.project.todo.filter(doneTasks => doneTasks.checked).length
-
-
-
-
-
-
-                  this.state.projects
-                    .filter(project => {
-                      return project.key === this.state.project.key
-                    })
-                    .map(project => {
-                      project.todo = this.state.project.todo
-                      project.doneTasks = trueArray
-                    });
-
-                  AsyncStorage.setItem(
-                    'projectss',
-                    JSON.stringify(this.state.projects),
-                  );
-
-                }}
-              />
-            ))
-            }
-          </View>
+        </ScrollView>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#fbfbfb'
+          }}>
+          <TextInput
+            style={[styles.input, { flex: 10, marginHorizontal: 10 }]}
+            autoCorrect={false}
+            placeholder="Add new todo"
+            placeholderTextColor="#999"
+            value={this.state.todoItem}
+            onChangeText={todoItem => this.setState({ todoItem })}
+          />
+          <TouchableOpacity
+            onPress={() => this.addTodo()}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+              marginRight: 15
+            }}>
+            <Icon name="chevron-right" size={30} color="#7159c1" solid />
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -170,7 +241,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 12,
     minHeight: '100%',
-    height: 500,
     backgroundColor: '#fff'
   },
   category: {
