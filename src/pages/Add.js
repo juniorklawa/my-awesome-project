@@ -111,7 +111,7 @@ export default class New extends Component {
       shortDescription: this.state.shortDescription,
       category: this.state.category,
       tags: this.state.tags,
-      worktime: `${this.state.estimatedTime} ${this.state.estimatedInterval}`,
+      worktime: this.state.worktime,
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
@@ -160,18 +160,6 @@ export default class New extends Component {
 
         <ScrollView>
           <View style={styles.container}>
-
-            <RNPickerSelect
-              style={{ width: '100%' }}
-              onValueChange={(value) => this.setState({ category: value })}
-              items={[
-                { label: 'Mobile App', value: 'Mobile App' },
-                { label: 'Desktop App', value: 'Desktop App' },
-                { label: 'Tool', value: 'Tool' },
-                { label: 'Bot', value: 'Bot' },
-                { label: 'Other', value: 'Other' },
-              ]}
-            />
             <Image
               style={{
                 width: '100%',
@@ -215,69 +203,29 @@ export default class New extends Component {
               onChangeText={tags => this.setState({ tags })}
             />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginStart: 5,
-              }}>
-              <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <RNPickerSelect
-                  style={{ width: '100%' }}
-                  onValueChange={(value) => this.setState({ estimatedTime: value })}
-                  items={[
-                    { label: '1', value: '1' },
-                    { label: '2', value: '2' },
-                    { label: '3', value: '3' },
-                    { label: '4', value: '4' },
-                    { label: '5', value: '5' },
-                    { label: '6', value: '6' },
-                    { label: '7', value: '7' },
-                    { label: '8', value: '8' },
-                    { label: '9', value: '9' },
-                    { label: '10', value: '10' },
-                  ]}
-                />
+            <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              placeholder="Estimated time"
+              placeholderTextColor="#999"
+              value={this.state.worktime}
+              onChangeText={worktime => this.setState({ worktime })}
+            />
 
 
-                <RNPickerSelect
-                  style={{ width: '100%' }}
-                  onValueChange={(value) => this.setState({ estimatedInterval: value })}
-                  items={[
-                    { label: 'days', value: 'days' },
-                    { label: 'weeks', value: 'weeks' },
-                    { label: 'months', value: 'months' },
-                    { label: 'years', value: 'years' },
-                  ]}
-                />
-              </View>
+            <RNPickerSelect
+              placeholder={{ label: 'Select a category', value: null, color: '#7159c1' }}
+              placeholderTextColor={{ color: '#7159c1' }}
+              onValueChange={(value) => this.setState({ category: value })}
+              items={[
+                { label: 'Mobile App', value: 'Mobile App' },
+                { label: 'Desktop App', value: 'Desktop App' },
+                { label: 'Tool', value: 'Tool' },
+                { label: 'Bot', value: 'Bot' },
+                { label: 'Other', value: 'Other' },
+              ]}
+            />
 
-            </View>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginStart: 5,
-              }}>
-              <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
-              <View style={{ marginLeft: 20 }}>
-                <RNPickerSelect
-                  style={{ width: '100%' }}
-                  onValueChange={(value) => this.setState({ category: value })}
-                  items={[
-                    { label: 'Mobile App', value: 'Mobile App' },
-                    { label: 'Desktop App', value: 'Desktop App' },
-                    { label: 'Tool', value: 'Tool' },
-                    { label: 'Bot', value: 'Bot' },
-                    { label: 'Other', value: 'Other' },
-                  ]}
-                />
-              </View>
-            </View>
             <View
               style={{
                 flexDirection: 'row',
@@ -285,23 +233,24 @@ export default class New extends Component {
                 justifyContent: 'center',
               }}>
               <TextInput
-                style={[styles.input, { flex: 5 }]}
+                style={[styles.input, { flex: 10}]}
                 autoCorrect={false}
-                autoCapitalize="none"
-                placeholder="To-do"
+                placeholder="Add new todo"
+                onSubmitEditing={() => this.addTodo()}
                 placeholderTextColor="#999"
                 value={this.state.todoItem}
                 onChangeText={todoItem => this.setState({ todoItem })}
               />
               <TouchableOpacity
                 onPress={() => this.addTodo()}
+                hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
                 style={{
                   flex: 1,
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginTop: 10,
                 }}>
-                <Icon name="plus" size={40} color="#7159c1" solid />
+                <Icon name="chevron-right" size={35} color="#7159c1" solid />
               </TouchableOpacity>
             </View>
 

@@ -113,7 +113,7 @@ export default class Details extends React.Component {
       date,
     } = this.state.project;
     return (
-      <SafeAreaView style={{ backgroundColor: '#7159c1', flex: 1 }}>
+      <SafeAreaView style={{ backgroundColor: '#fbfbfb', flex: 1 }}>
         <Header
           placement="left"
           centerComponent={
@@ -215,12 +215,14 @@ export default class Details extends React.Component {
             style={[styles.input, { flex: 10, marginHorizontal: 10 }]}
             autoCorrect={false}
             placeholder="Add new todo"
+            onSubmitEditing={() => this.addTodo()}
             placeholderTextColor="#999"
             value={this.state.todoItem}
             onChangeText={todoItem => this.setState({ todoItem })}
           />
           <TouchableOpacity
             onPress={() => this.addTodo()}
+            hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
             style={{
               flex: 1,
               alignItems: 'center',
