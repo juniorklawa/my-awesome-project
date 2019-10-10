@@ -14,7 +14,7 @@ import {
   TextInput,
   Image,
   StatusBar,
-  Picker,
+  Alert,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
