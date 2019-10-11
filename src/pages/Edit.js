@@ -41,6 +41,7 @@ export default class Edit extends Component {
     todo: [],
     projects: [],
     project: {},
+    category: '',
     estimatedTime: '',
     estimatedInterval: '',
     projectId: null,
@@ -66,8 +67,7 @@ export default class Edit extends Component {
       title: this.state.project.title,
       shortDescription: this.state.project.shortDescription,
       tags: this.state.project.tags,
-      estimatedTime: this.state.project.estimatedTime,
-      estimatedInterval: this.state.project.estimatedInterval,
+      worktime: this.state.worktime,
       category: this.state.category,
     });
   };
@@ -124,7 +124,7 @@ export default class Edit extends Component {
         project.shortDescription = this.state.shortDescription,
           project.category = this.state.category,
           project.tags = this.state.tags,
-          project.worktime = `${this.state.estimatedTime} ${this.state.estimatedInterval}`,
+          project.worktime = this.state.worktime,
           console.log('updated project', project)
       });
 
@@ -185,7 +185,7 @@ export default class Edit extends Component {
           leftComponent={
             <TouchableOpacity hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
-              
+
             </TouchableOpacity>
           }
           barStyle="light-content" // or directly
@@ -240,61 +240,27 @@ export default class Edit extends Component {
               onChangeText={tags => this.setState({ tags })}
             />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginStart: 5,
-              }}>
-              <Text style={{ color: '#666', fontSize: 15 }}>Estimate time: </Text>
+            <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              placeholder="Estimated time"
+              placeholderTextColor="#999"
+              value={this.state.worktime}
+              onChangeText={worktime => this.setState({ worktime })}
+            />
 
-              <RNPickerSelect
-                onValueChange={(value) => this.setState({ estimatedTime: value })}
-                items={[
-                  { label: '1', value: '1' },
-                  { label: '2', value: '2' },
-                  { label: '3', value: '3' },
-                  { label: '4', value: '4' },
-                  { label: '5', value: '5' },
-                  { label: '6', value: '6' },
-                  { label: '7', value: '7' },
-                  { label: '8', value: '8' },
-                  { label: '9', value: '9' },
-                  { label: '10', value: '10' },
-                ]}
-              />
 
-              <RNPickerSelect
-                onValueChange={(value) => this.setState({ estimatedInterval: value })}
-                items={[
-                  { label: 'days', value: 'days' },
-                  { label: 'weeks', value: 'weeks' },
-                  { label: 'months', value: 'months' },
-                  { label: 'years', value: 'years' },
-                ]}
-              />
-            </View>
+            <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              placeholder="Category"
+              placeholderTextColor="#999"
+              value={this.state.category}
+              onChangeText={category => this.setState({ category })}
+            />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginStart: 5,
-              }}>
-              <Text style={{ color: '#666', fontSize: 15 }}>Category</Text>
-              <RNPickerSelect
-                onValueChange={(value) => this.setState({ category: value })}
-                items={[
-                  { label: 'Mobile App', value: 'Mobile App' },
-                  { label: 'Desktop App', value: 'Desktop App' },
-                  { label: 'Tool', value: 'Tool' },
-                  { label: 'Bot', value: 'Bot' },
-                  { label: 'Other', value: 'Other' },
-                ]}
-              />
-            </View>
+
+
             <View
               style={{
                 flexDirection: 'row',
@@ -304,7 +270,7 @@ export default class Edit extends Component {
             <TouchableOpacity
               style={styles.shareButton}
               onPress={() => this.handleSubmit()}>
-              <Text style={styles.shareButtonText}>Add</Text>
+              <Text style={styles.shareButtonText}>Edit</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

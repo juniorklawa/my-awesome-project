@@ -88,7 +88,7 @@ export default class Dashboard extends React.Component {
           placement="left"
           centerComponent={
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white' }]}>
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', height:'100%' }]}>
               My ideas
             </Text>
           }
@@ -119,7 +119,7 @@ export default class Dashboard extends React.Component {
                           {
                             color: '#363a3f',
                             fontSize: 23,
-                            marginTop: -5,
+                            marginTop:10,
                             padding: 0,
                             width: '80%',
                             lineHeight: 24
