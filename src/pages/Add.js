@@ -201,7 +201,6 @@ class New extends Component {
             <TextInput
               style={styles.input}
               autoCorrect={false}
-              autoCapitalize="none"
               placeholder="Short description"
               placeholderTextColor="#999"
               value={this.state.shortDescription}
