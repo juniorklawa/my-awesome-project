@@ -6,8 +6,7 @@ import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
 import { Header, ListItem } from 'react-native-elements';
-import RNPickerSelect from 'react-native-picker-select';
-import { Input as RInput } from 'react-native-elements'
+import { withNavigationFocus } from 'react-navigation';
 import {
   View,
   StyleSheet,
@@ -23,7 +22,17 @@ import {
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 
-export default class New extends Component {
+class New extends Component {
+
+
+  static navigationOptions = {
+    //To hide the ActionBar/NavigationBar
+    headerStyle: {
+      backgroundColor: '#7159c1',
+    },
+    header: null,
+  };
+
   state = {
     title: '',
     shortDescription: '',
@@ -45,12 +54,13 @@ export default class New extends Component {
     await this.setState({
       projects: projects,
     });
-    console.log(this.state.projects);
   };
 
-  deleteTodo(i){
-    console.log(this.state.todo[i])
-    console.log('AAAA',i)
+  deleteTodo(i) {
+    let filteredTodo = this.state.todo.filter((item, index) => index !== i)
+    this.setState({
+      todo: filteredTodo
+    })
   }
 
   addTodo = async () => {
@@ -79,7 +89,6 @@ export default class New extends Component {
       todoItem: '',
     });
 
-    console.log(this.state.todo);
   };
 
   handleSubmit = async () => {
@@ -152,7 +161,7 @@ export default class New extends Component {
           }
           statusBarProps={{ barStyle: 'light-content' }}
           leftComponent={
-            <TouchableOpacity onPress={() => this.goToDashBoard()}>
+            <TouchableOpacity hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
             </TouchableOpacity>
           }
@@ -241,7 +250,7 @@ export default class New extends Component {
                   title={l.task}
                   rightIcon={
                     <TouchableOpacity
-                      onPress={() => this.state.todo.filter((item,index) => item[index] !== i)}
+                      onPress={() => this.deleteTodo(i)}
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
                       <Icon name="trash" size={23} color="#666" solid />
                     </TouchableOpacity>
@@ -347,3 +356,5 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
 });
+
+export default withNavigationFocus(New);

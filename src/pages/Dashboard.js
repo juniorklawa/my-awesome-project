@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-navigation';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProgressCircle from 'react-native-progress-circle';
+import { NavigationEvents } from 'react-navigation';
 
 const height = Dimensions.get('window').height;
 
@@ -18,8 +19,32 @@ export default class Dashboard extends React.Component {
     projects: [],
   };
 
+  // static navigationOptions = {
+  //   title: 'My ideas',
+  //   headerStyle: {
+  //     backgroundColor: '#7159c1',
+  //   },
+  //   headerTintColor: '#fff',
+  //   headerTitleStyle: {
+  //     fontWeight: 'bold',
+  //   },
+  // };
+
+  static navigationOptions = {
+    //To hide the ActionBar/NavigationBar
+    headerStyle: {
+      backgroundColor: '#7159c1',
+    },
+    header: null,
+  };
+
   async componentDidMount() {
     //await AsyncStorage.clear()
+    this._retrieveData();
+  }
+
+  async _retrieveData() {
+    console.log('_retrieveData')
     const data = await AsyncStorage.getItem('projectss');
     const projects = (await JSON.parse(data)) || [];
     await this.setState({
@@ -51,7 +76,14 @@ export default class Dashboard extends React.Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
+
       <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
+        <NavigationEvents
+          onWillFocus={() => this._retrieveData()}
+          onDidFocus={payload => console.log('did focus', payload)}
+          onWillBlur={payload => console.log('will blur', payload)}
+          onDidBlur={payload => console.log('did blur', payload)}
+        />
         <Header
           placement="left"
           centerComponent={

@@ -21,6 +21,15 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 
 export default class Edit extends Component {
+
+  static navigationOptions = {
+    //To hide the ActionBar/NavigationBar
+    headerStyle: {
+      backgroundColor: '#7159c1',
+    },
+    header: null,
+  };
+
   state = {
     title: '',
     shortDescription: '',
@@ -174,8 +183,9 @@ export default class Edit extends Component {
           }
           statusBarProps={{ barStyle: 'light-content' }}
           leftComponent={
-            <TouchableOpacity onPress={() => this.goToDashBoard()}>
+            <TouchableOpacity hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
+              
             </TouchableOpacity>
           }
           barStyle="light-content" // or directly

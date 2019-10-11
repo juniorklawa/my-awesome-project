@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import React from 'react';
 import {
   createAppContainer,
@@ -8,9 +8,10 @@ import Dashboard from './pages/Dashboard';
 import Add from './pages/Add';
 import Details from './pages/Details'
 import Edit from './pages/Edit'
-import { zoomIn } from 'react-navigation-transitions';
+import { fromRight,fadeIn } from 'react-navigation-transitions';
+import { createStackNavigator } from 'react-navigation-stack';
 
-const RootStack = createSwitchNavigator(
+const RootStack = createStackNavigator(
   {
     Dashboard: Dashboard,
     Add: Add,
@@ -18,8 +19,12 @@ const RootStack = createSwitchNavigator(
     Edit: Edit
   }, {
   initialRouteName: 'Dashboard',
-  transitionConfig: () => zoomIn(),
-},
+  transitionConfig: () => fadeIn(),
+}, {
+  defaultNavigationOptions: {
+    header: null
+  },
+}
 );
 
 const AppContainer = createAppContainer(RootStack);

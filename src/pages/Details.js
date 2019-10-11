@@ -19,6 +19,15 @@ import { Header } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
 
 export default class Details extends React.Component {
+
+  static navigationOptions = {
+    //To hide the ActionBar/NavigationBar
+    headerStyle: {
+      backgroundColor: '#7159c1',
+    },
+    header: null,
+  };
+
   state = {
     projects: [],
     project: {},
@@ -55,16 +64,18 @@ export default class Details extends React.Component {
     this.props.navigation.navigate('Dashboard');
   }
 
-  deleteTodo(task) {
-    console.log(task);
+  deleteTodo(i) {
 
-    this.state.todo = []
-    this.state.project.todo = []
-    this.forceUpdate()
-    AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+
+    let filteredTodo = this.state.todo.filter((item, index) => index !== i)
+    this.setState({
+      todo: filteredTodo
+    })
 
     console.log(this.state.todo)
-    console.log(this.state.project.todo)
+    this.forceUpdate()
+
+    AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
 
   }
 
@@ -93,8 +104,7 @@ export default class Details extends React.Component {
     })
 
     this.forceUpdate()
-    console.log(this.state.todo)
-    console.log(this.state.project.todo)
+
 
     AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
   };
@@ -124,7 +134,7 @@ export default class Details extends React.Component {
           }
           statusBarProps={{ barStyle: 'light-content' }}
           leftComponent={
-            <TouchableOpacity onPress={() => this.goToDashBoard()}>
+            <TouchableOpacity hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={23} color="#fff" solid />
             </TouchableOpacity>
           }
@@ -175,7 +185,7 @@ export default class Details extends React.Component {
                   key={i}
                   title={this.state.project.todo[i].task}
                   checked={this.state.project.todo[i].checked}
-                  onLongPress={() => this.deleteTodo(task.task)}
+                  onLongPress={() => this.deleteTodo(i)}
                   onPress={() => {
                     this.state.project.todo[i].checked = !this.state.project
                       .todo[i].checked;;
