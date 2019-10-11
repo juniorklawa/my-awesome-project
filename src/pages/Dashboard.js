@@ -112,7 +112,7 @@ export default class Dashboard extends React.Component {
                     <Text
                       style={[
                         iOSUIKit.bodyWhite,
-                        { color: '#363a3f', fontSize: 15, marginTop: 10, width: '80%' },
+                        { color: '#363a3f', fontSize: 15, marginTop: 10, width: '60%' },
                       ]}>
                       {project.shortDescription}
                     </Text>
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
   tags: {
     color: '#7159c1',
     fontWeight: 'bold',
+    width: '60%',
   },
 
   movieButtonText: {

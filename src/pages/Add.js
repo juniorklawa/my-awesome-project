@@ -48,6 +48,11 @@ export default class New extends Component {
     console.log(this.state.projects);
   };
 
+  deleteTodo(i){
+    console.log(this.state.todo[i])
+    console.log('AAAA',i)
+  }
+
   addTodo = async () => {
     const data = new FormData();
     data.append('todoItem', this.state.todoItem);
@@ -136,7 +141,7 @@ export default class New extends Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
         <Header
           placement="left"
           centerComponent={
@@ -158,7 +163,10 @@ export default class New extends Component {
           }}
         />
 
-        <ScrollView>
+        <ScrollView ref={ref => this.scrollView = ref}
+          onContentSizeChange={(contentWidth, contentHeight) => {
+            this.scrollView.scrollToEnd({ animated: true });
+          }}>
           <View style={styles.container}>
             <Image
               style={{
@@ -213,46 +221,16 @@ export default class New extends Component {
             />
 
 
-            <RNPickerSelect
-              placeholder={{ label: 'Select a category', value: null, color: '#7159c1' }}
-              placeholderTextColor={{ color: '#7159c1' }}
-              onValueChange={(value) => this.setState({ category: value })}
-              items={[
-                { label: 'Mobile App', value: 'Mobile App' },
-                { label: 'Desktop App', value: 'Desktop App' },
-                { label: 'Tool', value: 'Tool' },
-                { label: 'Bot', value: 'Bot' },
-                { label: 'Other', value: 'Other' },
-              ]}
+            <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              placeholder="Category"
+              placeholderTextColor="#999"
+              value={this.state.category}
+              onChangeText={category => this.setState({ category })}
             />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <TextInput
-                style={[styles.input, { flex: 10}]}
-                autoCorrect={false}
-                placeholder="Add new todo"
-                onSubmitEditing={() => this.addTodo()}
-                placeholderTextColor="#999"
-                value={this.state.todoItem}
-                onChangeText={todoItem => this.setState({ todoItem })}
-              />
-              <TouchableOpacity
-                onPress={() => this.addTodo()}
-                hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginTop: 10,
-                }}>
-                <Icon name="chevron-right" size={35} color="#7159c1" solid />
-              </TouchableOpacity>
-            </View>
+
 
             <View style={{ marginTop: 10 }}>
               {this.state.todo.map((l, i) => (
@@ -261,18 +239,52 @@ export default class New extends Component {
                   containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1' }}
                   key={i}
                   title={l.task}
-                  rightIcon={<Icon name="trash" size={23} color="#666" solid />}
+                  rightIcon={
+                    <TouchableOpacity
+                      onPress={() => this.state.todo.filter((item,index) => item[index] !== i)}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                      <Icon name="trash" size={23} color="#666" solid />
+                    </TouchableOpacity>
+                  }
                 />
               ))}
             </View>
-
-            <TouchableOpacity
-              style={styles.shareButton}
-              onPress={() => this.handleSubmit()}>
-              <Text style={styles.shareButtonText}>Add</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: 10
+          }}>
+          <TextInput
+            style={[styles.input, { flex: 10 }]}
+            autoCorrect={false}
+            placeholder="Add new todo"
+            onSubmitEditing={() => this.addTodo()}
+            placeholderTextColor="#999"
+            value={this.state.todoItem}
+            onChangeText={todoItem => this.setState({ todoItem })}
+          />
+          <TouchableOpacity
+            onPress={() => this.addTodo()}
+            hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}>
+            <Icon name="chevron-right" size={35} color="#7159c1" solid />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={styles.shareButton}
+          onPress={() => this.handleSubmit()}>
+          <Text style={styles.shareButtonText}>Add</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -324,7 +336,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 42,
     marginTop: 15,
-
+    margin: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
