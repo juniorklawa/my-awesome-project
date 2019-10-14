@@ -1,11 +1,7 @@
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
 import { Header, ListItem } from 'react-native-elements';
-import RNPickerSelect from 'react-native-picker-select';
 import {
   View,
   StyleSheet,
@@ -23,7 +19,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 export default class Edit extends Component {
 
   static navigationOptions = {
-    //To hide the ActionBar/NavigationBar
+
     headerStyle: {
       backgroundColor: '#7159c1',
     },
@@ -171,7 +167,7 @@ export default class Edit extends Component {
 
     return (
 
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#7159c1' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
         <StatusBar backgroundColor="#7159c1" barStyle="light-content" />
         <Header
           placement="left"

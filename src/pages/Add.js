@@ -6,8 +6,7 @@ import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
 import { Header, ListItem } from 'react-native-elements';
-import RNPickerSelect from 'react-native-picker-select';
-import { Input as RInput } from 'react-native-elements'
+import { Label, Form, Item, Picker } from 'native-base';
 import {
   View,
   StyleSheet,
@@ -16,7 +15,6 @@ import {
   TextInput,
   Image,
   StatusBar,
-  Picker,
   ScrollView,
   Alert
 } from 'react-native';
@@ -39,6 +37,14 @@ export default class New extends Component {
     doneTasks: 0
   };
 
+  static navigationOptions = {
+    //To hide the ActionBar/NavigationBar
+    headerStyle: {
+      backgroundColor: '#7159c1',
+    },
+    header: null,
+  };
+
   componentDidMount = async () => {
     const data = await AsyncStorage.getItem('projectss');
     this.state.projects = (await JSON.parse(data)) || [];
@@ -48,9 +54,11 @@ export default class New extends Component {
     console.log(this.state.projects);
   };
 
-  deleteTodo(i){
-    console.log(this.state.todo[i])
-    console.log('AAAA',i)
+  deleteTodo(i) {
+    const newTodoList = this.state.todo.filter((task, index) => index !== i)
+    this.setState({
+      todo: newTodoList
+    })
   }
 
   addTodo = async () => {
@@ -180,6 +188,11 @@ export default class New extends Component {
 
               source={require('../icons/newidea.png')}></Image>
 
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 30, marginTop: 16 }]}>
+              Required information
+            </Text>
+
             <TextInput
               style={styles.input}
               autoCorrect={false}
@@ -201,6 +214,11 @@ export default class New extends Component {
               }
             />
 
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 30, marginTop: 16 }]}>
+              Additional information
+            </Text>
+
             <TextInput
               style={styles.input}
               autoCorrect={false}
@@ -210,6 +228,20 @@ export default class New extends Component {
               value={this.state.tags}
               onChangeText={tags => this.setState({ tags })}
             />
+
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={{ width: '50%' }}
+              placeholder="Select one option"
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+            >
+              <Picker.Item label="day(s)" value="key0" />
+              <Picker.Item label="week(s)" value="key1" />
+              <Picker.Item label="months(s)" value="key2" />
+              <Picker.Item label="year(s)" value="key3" />
+            </Picker>
 
             <TextInput
               style={styles.input}
@@ -241,7 +273,7 @@ export default class New extends Component {
                   title={l.task}
                   rightIcon={
                     <TouchableOpacity
-                      onPress={() => this.state.todo.filter((item,index) => item[index] !== i)}
+                      onPress={() => this.deleteTodo(i)}
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
                       <Icon name="trash" size={23} color="#666" solid />
                     </TouchableOpacity>

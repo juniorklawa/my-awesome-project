@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -21,7 +19,6 @@ import Icon from 'react-native-vector-icons/Entypo';
 export default class Details extends React.Component {
 
   static navigationOptions = {
-    //To hide the ActionBar/NavigationBar
     headerStyle: {
       backgroundColor: '#7159c1',
     },
@@ -54,44 +51,62 @@ export default class Details extends React.Component {
   }
 
   deleteProject(id) {
-    const newProjects = this.state.projects.filter(obj => obj.key != id);
-    this.setState({
-      projects: newProjects,
-    });
 
-    AsyncStorage.setItem('projectss', JSON.stringify(newProjects));
+    Alert.alert(
+      'Are you sure?',
+      `You are going to delete ${this.state.project.title}`,
+      [
+        {
+          text: 'Yes', onPress: () => {
+            const newProjects = this.state.projects.filter(obj => obj.key != id);
+            this.setState({
+              projects: newProjects,
+            });
 
-    this.props.navigation.navigate('Dashboard');
+            AsyncStorage.setItem('projectss', JSON.stringify(newProjects));
+
+            this.props.navigation.navigate('Dashboard');
+          }
+        },
+        { text: 'No', onPress: () => { return } },
+      ],
+      { cancelable: true },
+    );
+
+
+
   }
 
   deleteTodo(i) {
-
-
-    let filteredTodo = this.state.todo.filter((item, index) => index !== i)
+    const newTodoList = this.state.todo.filter((task, index) => index !== i)
     this.setState({
-      todo: filteredTodo
+      todo: newTodoList
     })
 
-    console.log(this.state.todo)
-    this.forceUpdate()
+    this.state.project.todo = this.state.todo;
 
     AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
-
   }
 
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
   }
 
-  addTodo() {
+  addTodo = async () => {
     const data = new FormData();
     data.append('todoItem', this.state.todoItem);
 
+
     if (!this.state.todoItem) {
-      Alert.alert('Ops!', 'This field is obligatory', [{ text: 'OK' }], {
-        cancelable: false,
-      });
-      return;
+      Alert.alert(
+        'Ops!',
+        'This field is obligatory',
+        [
+          { text: 'OK' },
+        ],
+        { cancelable: false },
+      );
+      return
     }
 
     this.state.todo.push({
@@ -100,18 +115,19 @@ export default class Details extends React.Component {
     });
 
     this.setState({
-      todoItem: ''
-    })
+      todoItem: '',
+    });
 
-    this.forceUpdate()
-
+    console.log(this.state.todo);
 
     AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+
+    //this.forceUpdate()
   };
 
+
+
   render() {
-    const { todo } = this.state;
-    console.log(todo)
     StatusBar.setBarStyle('light-content', true);
     const {
       key,
@@ -180,28 +196,27 @@ export default class Details extends React.Component {
 
             <View>
               <Text style={[styles.category, { fontSize: 25 }]}>To-do</Text>
-              {todo.map((task, i) => (
+              {this.state.todo.map((task, i) => (
                 <CheckBox
                   key={i}
-                  title={this.state.project.todo[i].task}
-                  checked={this.state.project.todo[i].checked}
+                  title={task.task}
+                  checked={task.checked}
                   onLongPress={() => this.deleteTodo(i)}
                   onPress={() => {
-                    this.state.project.todo[i].checked = !this.state.project
-                      .todo[i].checked;;
-                    this.forceUpdate();;
+                    task.checked = !task.checked;
+                    this.forceUpdate();
 
                     const trueArray = this.state.project.todo.filter(
                       doneTasks => doneTasks.checked,
-                    ).length;;
+                    ).length;
 
                     this.state.projects
                       .filter(project => {
-                        return project.key === this.state.project.key;;
+                        return project.key === this.state.project.key;
                       })
                       .map(project => {
-                        project.todo = this.state.project.todo;;
-                        project.doneTasks = trueArray;;
+                        project.todo = this.state.project.todo;
+                        project.doneTasks = trueArray;
                       });
 
                     AsyncStorage.setItem(
@@ -219,10 +234,10 @@ export default class Details extends React.Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#fbfbfb',
+            marginHorizontal: 10
           }}>
           <TextInput
-            style={[styles.input, { flex: 10, marginHorizontal: 10 }]}
+            style={[styles.input, { flex: 10 }]}
             autoCorrect={false}
             placeholder="Add new todo"
             onSubmitEditing={() => this.addTodo()}
@@ -238,9 +253,8 @@ export default class Details extends React.Component {
               alignItems: 'center',
               justifyContent: 'center',
               marginTop: 10,
-              marginRight: 15,
             }}>
-            <Icon name="chevron-right" size={30} color="#7159c1" solid />
+            <Icon name="chevron-right" size={35} color="#7159c1" solid />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
