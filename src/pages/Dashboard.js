@@ -77,28 +77,18 @@ export default class Dashboard extends React.Component {
 
     return (
 
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEFF1' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#1575D3' }}>
         <NavigationEvents
           onWillFocus={() => this._retrieveData()}
           onDidFocus={payload => console.log('did focus', payload)}
           onWillBlur={payload => console.log('will blur', payload)}
           onDidBlur={payload => console.log('did blur', payload)}
         />
-        <Header
-          placement="left"
-          centerComponent={
-            <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', height:'100%' }]}>
-              My ideas
+
+        <Text
+          style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#fafafa', marginLeft:18,marginTop:32 }]}>
+          My ideas
             </Text>
-          }
-          statusBarProps={{ barStyle: 'light-content' }}
-          barStyle="light-content" // or directly
-          containerStyle={{
-            backgroundColor: '#7159c1',
-            justifyContent: 'space-around',
-          }}
-        />
 
         <ScrollView>
           <View style={styles.container}>
@@ -119,7 +109,7 @@ export default class Dashboard extends React.Component {
                           {
                             color: '#363a3f',
                             fontSize: 23,
-                            marginTop:10,
+                            marginTop: 10,
                             padding: 0,
                             width: '80%',
                             lineHeight: 24
@@ -144,7 +134,7 @@ export default class Dashboard extends React.Component {
                     <Text
                       style={[
                         iOSUIKit.bodyWhite,
-                        { color: '#363a3f', fontSize: 15, marginTop: 10, width: '60%' },
+                        { color: '#4b4b4b', fontSize: 15, marginTop: 10, width: '60%' },
                       ]}>
                       {project.shortDescription}
                     </Text>
@@ -158,10 +148,10 @@ export default class Dashboard extends React.Component {
                         percent={project.doneTasks / project.todo.length * 100}
                         radius={40}
                         borderWidth={5}
-                        color="#7159c1"
+                        color="#61B0FF"
                         shadowColor="#f0f0f0"
                         bgColor="#fff">
-                        <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 18, color: '#7159c1' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
+                        <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#61B0FF' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
                       </ProgressCircle>
                     </View>
                   </View>
@@ -210,7 +200,7 @@ export default class Dashboard extends React.Component {
             this.props.navigation.navigate('Add');
           }}
           style={{ marginBottom: 15 }}
-          buttonColor="#7159c1"
+          buttonColor="#778899"
         />
       </SafeAreaView>
     );
@@ -220,7 +210,7 @@ export default class Dashboard extends React.Component {
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    backgroundColor: '#ECEFF1',
+    backgroundColor: '#1575D3',
     minHeight: '100%',
     //height: height,
   },
@@ -255,7 +245,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tags: {
-    color: '#7159c1',
+    color: '#61B0FF',
     fontWeight: 'bold',
     width: '60%',
   },
