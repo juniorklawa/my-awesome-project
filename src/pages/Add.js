@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
 import { Header, ListItem } from 'react-native-elements';
 import { Label, Form, Item, Picker } from 'native-base';
+import moment from 'moment';
 import {
   View,
   StyleSheet,
@@ -29,7 +30,7 @@ export default class New extends Component {
     worktime: '',
     tags: '',
     todoItem: '',
-    date: new Date(),
+    date: moment().format('ddd, D [th] MMMM'),
     todo: [],
     projects: [],
     estimatedTime: '',
@@ -112,12 +113,15 @@ export default class New extends Component {
       return
     }
 
-    this.state.date =
-      this.state.date.getDate() +
-      '/' +
-      (this.state.date.getMonth() + 1) +
-      '/' +
-      this.state.date.getFullYear();
+    /* this.state.date =
+       this.state.date.getDate() +
+       '/' +
+       (this.state.date.getMonth() + 1) +
+       '/' +
+       this.state.date.getFullYear();*/
+
+
+
 
     this.state.projects.push({
       title: this.state.title,
