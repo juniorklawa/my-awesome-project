@@ -5,6 +5,7 @@ import { View, Text, Image, StyleSheet, Button, StatusBar, ScrollView, Touchable
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
 import { Header } from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions } from 'react-native';
@@ -19,22 +20,8 @@ export default class Dashboard extends React.Component {
     projects: [],
   };
 
-  // static navigationOptions = {
-  //   title: 'My ideas',
-  //   headerStyle: {
-  //     backgroundColor: '#7159c1',
-  //   },
-  //   headerTintColor: '#fff',
-  //   headerTitleStyle: {
-  //     fontWeight: 'bold',
-  //   },
-  // };
 
   static navigationOptions = {
-    //To hide the ActionBar/NavigationBar
-    headerStyle: {
-      backgroundColor: '#7159c1',
-    },
     header: null,
   };
 
@@ -76,133 +63,138 @@ export default class Dashboard extends React.Component {
     StatusBar.setBarStyle('light-content', true);
 
     return (
+      <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
+        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
+        <SafeAreaView style={{ flex: 1 }}>
+          <NavigationEvents
+            onWillFocus={() => this._retrieveData()}
+            onDidFocus={payload => console.log('did focus', payload)}
+            onWillBlur={payload => console.log('will blur', payload)}
+            onDidBlur={payload => console.log('did blur', payload)}
+          />
 
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#1575D3' }}>
-        <NavigationEvents
-          onWillFocus={() => this._retrieveData()}
-          onDidFocus={payload => console.log('did focus', payload)}
-          onWillBlur={payload => console.log('will blur', payload)}
-          onDidBlur={payload => console.log('did blur', payload)}
-        />
 
-        <Text
-          style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#fafafa', marginLeft:18,marginTop:32 }]}>
-          My ideas
+          <Text
+            style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', marginLeft: 18, marginTop: 32 }]}>
+            My ideas
             </Text>
 
-        <ScrollView>
-          <View style={styles.container}>
-            {this.state.projects.length > 0 ? (
-              this.state.projects.map((project, i) => (
-                <TouchableWithoutFeedback
-                  key={i}
-                  onPress={() => this.goToProjectDetails(project.key)}>
-                  <View style={styles.projectContainer}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
+          <ScrollView>
+            <View style={styles.container}>
+              {this.state.projects.length > 0 ? (
+                this.state.projects.map((project, i) => (
+                  <TouchableWithoutFeedback
+                    key={i}
+                    onPress={() => this.goToProjectDetails(project.key)}>
+                    <View style={styles.projectContainer}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text
+                          style={[
+                            iOSUIKit.largeTitleEmphasizedObject,
+                            {
+                              color: '#4b4b4b',
+                              fontSize: 23,
+                              marginTop: 10,
+                              padding: 0,
+                              width: '80%',
+                              lineHeight: 24
+                            },
+                          ]}>
+                          {project.title}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => this.goToEdit(project.key)}>
+                          <View>
+                            <Icon name="edit" size={23} color="#666" solid />
+                          </View>
+                        </TouchableOpacity>
+                      </View>
                       <Text
                         style={[
-                          iOSUIKit.largeTitleEmphasizedObject,
-                          {
-                            color: '#363a3f',
-                            fontSize: 23,
-                            marginTop: 10,
-                            padding: 0,
-                            width: '80%',
-                            lineHeight: 24
-                          },
+                          iOSUIKit.subheadEmphasized,
+                          { color: '#929699', fontSize: 14, marginTop: 3 },
                         ]}>
-                        {project.title}
+                        {project.date}
                       </Text>
-                      <TouchableOpacity
-                        onPress={() => this.goToEdit(project.key)}>
-                        <View>
-                          <Icon name="edit" size={23} color="#666" solid />
-                        </View>
-                      </TouchableOpacity>
+                      <Text
+                        style={[
+                          iOSUIKit.bodyWhite,
+                          { color: '#5b5b5b', fontSize: 15, marginTop: 10, width: '60%', fontWeight: '600' },
+                        ]}>
+                        {project.shortDescription}
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text style={styles.category}>{project.category}</Text>
+                      </View>
+                      <Text style={styles.tags}>{project.tags}</Text>
+                      <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
+                        <ProgressCircle
+                          percent={project.doneTasks / project.todo.length * 100}
+                          radius={40}
+                          borderWidth={5}
+                          color="#61B0FF"
+                          shadowColor="#f0f0f0"
+                          bgColor="#fff">
+                          <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#61B0FF' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
+                        </ProgressCircle>
+                      </View>
                     </View>
+                  </TouchableWithoutFeedback>
+                ))
+              ) : (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: height,
+                    }}>
+                    <Image
+                      style={{
+                        width: '100%',
+                        height: 180,
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        marginBottom: 16,
+                        marginTop: 16,
+                      }}
+                      source={require('../icons/astronaut.png')}
+                    />
                     <Text
                       style={[
                         iOSUIKit.subheadEmphasized,
-                        { color: '#929699', fontSize: 14, marginTop: 3 },
+                        {
+                          color: 'white',
+                          fontSize: 18,
+                          marginTop: 20,
+                          margin: 20,
+                          alignContent: 'center',
+                          justifyContent: 'center',
+                          textAlign: 'center',
+                        },
                       ]}>
-                      {project.date}
-                    </Text>
-                    <Text
-                      style={[
-                        iOSUIKit.bodyWhite,
-                        { color: '#4b4b4b', fontSize: 15, marginTop: 10, width: '60%' },
-                      ]}>
-                      {project.shortDescription}
-                    </Text>
-
-                    <Text style={styles.tags}>{project.tags}</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Text style={styles.category}>{project.category}</Text>
-                    </View>
-                    <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
-                      <ProgressCircle
-                        percent={project.doneTasks / project.todo.length * 100}
-                        radius={40}
-                        borderWidth={5}
-                        color="#61B0FF"
-                        shadowColor="#f0f0f0"
-                        bgColor="#fff">
-                        <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#61B0FF' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
-                      </ProgressCircle>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              ))
-            ) : (
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: height,
-                  }}>
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 180,
-                      justifyContent: 'flex-end',
-                      alignItems: 'center',
-                      marginBottom: 16,
-                      marginTop: 16,
-                    }}
-                    source={require('../icons/astronaut.png')}
-                  />
-                  <Text
-                    style={[
-                      iOSUIKit.subheadEmphasized,
-                      {
-                        color: '#929699',
-                        fontSize: 18,
-                        marginTop: 20,
-                        margin: 20,
-                        alignContent: 'center',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                      },
-                    ]}>
-                    Press the + button to create your new awesome idea!
+                      Press the + button to create your new awesome idea!
                 </Text>
-                </View>
-              )}
-          </View>
-        </ScrollView>
+                  </View>
+                )}
+            </View>
+          </ScrollView>
 
-        <ActionButton
-          onPress={() => {
-            this.props.navigation.navigate('Add');
-          }}
-          style={{ marginBottom: 15 }}
-          buttonColor="#f44336"
-        />
-      </SafeAreaView>
+
+          <ActionButton
+            onPress={() => {
+              this.props.navigation.navigate('Add');
+            }}
+            style={{ marginBottom: 15 }}
+            buttonColor="#f44336"
+          />
+
+        </SafeAreaView>
+      </LinearGradient>
+
     );
   }
 }
@@ -210,12 +202,13 @@ export default class Dashboard extends React.Component {
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    backgroundColor: '#1575D3',
+    //backgroundColor: '#ECEFF1',
     minHeight: '100%',
     //height: height,
   },
   category: {
     fontWeight: 'bold',
+    color: '#3b3b3b'
   },
   projectContainer: {
     backgroundColor: '#ffffff',
@@ -248,6 +241,7 @@ const styles = StyleSheet.create({
     color: '#61B0FF',
     fontWeight: 'bold',
     width: '60%',
+    marginTop: 10
   },
 
   movieButtonText: {
