@@ -200,7 +200,7 @@ export default class Dashboard extends React.Component {
             this.props.navigation.navigate('Add');
           }}
           style={{ marginBottom: 15 }}
-          buttonColor="#778899"
+          buttonColor="#f44336"
         />
       </SafeAreaView>
     );

@@ -30,7 +30,7 @@ export default class New extends Component {
     worktime: '',
     tags: '',
     todoItem: '',
-    date: moment().format('ddd, D [th] MMMM'),
+    date: moment().format('ddd, D[th] MMMM'),
     todo: [],
     projects: [],
     estimatedTime: '',
