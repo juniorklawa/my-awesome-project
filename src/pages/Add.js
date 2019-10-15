@@ -328,7 +328,7 @@ export default class New extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
+    paddingHorizontal : 12,
     backgroundColor: '#ECEFF1',
     flex: 1,
     minHeight: '100%',

@@ -14,6 +14,7 @@ import { CheckBox, Input } from 'react-native-elements';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
+import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
 
 export default class Details extends React.Component {
@@ -141,52 +142,63 @@ export default class Details extends React.Component {
             <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={30} color="#fff" solid />
             </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{ marginEnd: 15 }}
-              onPress={() => this.deleteProject(key)}>
-              <Icon name="trash" size={23} color="#fff" solid />
-            </TouchableOpacity>
           </View>
-          <View key={key} style={styles.container}>
-            <ScrollView style={{ flex: 1 }}>
 
-
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 32 }]}>
-                {this.state.project.title}
-              </Text>
-              <Text
+          <Text
+            style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18 }]}>
+            {this.state.project.title}
+          </Text>
+          <Text
                 style={[
                   iOSUIKit.subheadEmphasized,
-                  { color: '#929699', fontSize: 14, marginTop: -10 },
+                  { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal:18 },
                 ]}>
                 Created at {date}
               </Text>
+
+          <View key={key} style={styles.container}>
+            <ScrollView style={{ flex: 1 }}>
+              <Text
+                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 24, marginTop: 8 }]}>
+                Description
+              </Text>
               <Text
                 style={[
-                  iOSUIKit.bodyWhite,
-                  { color: '#363a3f', fontSize: 15, marginTop: 10 },
+                  iOSUIKit.subhead,
+                  { color: '#4b4b4b', fontSize: 16, marginTop: 5 },
                 ]}>
-                Description: {shortDescription}
+                {shortDescription}
               </Text>
-
-              <Text style={styles.tags}>Tags: {tags}</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.category}>Category: {category}</Text>
-              </View>
 
               <Text
-                style={[iOSUIKit.bodyWhite, { color: '#363a3f', fontSize: 15 }]}>
-                Estimate to finish {worktime}
+                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
+                Tags
+              </Text>
+              <Text style={styles.tags}>{tags}</Text>
+              <Text
+                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
+                Category
+              </Text>
+              <Text style={styles.category}>{category}</Text>
+
+              <Text
+                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
+                Estimate
               </Text>
 
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.category, { fontSize: 25 }]}>To-do</Text>
+              <Text
+                style={styles.category}>
+                {worktime}
+              </Text>
+
+              <View style={{ flex: 1, marginTop:20 }}>
+                <Text style={[styles.category, { fontSize: 25, color: '#0D4DB0' }]}>To-do</Text>
                 {this.state.todo.map((task, i) => (
                   <CheckBox
                     key={i}
+                    style={{width:'100%'}}
                     title={task.task}
+                    containerStyle={{margin:5, padding:10, marginLeft:0, borderColor:'transparent', width:'100%'}}
                     checked={task.checked}
                     onLongPress={() => this.deleteTodo(i)}
                     onPress={() => {
@@ -249,6 +261,23 @@ export default class Details extends React.Component {
               <Icon name="chevron-right" size={35} color="#7159c1" solid />
             </TouchableOpacity>
           </View>
+          <ActionButton
+            style={{ marginBottom: 15 }}
+            buttonColor="#f44336"
+          >
+            <ActionButton.Item buttonColor='#1abc9c' title="Delete project" onPress={() => this.deleteProject(key)}>
+              <Icon name="trash" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+
+            <ActionButton.Item buttonColor='#3498db' title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
+              <Icon name="edit" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+
+            <ActionButton.Item buttonColor='#9b59b6' title="New to-do" onPress={() => console.log("notes tapped!")}>
+              <Icon name="check" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+
+          </ActionButton>
         </SafeAreaView>
       </LinearGradient>
     );
@@ -257,7 +286,7 @@ export default class Details extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
+    padding: 18,
     height: '100%',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
@@ -294,13 +323,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tags: {
-    color: '#7159c1',
+    color: '#1679D9',
     fontWeight: 'bold',
   },
 
-  movieButtonText: {
-    fontSize: 16,
-    color: '#E8B708',
-    fontWeight: 'bold',
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
   },
 });

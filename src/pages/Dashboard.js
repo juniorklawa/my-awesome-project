@@ -64,7 +64,7 @@ export default class Dashboard extends React.Component {
 
     return (
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
-        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
+        <StatusBar backgroundColor="transparent" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
             onWillFocus={() => this._retrieveData()}
@@ -136,10 +136,10 @@ export default class Dashboard extends React.Component {
                           percent={project.doneTasks / project.todo.length * 100}
                           radius={40}
                           borderWidth={5}
-                          color="#61B0FF"
+                          color="#1679D9"
                           shadowColor="#f0f0f0"
                           bgColor="#fff">
-                          <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#61B0FF' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
+                          <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#1679D9' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
                         </ProgressCircle>
                       </View>
                     </View>
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tags: {
-    color: '#61B0FF',
+    color: '#1679D9',
     fontWeight: 'bold',
     width: '60%',
     marginTop: 10
