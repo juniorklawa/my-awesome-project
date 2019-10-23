@@ -64,7 +64,7 @@ export default class Dashboard extends React.Component {
 
     return (
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
-        <StatusBar backgroundColor="transparent" barStyle="light-content" />
+        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
             onWillFocus={() => this._retrieveData()}
