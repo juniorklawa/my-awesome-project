@@ -244,24 +244,38 @@ export default class New extends Component {
                 Interval time
               </Text>
 
+              <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-              <View style={styles.selectInput}>
-                <Picker
-                  mode="dropdown"
-                  iosIcon={<Icon name="arrow-down" />}
-                  style={{ width: '50%' }}
-                  value={this.state.estimatedInterval}
-                  onChangeText={tags => this.setState({ estimatedInterval })}
-                  placeholder="Select one option"
-                  placeholderStyle={{ color: "#bfc6ea" }}
-                  placeholderIconColor="#007aff"
-                >
-                  <Picker.Item label="day(s)" value="key0" />
-                  <Picker.Item label="week(s)" value="key1" />
-                  <Picker.Item label="months(s)" value="key2" />
-                  <Picker.Item label="year(s)" value="key3" />
-                </Picker>
+                <View>
 
+                  <TextInput
+                    style={styles.input}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    placeholder="Tags"
+                    placeholderTextColor="#999"
+                    value={this.state.tags}
+                    onChangeText={tags => this.setState({ tags })}
+                  />
+                </View>
+                <View style={styles.selectInput}>
+                  <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="arrow-down" />}
+                    style={{ width: '100%' }}
+                    value={this.state.estimatedInterval}
+                    onChangeText={tags => this.setState({ estimatedInterval })}
+                    placeholder="Select one option"
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                  >
+                    <Picker.Item label="day(s)" value="key0" />
+                    <Picker.Item label="week(s)" value="key1" />
+                    <Picker.Item label="months(s)" value="key2" />
+                    <Picker.Item label="year(s)" value="key3" />
+                  </Picker>
+
+                </View>
               </View>
 
 
@@ -371,6 +385,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "#F7F7F7",
     padding: 5,
+    flex: 1,
     marginTop: 10,
   },
 
