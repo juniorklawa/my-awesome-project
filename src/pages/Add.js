@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  KeyboardAvoidingView,
   TextInput,
   Image,
   StatusBar,
@@ -83,6 +84,8 @@ export default class New extends Component {
       todoItem: '',
     });
 
+    this.scrollView.scrollToEnd({ animated: true });
+
     console.log(this.state.todo);
   };
 
@@ -108,22 +111,12 @@ export default class New extends Component {
       return
     }
 
-    /* this.state.date =
-       this.state.date.getDate() +
-       '/' +
-       (this.state.date.getMonth() + 1) +
-       '/' +
-       this.state.date.getFullYear();*/
-
-
-
-
     this.state.projects.push({
       title: this.state.title,
       shortDescription: this.state.shortDescription,
       category: this.state.category,
       tags: this.state.tags,
-      worktime: this.state.worktime,
+      worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
@@ -151,211 +144,220 @@ export default class New extends Component {
 
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-          <Header
-            placement="left"
-            centerComponent={
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white' }]}>
-                What's your idea?
+        <SafeAreaView style={{ flex: 1 }}>
+          <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+            <View style={{ backgroundColor: '#fff', flex: 1 }}>
+              <View style={{ backgroundColor: '#1679D9' }}>
+                <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
+                  <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
+                    <Icon name="chevron-thin-left" size={30} color="#fff" solid />
+                  </TouchableOpacity>
+                </View>
+
+                <Text
+                  style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18, marginBottom: 10 }]}>
+                  What's your idea?
             </Text>
-            }
-            statusBarProps={{ barStyle: 'light-content' }}
-            leftComponent={
-              <TouchableOpacity onPress={() => this.goToDashBoard()}>
-                <Icon name="chevron-thin-left" size={23} color="#fff" solid />
-              </TouchableOpacity>
-            }
-            barStyle="light-content" // or directly
-            containerStyle={{
+              </View>
+              <ScrollView
+                ref={ref => this.scrollView = ref}
+              >
+                <View style={styles.container}>
+                  <Image
+                    style={{
+                      width: '100%',
+                      height: 180,
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      marginBottom: 16,
+                      marginTop: 16,
+                    }}
 
-              justifyContent: 'space-around',
-            }}
-          />
+                    source={require('../icons/newidea.png')}></Image>
 
-          <ScrollView ref={ref => this.scrollView = ref}
-            onContentSizeChange={(contentWidth, contentHeight) => {
-              this.scrollView.scrollToEnd({ animated: true });
-            }}>
-            <View style={styles.container}>
-              <Image
-                style={{
-                  width: '100%',
-                  height: 180,
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  marginBottom: 16,
-                  marginTop: 16,
-                }}
-
-                source={require('../icons/newidea.png')}></Image>
-
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginTop: 16 }]}>
-                Required information
+                  <Text
+                    style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginTop: 16 }]}>
+                    Required information
             </Text>
 
-              <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16 }}>
-                Project Name
+                  <Text style={styles.labelTitle}>
+                    Project Name
               </Text>
-              <TextInput
-                style={styles.input}
-                autoCorrect={false}
-                placeholderTextColor="#999"
-                value={this.state.title}
-                onChangeText={title => this.setState({ title })}
-              />
+                  <TextInput
+                    style={styles.input}
+                    autoCorrect={false}
+                    placeholder="Ex: My Awesome Idea"
+                    placeholderTextColor="#999"
+                    value={this.state.title}
+                    onChangeText={title => this.setState({ title })}
+                  />
 
-              <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16 }}>
-                Description
+                  <Text style={styles.labelTitle}>
+                    Description
               </Text>
-
-              <TextInput
-                style={styles.input}
-                autoCorrect={false}
-                autoCapitalize="none"
-                placeholderTextColor="#999"
-                value={this.state.shortDescription}
-                onChangeText={shortDescription =>
-                  this.setState({ shortDescription })
-                }
-              />
-
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginTop: 16 }]}>
-                Additional information
-            </Text>
-
-              <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16 }}>
-                Keys
-              </Text>
-
-              <TextInput
-                style={styles.input}
-                autoCorrect={false}
-                autoCapitalize="none"
-                placeholder="Tags"
-                placeholderTextColor="#999"
-                value={this.state.tags}
-                onChangeText={tags => this.setState({ tags })}
-              />
-
-              <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16 }}>
-                Interval time
-              </Text>
-
-              <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-
-                <View>
 
                   <TextInput
                     style={styles.input}
                     autoCorrect={false}
                     autoCapitalize="none"
-                    placeholder="Tags"
+                    placeholderTextColor="#999"
+                    value={this.state.shortDescription}
+                    placeholder="Ex: An app that tracks awesome ideas"
+                    onChangeText={shortDescription =>
+                      this.setState({ shortDescription })
+                    }
+                  />
+
+                  <Text
+                    style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginTop: 16 }]}>
+                    Additional information
+            </Text>
+
+                  <Text style={styles.labelTitle}>
+                    Keywords
+              </Text>
+
+                  <TextInput
+                    style={styles.input}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    placeholder="Ex: #Random #Pictures #Dogs"
                     placeholderTextColor="#999"
                     value={this.state.tags}
                     onChangeText={tags => this.setState({ tags })}
                   />
-                </View>
-                <View style={styles.selectInput}>
-                  <Picker
-                    mode="dropdown"
-                    iosIcon={<Icon name="arrow-down" />}
-                    style={{ width: '100%' }}
-                    value={this.state.estimatedInterval}
-                    onChangeText={tags => this.setState({ estimatedInterval })}
-                    placeholder="Select one option"
-                    placeholderStyle={{ color: "#bfc6ea" }}
-                    placeholderIconColor="#007aff"
-                  >
-                    <Picker.Item label="day(s)" value="key0" />
-                    <Picker.Item label="week(s)" value="key1" />
-                    <Picker.Item label="months(s)" value="key2" />
-                    <Picker.Item label="year(s)" value="key3" />
-                  </Picker>
 
-                </View>
-              </View>
-
-
-              <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16 }}>
-                Category
+                  <Text style={styles.labelTitle}>
+                    Estimated time
               </Text>
 
-              <View style={styles.selectInput}>
-                <Picker
-                  mode="dropdown"
-                  iosIcon={<Icon name="arrow-down" />}
-                  style={{ width: '100%' }}
-                  placeholder="Select one option"
-                  placeholderStyle={{ color: "#bfc6ea" }}
-                  placeholderIconColor="#007aff"
-                >
-                  <Picker.Item label="Application" value="Application" />
-                  <Picker.Item label="Website" value="Website" />
-                  <Picker.Item label="Software" value="Software" />
-                  <Picker.Item label="Bot" value="Bot" />
-                  <Picker.Item label="Other" value="Other" />
-                </Picker>
+                  <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
+                    <View>
+                      <TextInput
+                        style={styles.input}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        placeholder="0"
+                        placeholderTextColor="#999"
+                        value={this.state.estimatedTime}
+                        onChangeText={estimatedTime => this.setState({ estimatedTime })}
+                      />
+                    </View>
+                    <View style={[styles.selectInput, { height: 50, marginLeft: 10 }]}>
+                      <Picker
+                        mode="dropdown"
+                        iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                        style={{ width: '100%' }}
+                        value={this.state.estimatedInterval}
+                        onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
+                        placeholder="Select one option"
+                        selectedValue={this.state.estimatedInterval}
+                        onValueChange={estimatedInterval => this.setState({ estimatedInterval })}
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                      >
+                        <Picker.Item label="day(s)" value="days(s)" />
+                        <Picker.Item label="week(s)" value="weeks(s)" />
+                        <Picker.Item label="months(s)" value="months(s)" />
+                        <Picker.Item label="year(s)" value="years(s)" />
+                      </Picker>
+
+                    </View>
+                  </View>
+
+
+                  <Text style={styles.labelTitle}>
+                    Category
+              </Text>
+
+                  <View style={styles.selectInput}>
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                      style={{ width: '100%' }}
+                      value={this.state.category}
+                      onChangeText={category => this.setState({ category })}
+                      placeholder="Select one option"
+                      selectedValue={this.state.category}
+                      onValueChange={category => this.setState({ category })}
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                    >
+                      <Picker.Item label="Application" value="Application" />
+                      <Picker.Item label="Website" value="Website" />
+                      <Picker.Item label="Software" value="Software" />
+                      <Picker.Item label="Bot" value="Bot" />
+                      <Picker.Item label="Other" value="Other" />
+                    </Picker>
+
+                  </View>
+
+
+
+                  {
+                    this.state.todo.length > 0 ?
+                      <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16, fontSize: 24 }}>
+                        To-do
+                  </Text>
+                      : null
+                  }
+
+
+                  <View style={{ marginTop: 10, flex:1 }}>
+                    {this.state.todo.map((l, i) => (
+                      <ListItem
+                        containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1', borderRadius: 4, marginTop: 2, marginBottom: 2 }}
+                        key={i}
+                        title={l.task}
+                        rightIcon={
+                          <TouchableOpacity
+                            onPress={() => this.deleteTodo(i)}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                            <Icon name="trash" size={23} color="#666" solid />
+                          </TouchableOpacity>
+                        }
+                      />
+                    ))}
+                  </View>
+                </View>
+              </ScrollView>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginHorizontal: 10
+                }}>
+                <TextInput
+                  style={[styles.input, { flex: 10 }]}
+                  autoCorrect={false}
+                  placeholder="Add new todo"
+                  onSubmitEditing={() => this.addTodo()}
+                  placeholderTextColor="#999"
+                  value={this.state.todoItem}
+                  onChangeText={todoItem => this.setState({ todoItem })}
+                />
+                <TouchableOpacity
+                  onPress={() => this.addTodo()}
+                  hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                </TouchableOpacity>
               </View>
-
-
-
-              <View style={{ marginTop: 10 }}>
-                {this.state.todo.map((l, i) => (
-                  <ListItem
-                    bottomDivider
-                    containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1' }}
-                    key={i}
-                    title={l.task}
-                    rightIcon={
-                      <TouchableOpacity
-                        onPress={() => this.deleteTodo(i)}
-                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                        <Icon name="trash" size={23} color="#666" solid />
-                      </TouchableOpacity>
-                    }
-                  />
-                ))}
-              </View>
+              <TouchableOpacity
+                style={styles.shareButton}
+                onPress={() => this.handleSubmit()}>
+                <Text style={styles.shareButtonText}>Add</Text>
+              </TouchableOpacity>
             </View>
-          </ScrollView>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginHorizontal: 10
-            }}>
-            <TextInput
-              style={[styles.input, { flex: 10 }]}
-              autoCorrect={false}
-              placeholder="Add new todo"
-              onSubmitEditing={() => this.addTodo()}
-              placeholderTextColor="#999"
-              value={this.state.todoItem}
-              onChangeText={todoItem => this.setState({ todoItem })}
-            />
-            <TouchableOpacity
-              onPress={() => this.addTodo()}
-              hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Icon name="chevron-right" size={35} color="#0D4DB0" solid />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.shareButton}
-            onPress={() => this.handleSubmit()}>
-            <Text style={styles.shareButtonText}>Add</Text>
-          </TouchableOpacity>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       </LinearGradient>
     );
@@ -370,6 +372,12 @@ const styles = StyleSheet.create({
     minHeight: '100%',
   },
 
+  labelTitle: {
+    fontWeight: 'bold',
+    color: '#1679D9',
+    fontSize: 16,
+    marginTop: 16
+  },
   selectButton: {
     borderRadius: 4,
     borderWidth: 1,
@@ -411,7 +419,7 @@ const styles = StyleSheet.create({
   },
 
   shareButton: {
-    backgroundColor: '#0D4DB0',
+    backgroundColor: '#1679D9',
     borderRadius: 4,
     height: 42,
     marginTop: 15,

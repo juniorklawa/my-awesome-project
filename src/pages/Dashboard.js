@@ -119,6 +119,9 @@ export default class Dashboard extends React.Component {
                         ]}>
                         {project.date}
                       </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text style={styles.category}>{project.category}</Text>
+                      </View>
                       <Text
                         style={[
                           iOSUIKit.bodyWhite,
@@ -126,9 +129,6 @@ export default class Dashboard extends React.Component {
                         ]}>
                         {project.shortDescription}
                       </Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.category}>{project.category}</Text>
-                      </View>
                       <Text style={styles.tags}>{project.tags}</Text>
                       <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                         <ProgressCircle
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   category: {
     fontWeight: 'bold',
-    color: '#3b3b3b'
+    color: '#949494'
   },
   projectContainer: {
     backgroundColor: '#ffffff',

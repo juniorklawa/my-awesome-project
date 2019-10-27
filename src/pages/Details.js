@@ -149,12 +149,12 @@ export default class Details extends React.Component {
             {this.state.project.title}
           </Text>
           <Text
-                style={[
-                  iOSUIKit.subheadEmphasized,
-                  { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal:18 },
-                ]}>
-                Created at {date}
-              </Text>
+            style={[
+              iOSUIKit.subheadEmphasized,
+              { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal: 18 },
+            ]}>
+            Created at {date}
+          </Text>
 
           <View key={key} style={styles.container}>
             <ScrollView style={{ flex: 1 }}>
@@ -191,14 +191,14 @@ export default class Details extends React.Component {
                 {worktime}
               </Text>
 
-              <View style={{ flex: 1, marginTop:20 }}>
+              <View style={{ flex: 1, marginTop: 20 }}>
                 <Text style={[styles.category, { fontSize: 25, color: '#0D4DB0' }]}>To-do</Text>
                 {this.state.todo.map((task, i) => (
                   <CheckBox
                     key={i}
-                    style={{width:'100%'}}
+                    style={{ width: '100%' }}
                     title={task.task}
-                    containerStyle={{margin:5, padding:10, marginLeft:0, borderColor:'transparent', width:'100%'}}
+                    containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%' }}
                     checked={task.checked}
                     onLongPress={() => this.deleteTodo(i)}
                     onPress={() => {
@@ -265,7 +265,7 @@ export default class Details extends React.Component {
             style={{ marginBottom: 15 }}
             buttonColor="#f44336"
           >
-            <ActionButton.Item buttonColor='#1abc9c' title="Delete project" onPress={() => this.deleteProject(key)}>
+            <ActionButton.Item buttonColor='#b71c1c' title="Delete project" onPress={() => this.deleteProject(key)}>
               <Icon name="trash" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
@@ -273,7 +273,7 @@ export default class Details extends React.Component {
               <Icon name="edit" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#9b59b6' title="New to-do" onPress={() => console.log("notes tapped!")}>
+            <ActionButton.Item buttonColor='#2AB552' title="New to-do" onPress={() => console.log("notes tapped!")}>
               <Icon name="check" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   category: {
+    color: '#949494',
     fontWeight: 'bold',
   },
   projectContainer: {
