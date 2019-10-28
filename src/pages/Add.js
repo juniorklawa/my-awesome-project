@@ -265,10 +265,10 @@ export default class New extends Component {
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
                       >
-                        <Picker.Item label="day(s)" value="days(s)" />
-                        <Picker.Item label="week(s)" value="weeks(s)" />
-                        <Picker.Item label="months(s)" value="months(s)" />
-                        <Picker.Item label="year(s)" value="years(s)" />
+                        <Picker.Item label="day(s)" value="day(s)" />
+                        <Picker.Item label="week(s)" value="week(s)" />
+                        <Picker.Item label="month(s)" value="month(s)" />
+                        <Picker.Item label="year(s)" value="year(s)" />
                       </Picker>
 
                     </View>

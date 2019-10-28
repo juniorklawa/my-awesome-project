@@ -107,12 +107,6 @@ export default class Edit extends Component {
       return
     }
 
-    /* this.state.date =
-      this.state.date.getDate() +
-      '/' +
-      (this.state.date.getMonth() + 1) +
-      '/' +
-      this.state.date.getFullYear();*/
     this.state.projects
       .filter(project => {
         console.log('project key', project.key)
@@ -125,7 +119,7 @@ export default class Edit extends Component {
           project.category = this.state.category,
           project.tags = this.state.tags,
           project.worktime = this.state.estimatedTime + ' ' + this.state.estimatedInterval
-          console.log('updated project', project)
+        console.log('updated project', project)
       });
 
 
@@ -171,11 +165,11 @@ export default class Edit extends Component {
 
     return (
 
- 
+
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+          <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
               <View style={{ backgroundColor: '#1679D9' }}>
                 <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
@@ -190,7 +184,16 @@ export default class Edit extends Component {
             </Text>
               </View>
               <ScrollView
-                ref={ref => this.scrollView = ref}
+                ref={(view) => {
+                  this.scrollView = view;
+                }}
+                onContentSizeChange={(contentWidth, contentHeight) => {
+                  this.setState({
+                    currentHeight: contentHeight
+                  })
+                  this.scrollView.scrollTo({ y: this.state.currentHeight });
+                  console.log('current height:', this.state.currentHeight)
+                }}
               >
                 <View style={styles.container}>
                   <Image
@@ -287,10 +290,10 @@ export default class Edit extends Component {
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
                       >
-                        <Picker.Item label="day(s)" value="days(s)" />
-                        <Picker.Item label="week(s)" value="weeks(s)" />
-                        <Picker.Item label="months(s)" value="months(s)" />
-                        <Picker.Item label="year(s)" value="years(s)" />
+                        <Picker.Item label="day(s)" value="day(s)" />
+                        <Picker.Item label="week(s)" value="week(s)" />
+                        <Picker.Item label="month(s)" value="month(s)" />
+                        <Picker.Item label="year(s)" value="year(s)" />
                       </Picker>
 
                     </View>
@@ -334,7 +337,7 @@ export default class Edit extends Component {
                   }
 
 
-                  <View style={{ marginTop: 10, flex:1 }}>
+                  <View style={{ marginTop: 10, flex: 1 }}>
                     {this.state.todo.map((l, i) => (
                       <ListItem
                         containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1', borderRadius: 4, marginTop: 2, marginBottom: 2 }}

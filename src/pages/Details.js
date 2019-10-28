@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
+import { Overlay } from 'react-native-elements';
 
 export default class Details extends React.Component {
 
@@ -30,6 +31,7 @@ export default class Details extends React.Component {
     todoItem: '',
     checked: false,
     doneTasks: 0,
+    isVisible: false
   };
 
   async componentDidMount() {
@@ -117,7 +119,9 @@ export default class Details extends React.Component {
     });
 
     console.log(this.state.todo);
-
+    this.setState({
+      isVisible: false
+    })
     AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
   };
 
@@ -138,6 +142,45 @@ export default class Details extends React.Component {
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
+
+          <Overlay
+            height={200}
+            onBackdropPress={() => {
+              this.setState({
+                isVisible: false
+              })
+            }}
+            isVisible={this.state.isVisible}>
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginLeft: 10 }]}>
+              New Todo
+              </Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginHorizontal: 10
+              }}>
+              <TextInput
+                style={[styles.input, { flex: 10 }]}
+                autoCorrect={false}
+                placeholder="Add new todo"
+                onSubmitEditing={() => this.addTodo()}
+                placeholderTextColor="#999"
+                value={this.state.todoItem}
+                onChangeText={todoItem => this.setState({ todoItem })}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.shareButton}
+              onPress={() => this.addTodo()}>
+              <Text style={styles.shareButtonText}>Add</Text>
+            </TouchableOpacity>
+
+          </Overlay>
+
           <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
             <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
               <Icon name="chevron-thin-left" size={30} color="#fff" solid />
@@ -155,9 +198,9 @@ export default class Details extends React.Component {
             ]}>
             Created at {date}
           </Text>
+          <ScrollView >
 
-          <View key={key} style={styles.container}>
-            <ScrollView style={{ flex: 1 }}>
+            <View key={key} style={styles.container}>
               <Text
                 style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 24, marginTop: 8 }]}>
                 Description
@@ -226,46 +269,15 @@ export default class Details extends React.Component {
                   />
                 ))}
               </View>
+            </View>
+          </ScrollView>
 
 
-            </ScrollView>
-
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#f5f5f5',
-
-            }}>
-            <TextInput
-              style={[styles.input, { flex: 10, marginLeft: 10 }]}
-              autoCorrect={false}
-              placeholder="Add new todo"
-              onSubmitEditing={() => this.addTodo()}
-              placeholderTextColor="#999"
-              value={this.state.todoItem}
-              onChangeText={todoItem => this.setState({ todoItem })}
-            />
-            <TouchableOpacity
-              onPress={() => this.addTodo()}
-              hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-                marginRight: 15
-              }}>
-              <Icon name="chevron-right" size={35} color="#7159c1" solid />
-            </TouchableOpacity>
-          </View>
           <ActionButton
             style={{ marginBottom: 15 }}
             buttonColor="#f44336"
           >
-            <ActionButton.Item buttonColor='#b71c1c' title="Delete project" onPress={() => this.deleteProject(key)}>
+            <ActionButton.Item buttonColor='#1abc9c' title="Delete project" onPress={() => this.deleteProject(key)}>
               <Icon name="trash" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
@@ -273,12 +285,16 @@ export default class Details extends React.Component {
               <Icon name="edit" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#2AB552' title="New to-do" onPress={() => console.log("notes tapped!")}>
+            <ActionButton.Item buttonColor='#9b59b6' title="New to-do" onPress={() => this.setState({
+              isVisible: true
+            })}>
               <Icon name="check" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
           </ActionButton>
+
         </SafeAreaView>
+
       </LinearGradient>
     );
   }
@@ -287,13 +303,13 @@ export default class Details extends React.Component {
 const styles = StyleSheet.create({
   container: {
     padding: 18,
-    height: '100%',
+    height: 800,
+    flex: 1,
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     backgroundColor: '#fff',
   },
   category: {
-    color: '#949494',
     fontWeight: 'bold',
   },
   projectContainer: {
@@ -306,6 +322,28 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+  },
+  shareButtonText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#FFF',
+  },
+  shareButton: {
+    backgroundColor: '#1679D9',
+    borderRadius: 4,
+    height: 42,
+    marginTop: 15,
+    marginBottom: 40,
+    margin: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    borderRadius: 4,
+    backgroundColor: "#F7F7F7",
+    padding: 15,
+    marginTop: 10,
+    fontSize: 16,
   },
   moviePlot: {
     fontSize: 16,
