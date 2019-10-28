@@ -33,7 +33,8 @@ export default class New extends Component {
     projects: [],
     estimatedTime: '',
     estimatedInterval: '',
-    doneTasks: 0
+    doneTasks: 0,
+    currentHeight: null
   };
 
 
@@ -84,9 +85,7 @@ export default class New extends Component {
       todoItem: '',
     });
 
-    this.scrollView.scrollToEnd({ animated: true });
-
-    console.log(this.state.todo);
+    
   };
 
   handleSubmit = async () => {
@@ -145,7 +144,7 @@ export default class New extends Component {
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+          <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
               <View style={{ backgroundColor: '#1679D9' }}>
                 <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
@@ -160,7 +159,16 @@ export default class New extends Component {
             </Text>
               </View>
               <ScrollView
-                ref={ref => this.scrollView = ref}
+                ref={(view) => {
+                  this.scrollView = view;
+                }}
+                onContentSizeChange={(contentWidth, contentHeight)=>{        
+                  this.setState({
+                    currentHeight: contentHeight
+                  })
+                  this.scrollView.scrollTo({y:this.state.currentHeight}); 
+                  console.log('current height:',this.state.currentHeight)
+              }}
               >
                 <View style={styles.container}>
                   <Image
@@ -304,7 +312,7 @@ export default class New extends Component {
                   }
 
 
-                  <View style={{ marginTop: 10, flex:1 }}>
+                  <View style={{ marginTop: 10, flex: 1 }}>
                     {this.state.todo.map((l, i) => (
                       <ListItem
                         containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1', borderRadius: 4, marginTop: 2, marginBottom: 2 }}
@@ -423,6 +431,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 42,
     marginTop: 15,
+    marginBottom: 40,
     margin: 15,
     justifyContent: 'center',
     alignItems: 'center',
