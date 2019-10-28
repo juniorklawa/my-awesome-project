@@ -303,7 +303,7 @@ export default class Details extends React.Component {
 const styles = StyleSheet.create({
   container: {
     padding: 18,
-    height: 800,
+    
     flex: 1,
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
