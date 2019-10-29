@@ -82,12 +82,7 @@ export default class Details extends React.Component {
     this.setState({
       todo: newTodoList
     })
-
-    this.state.project.todo = this.state.todo;
-
-    AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
   }
-
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
   }
@@ -139,7 +134,7 @@ export default class Details extends React.Component {
       date,
     } = this.state.project;
     return (
-      <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
+      <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
 
@@ -180,24 +175,25 @@ export default class Details extends React.Component {
             </TouchableOpacity>
 
           </Overlay>
+          <LinearGradient colors={['#1679D9', '#0E56B9']}>
+            <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+              <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
+                <Icon name="chevron-thin-left" size={30} color="#fff" solid />
+              </TouchableOpacity>
+            </View>
 
-          <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-            <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
-              <Icon name="chevron-thin-left" size={30} color="#fff" solid />
-            </TouchableOpacity>
-          </View>
-
-          <Text
-            style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18 }]}>
-            {this.state.project.title}
-          </Text>
-          <Text
-            style={[
-              iOSUIKit.subheadEmphasized,
-              { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal: 18 },
-            ]}>
-            Created at {date}
-          </Text>
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18 }]}>
+              {this.state.project.title}
+            </Text>
+            <Text
+              style={[
+                iOSUIKit.subheadEmphasized,
+                { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal: 18 },
+              ]}>
+              Created at {date}
+            </Text>
+          </LinearGradient>
           <ScrollView >
 
             <View key={key} style={styles.container}>
@@ -295,7 +291,7 @@ export default class Details extends React.Component {
 
         </SafeAreaView>
 
-      </LinearGradient>
+      </View>
     );
   }
 }
@@ -305,8 +301,6 @@ const styles = StyleSheet.create({
     padding: 18,
     
     flex: 1,
-    borderTopEndRadius: 20,
-    borderTopStartRadius: 20,
     backgroundColor: '#fff',
   },
   category: {

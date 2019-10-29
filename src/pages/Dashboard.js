@@ -130,17 +130,19 @@ export default class Dashboard extends React.Component {
                         {project.shortDescription}
                       </Text>
                       <Text style={styles.tags}>{project.tags}</Text>
-                      <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
-                        <ProgressCircle
-                          percent={project.doneTasks / project.todo.length * 100}
-                          radius={40}
-                          borderWidth={5}
-                          color="#1679D9"
-                          shadowColor="#f0f0f0"
-                          bgColor="#fff">
-                          <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#1679D9' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
-                        </ProgressCircle>
-                      </View>
+                      {
+                        project.todo.length > 0 ?
+                          <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
+                            <ProgressCircle
+                              percent={(project.doneTasks / project.todo.length * 100)}
+                              radius={40}
+                              borderWidth={5}
+                              color="#1679D9"
+                              shadowColor="#f0f0f0"
+                              bgColor="#fff">
+                              <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#1679D9' }]}>{project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`}</Text>
+                            </ProgressCircle>
+                          </View> : null}
                     </View>
                   </TouchableWithoutFeedback>
                 ))

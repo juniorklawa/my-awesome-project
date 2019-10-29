@@ -171,7 +171,7 @@ export default class Edit extends Component {
         <SafeAreaView style={{ flex: 1 }}>
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
-              <View style={{ backgroundColor: '#1679D9' }}>
+              <LinearGradient colors={['#1679D9', '#0E56B9']}>
                 <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
                   <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
                     <Icon name="chevron-thin-left" size={30} color="#fff" solid />
@@ -182,7 +182,7 @@ export default class Edit extends Component {
                   style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18, marginBottom: 10 }]}>
                   Edit your idea
             </Text>
-              </View>
+              </LinearGradient>
               <ScrollView
                 ref={(view) => {
                   this.scrollView = view;
