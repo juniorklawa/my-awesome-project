@@ -154,9 +154,10 @@ export default class Dashboard extends React.Component {
                       height: height,
                     }}>
                     <Image
+                      resizeMode='contain'
                       style={{
                         width: '100%',
-                        height: 180,
+                        height: 280,
                         justifyContent: 'flex-end',
                         alignItems: 'center',
                         marginBottom: 16,

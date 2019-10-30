@@ -26,13 +26,14 @@ export default class New extends Component {
     shortDescription: '',
     priority: '',
     worktime: '',
+    category:'Application',
     tags: '',
     todoItem: '',
     date: moment().format('ddd, D[th] MMMM'),
     todo: [],
     projects: [],
     estimatedTime: '',
-    estimatedInterval: '',
+    estimatedInterval: 'day(s)',
     doneTasks: 0,
     currentHeight: null
   };
@@ -116,6 +117,8 @@ export default class New extends Component {
       category: this.state.category,
       tags: this.state.tags,
       worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
+      estimatedTime: this.state.estimatedTime,
+      estimatedInterval: this.state.estimatedInterval,
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
@@ -194,6 +197,7 @@ export default class New extends Component {
                   <TextInput
                     style={styles.input}
                     autoCorrect={false}
+                    autoCapitalize='words'
                     placeholder="Ex: My Awesome Idea"
                     placeholderTextColor="#999"
                     value={this.state.title}
@@ -207,7 +211,7 @@ export default class New extends Component {
                   <TextInput
                     style={styles.input}
                     autoCorrect={false}
-                    autoCapitalize="none"
+                    autoCapitalize="sentences"
                     placeholderTextColor="#999"
                     value={this.state.shortDescription}
                     placeholder="Ex: An app that tracks awesome ideas"
@@ -228,7 +232,7 @@ export default class New extends Component {
                   <TextInput
                     style={styles.input}
                     autoCorrect={false}
-                    autoCapitalize="none"
+                    autoCapitalize="words"
                     placeholder="Ex: #Random #Pictures #Dogs"
                     placeholderTextColor="#999"
                     value={this.state.tags}
@@ -247,6 +251,7 @@ export default class New extends Component {
                         autoCorrect={false}
                         autoCapitalize="none"
                         placeholder="0"
+                        keyboardType='num'
                         placeholderTextColor="#999"
                         value={this.state.estimatedTime}
                         onChangeText={estimatedTime => this.setState({ estimatedTime })}
@@ -341,6 +346,7 @@ export default class New extends Component {
                 <TextInput
                   style={[styles.input, { flex: 10 }]}
                   autoCorrect={false}
+                  autoCapitalize='sentences'
                   placeholder="Add new todo"
                   onSubmitEditing={() => this.addTodo()}
                   placeholderTextColor="#999"

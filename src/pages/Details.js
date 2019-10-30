@@ -82,6 +82,7 @@ export default class Details extends React.Component {
     this.setState({
       todo: newTodoList
     })
+    AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
   }
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
@@ -208,27 +209,29 @@ export default class Details extends React.Component {
                 ]}>
                 {shortDescription}
               </Text>
-
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
-                Tags
+              {tags != '' ? <View>
+                <Text
+                  style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
+                  Tags
               </Text>
-              <Text style={styles.tags}>{tags}</Text>
+                <Text style={styles.tags}>{tags}</Text>
+              </View> : null}
               <Text
                 style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
                 Category
               </Text>
               <Text style={styles.category}>{category}</Text>
-
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
-                Estimate
+              {this.state.project.estimatedTime != '' ? <View>
+                <Text
+                  style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
+                  Estimate
               </Text>
 
-              <Text
-                style={styles.category}>
-                {worktime}
-              </Text>
+                <Text
+                  style={styles.category}>
+                  {worktime}
+                </Text>
+              </View> : null}
 
               <View style={{ flex: 1, marginTop: 20 }}>
                 <Text style={[styles.category, { fontSize: 25, color: '#0D4DB0' }]}>To-do</Text>
@@ -299,7 +302,7 @@ export default class Details extends React.Component {
 const styles = StyleSheet.create({
   container: {
     padding: 18,
-    
+
     flex: 1,
     backgroundColor: '#fff',
   },

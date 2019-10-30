@@ -67,9 +67,13 @@ export default class Edit extends Component {
       title: this.state.project.title,
       shortDescription: this.state.project.shortDescription,
       tags: this.state.project.tags,
+      estimatedTime: this.state.project.estimatedTime,
+      estimatedInterval: this.state.project.estimatedInterval,
       worktime: this.state.worktime,
-      category: this.state.category,
+      category: this.state.project.category,
     });
+
+    console.log('the category', this.state.project)
   };
 
   addTodo = async () => {
