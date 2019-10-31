@@ -79,11 +79,22 @@ export default class Details extends React.Component {
 
   deleteTodo(i) {
     const newTodoList = this.state.todo.filter((task, index) => index !== i)
+    const isCheck = this.state.todo.filter((task,index) => index === i)
     this.setState({
       todo: newTodoList
     })
+
+    console.log(isCheck)
+
+    if(isCheck.checked){
+      this.state.project.doneTasks--
+    }
+
+    this.state.project.todo = this.state.todo
+
     AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
   }
+
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
   }
@@ -113,8 +124,6 @@ export default class Details extends React.Component {
     this.setState({
       todoItem: '',
     });
-
-    console.log(this.state.todo);
     this.setState({
       isVisible: false
     })

@@ -27,15 +27,18 @@ export default class Dashboard extends React.Component {
   async componentDidMount() {
     //await AsyncStorage.clear()
     this._retrieveData();
+
+
   }
 
   async _retrieveData() {
-    console.log('_retrieveData')
     const data = await AsyncStorage.getItem('projectss');
     const projects = (await JSON.parse(data)) || [];
     await this.setState({
       projects: projects,
     });
+
+    console.log(this.state.projects)
   }
 
   async deleteProject(id) {
@@ -67,9 +70,6 @@ export default class Dashboard extends React.Component {
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
             onWillFocus={() => this._retrieveData()}
-            onDidFocus={payload => console.log('did focus', payload)}
-            onWillBlur={payload => console.log('will blur', payload)}
-            onDidBlur={payload => console.log('did blur', payload)}
           />
 
 
