@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
 import { Overlay } from 'react-native-elements';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Details extends React.Component {
 
@@ -31,10 +32,12 @@ export default class Details extends React.Component {
     todoItem: '',
     checked: false,
     doneTasks: 0,
-    isVisible: false
+    isVisible: false,
+    showAlert: false
   };
 
   async componentDidMount() {
+    this.showAlert()
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('projectss');
     const projects = (await JSON.parse(data)) || [];
@@ -42,13 +45,30 @@ export default class Details extends React.Component {
       projects: projects,
     });
 
+
+
+
     const detail = await this.state.projects.find(obj => obj.key === projectId);
     const todoDetail = await detail.todo;
     this.setState({
       project: detail,
       todo: todoDetail,
     });
+
+    this.hideAlert()
   }
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
 
   deleteProject(id) {
 
@@ -79,14 +99,12 @@ export default class Details extends React.Component {
 
   deleteTodo(i) {
     const newTodoList = this.state.todo.filter((task, index) => index !== i)
-    const isCheck = this.state.todo.filter((task,index) => index === i)
+    const isCheck = this.state.todo.find((task, index) => index === i)
     this.setState({
       todo: newTodoList
     })
 
-    console.log(isCheck)
-
-    if(isCheck.checked){
+    if (isCheck.checked) {
       this.state.project.doneTasks--
     }
 
@@ -134,6 +152,7 @@ export default class Details extends React.Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
+    const { showAlert } = this.state;
     const {
       key,
       title,
@@ -146,7 +165,7 @@ export default class Details extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
 
           <Overlay
             height={200}
@@ -207,85 +226,93 @@ export default class Details extends React.Component {
           <ScrollView >
 
             <View key={key} style={styles.container}>
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 24, marginTop: 8 }]}>
-                Description
+              <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                <View style={{ margin: 20 }}>
+                  <Text
+                    style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24 }]}>
+                    Description
               </Text>
-              <Text
-                style={[
-                  iOSUIKit.subhead,
-                  { color: '#4b4b4b', fontSize: 16, marginTop: 5 },
-                ]}>
-                {shortDescription}
+                  <Text
+                    style={[
+                      iOSUIKit.subhead,
+                      { color: '#4b4b4b', fontSize: 16, marginTop: 5 },
+                    ]}>
+                    {shortDescription}
+                  </Text>
+                  {tags != '' ? <View>
+                    <Text
+                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                      Tags
               </Text>
-              {tags != '' ? <View>
-                <Text
-                  style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
-                  Tags
+                    <Text style={styles.tags}>{tags}</Text>
+                  </View> : null}
+                  <Text
+                    style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                    Category
               </Text>
-                <Text style={styles.tags}>{tags}</Text>
-              </View> : null}
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
-                Category
-              </Text>
-              <Text style={styles.category}>{category}</Text>
-              {this.state.project.estimatedTime != '' ? <View>
-                <Text
-                  style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#0E56B9', fontSize: 18, marginTop: 8 }]}>
-                  Estimate
+                  <Text style={styles.category}>{category}</Text>
+                  {this.state.project.estimatedTime != '' ? <View>
+                    <Text
+                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                      Estimate
               </Text>
 
-                <Text
-                  style={styles.category}>
-                  {worktime}
-                </Text>
-              </View> : null}
-
-              <View style={{ flex: 1, marginTop: 20 }}>
-                <Text style={[styles.category, { fontSize: 25, color: '#0D4DB0' }]}>To-do</Text>
-                {this.state.todo.map((task, i) => (
-                  <CheckBox
-                    key={i}
-                    style={{ width: '100%' }}
-                    title={task.task}
-                    containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%' }}
-                    checked={task.checked}
-                    onLongPress={() => this.deleteTodo(i)}
-                    onPress={() => {
-                      task.checked = !task.checked;
-                      this.forceUpdate();
-
-                      const trueArray = this.state.project.todo.filter(
-                        doneTasks => doneTasks.checked,
-                      ).length;
-
-                      this.state.projects
-                        .filter(project => {
-                          return project.key === this.state.project.key;
-                        })
-                        .map(project => {
-                          project.todo = this.state.project.todo;
-                          project.doneTasks = trueArray;
-                        });
-
-                      AsyncStorage.setItem(
-                        'projectss',
-                        JSON.stringify(this.state.projects),
-                      );
-                    }}
-                  />
-                ))}
+                    <Text
+                      style={styles.category}>
+                      {worktime}
+                    </Text>
+                  </View> : null}
+                </View>
               </View>
+
+              {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
+                <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                  <View style={{ margin: 20 }}>
+                    <Text style={[styles.category, { fontSize: 25, color: '#4b4b4b' }]}>To-do</Text>
+                    {this.state.todo.map((task, i) => (
+                      <CheckBox
+                        key={i}
+                        style={{ width: '100%' }}
+                        title={task.task}
+                        containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%' }}
+                        checked={task.checked}
+                        onLongPress={() => this.deleteTodo(i)}
+                        onPress={() => {
+                          task.checked = !task.checked;
+                          this.forceUpdate();
+
+                          const trueArray = this.state.project.todo.filter(
+                            doneTasks => doneTasks.checked,
+                          ).length;
+
+                          this.state.projects
+                            .filter(project => {
+                              return project.key === this.state.project.key;
+                            })
+                            .map(project => {
+                              project.todo = this.state.project.todo;
+                              project.doneTasks = trueArray;
+                            });
+
+                          AsyncStorage.setItem(
+                            'projectss',
+                            JSON.stringify(this.state.projects),
+                          );
+                        }}
+                      />
+                    ))}
+                  </View>
+                </View>
+              </View> : null}
             </View>
           </ScrollView>
 
 
           <ActionButton
             style={{ marginBottom: 15 }}
-            buttonColor="#f44336"
+            buttonColor="#0E56B9"
           >
-            <ActionButton.Item buttonColor='#1abc9c' title="Delete project" onPress={() => this.deleteProject(key)}>
+            <ActionButton.Item buttonColor='#f44336' title="Delete project" onPress={() => this.deleteProject(key)}>
               <Icon name="trash" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
@@ -293,7 +320,7 @@ export default class Details extends React.Component {
               <Icon name="edit" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#9b59b6' title="New to-do" onPress={() => this.setState({
+            <ActionButton.Item buttonColor='#1abc9c' title="New to-do" onPress={() => this.setState({
               isVisible: true
             })}>
               <Icon name="check" style={styles.actionButtonIcon} />
@@ -302,7 +329,15 @@ export default class Details extends React.Component {
           </ActionButton>
 
         </SafeAreaView>
-
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={true}
+          progressSize={50}
+          contentContainerStyle={{ height: 100, width: 200, alignItems: 'center', justifyContent: 'center' }}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          confirmButtonColor="#DD6B55"
+        />
       </View>
     );
   }
@@ -310,13 +345,12 @@ export default class Details extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 18,
-
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7F7F7',
   },
   category: {
     fontWeight: 'bold',
+    color: '#1679D9'
   },
   projectContainer: {
     backgroundColor: '#ffffff',

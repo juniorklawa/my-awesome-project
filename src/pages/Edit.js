@@ -19,6 +19,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
+import AwesomeAlert from 'react-native-awesome-alerts';
+
 
 export default class Edit extends Component {
 
@@ -45,35 +47,52 @@ export default class Edit extends Component {
     estimatedTime: '',
     estimatedInterval: '',
     projectId: null,
+    showAlert: false
   };
 
-  componentDidMount = async () => {
-    const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
-    const data = await AsyncStorage.getItem('projectss');
-    const projects = (await JSON.parse(data)) || [];
-    await this.setState({
-      projects: projects,
-      projectId: projectId,
-    });
+  async componentDidMount() {
+    this.showAlert()
+    try {
+      const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
+      const data = await AsyncStorage.getItem('projectss');
+      const projects = (await JSON.parse(data)) || [];
+      await this.setState({
+        projects: projects,
+        projectId: projectId,
+      });
 
-    const detail = await this.state.projects.find(obj => obj.key === projectId);
-    const todoDetail = await detail.todo;
-    await this.setState({
-      project: detail,
-      todo: todoDetail,
-    });
+      const detail = await this.state.projects.find(obj => obj.key === projectId);
+      const todoDetail = await detail.todo;
+      await this.setState({
+        project: detail,
+        todo: todoDetail,
+      });
 
-    await this.setState({
-      title: this.state.project.title,
-      shortDescription: this.state.project.shortDescription,
-      tags: this.state.project.tags,
-      estimatedTime: this.state.project.estimatedTime,
-      estimatedInterval: this.state.project.estimatedInterval,
-      worktime: this.state.worktime,
-      category: this.state.project.category,
-    });
+      await this.setState({
+        title: this.state.project.title,
+        shortDescription: this.state.project.shortDescription,
+        tags: this.state.project.tags,
+        estimatedTime: this.state.project.estimatedTime,
+        estimatedInterval: this.state.project.estimatedInterval,
+        worktime: this.state.worktime,
+        category: this.state.project.category,
+      });
+    } catch (e) {
+      console.log(e)
+    }
+    this.hideAlert()
+  };
 
-    console.log('the category', this.state.project)
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
   };
 
   addTodo = async () => {
@@ -88,6 +107,13 @@ export default class Edit extends Component {
       todoItem: '',
     });
   };
+
+  deleteTodo(i) {
+    const newTodoList = this.state.todo.filter((task, index) => index !== i)
+    this.setState({
+      todo: newTodoList
+    })
+  }
 
   handleSubmit = async () => {
     const data = new FormData();
@@ -133,40 +159,18 @@ export default class Edit extends Component {
       JSON.stringify(this.state.projects),
     );
 
-    console.log('all projects', this.state.projects)
-
     this.props.navigation.navigate('Dashboard');
 
-    /*      data = data.filter(obj => {
-        return this.state.objToFind === obj.title;   
-        }).map(obj, idx) => {
-           console.log("found " + obj.title);
-           obj.menu = this.state.menu;
-           obj.title = this.state.title;
-           obj.content = this.state.content;
-      });  
-
-    this.state.projects.push({
-      title: this.state.title,
-      shortDescription: this.state.shortDescription,
-      category: this.state.category,
-      tags: this.state.tags,
-      worktime: `${this.state.estimatedTime} ${this.state.estimatedInterval}`,
-      key: Math.random(),
-      date: this.state.date,
-      todo: this.state.todo,
-    });
-
-
-    */
   };
+
+
 
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
   }
 
   render() {
-
+    const { showAlert } = this.state;
     return (
 
 
@@ -330,64 +334,8 @@ export default class Edit extends Component {
 
                   </View>
 
-
-
-                  {
-                    this.state.todo.length > 0 ?
-                      <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16, fontSize: 24 }}>
-                        To-do
-                  </Text>
-                      : null
-                  }
-
-
-                  <View style={{ marginTop: 10, flex: 1 }}>
-                    {this.state.todo.map((l, i) => (
-                      <ListItem
-                        containerStyle={{ marginRight: 50, backgroundColor: '#ECEFF1', borderRadius: 4, marginTop: 2, marginBottom: 2 }}
-                        key={i}
-                        title={l.task}
-                        rightIcon={
-                          <TouchableOpacity
-                            onPress={() => this.deleteTodo(i)}
-                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                            <Icon name="trash" size={23} color="#666" solid />
-                          </TouchableOpacity>
-                        }
-                      />
-                    ))}
-                  </View>
                 </View>
               </ScrollView>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginHorizontal: 10
-                }}>
-                <TextInput
-                  style={[styles.input, { flex: 10 }]}
-                  autoCorrect={false}
-                  placeholder="Add new todo"
-                  onSubmitEditing={() => this.addTodo()}
-                  placeholderTextColor="#999"
-                  value={this.state.todoItem}
-                  onChangeText={todoItem => this.setState({ todoItem })}
-                />
-                <TouchableOpacity
-                  onPress={() => this.addTodo()}
-                  hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: 10,
-                  }}>
-                  <Icon name="chevron-right" size={35} color="#1679D9" solid />
-                </TouchableOpacity>
-              </View>
               <TouchableOpacity
                 style={styles.shareButton}
                 onPress={() => this.handleSubmit()}>
@@ -396,6 +344,7 @@ export default class Edit extends Component {
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
+
       </LinearGradient>
     );
   }

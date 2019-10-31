@@ -11,12 +11,13 @@ import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProgressCircle from 'react-native-progress-circle';
 import { NavigationEvents } from 'react-navigation';
-
+import AwesomeAlert from 'react-native-awesome-alerts';
 const height = Dimensions.get('window').height;
 
 export default class Dashboard extends React.Component {
   state = {
     projects: [],
+    showAlert: false
   };
 
 
@@ -25,11 +26,22 @@ export default class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
-    //await AsyncStorage.clear()
-    this._retrieveData();
-
-
+    this.showAlert()
+    await this._retrieveData();
+    this.hideAlert()
   }
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    });
+  };
 
   async _retrieveData() {
     const data = await AsyncStorage.getItem('projectss');
@@ -63,7 +75,7 @@ export default class Dashboard extends React.Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-
+    const { showAlert } = this.state;
     return (
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
@@ -194,7 +206,17 @@ export default class Dashboard extends React.Component {
             buttonColor="#f44336"
           />
 
+
         </SafeAreaView>
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={true}
+          progressSize={50}
+          contentContainerStyle={{ height: 100, width: 200, alignItems: 'center', justifyContent: 'center' }}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          confirmButtonColor="#DD6B55"
+        />
       </LinearGradient>
 
     );
