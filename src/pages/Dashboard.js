@@ -8,7 +8,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconEntypo from 'react-native-vector-icons/Entypo';
 import ProgressCircle from 'react-native-progress-circle';
 import { NavigationEvents } from 'react-navigation';
 import AwesomeAlert from 'react-native-awesome-alerts';
@@ -17,7 +18,10 @@ const height = Dimensions.get('window').height;
 export default class Dashboard extends React.Component {
   state = {
     projects: [],
-    showAlert: false
+    displayProjects: [],
+    showAlert: false,
+    hideIcon: 'eye',
+    filterProjects: false
   };
 
 
@@ -29,6 +33,24 @@ export default class Dashboard extends React.Component {
     this.showAlert()
     await this._retrieveData();
     this.hideAlert()
+  }
+
+  filterProjects() {
+    this.setState({
+      filterProjects: !this.state.filterProjects
+    })
+
+    if (this.state.filterProjects) {
+      this.setState({
+        hideIcon: 'eye'
+      })
+      this.state.projects = this.state.projects.filter((project) => !project.isArchived)
+    } else {
+      this.setState({
+        hideIcon: 'eye-off'
+      })
+      this.state.projects = this.state.projects.filter((project) => project.isArchived)
+    }
   }
 
   showAlert = () => {
@@ -50,7 +72,6 @@ export default class Dashboard extends React.Component {
       projects: projects,
     });
 
-    console.log(this.state.projects)
   }
 
   async deleteProject(id) {
@@ -84,11 +105,15 @@ export default class Dashboard extends React.Component {
             onWillFocus={() => this._retrieveData()}
           />
 
-
-          <Text
-            style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', marginLeft: 18, marginTop: 32 }]}>
-            My ideas
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', marginLeft: 18, marginTop: 32 }]}>
+              My ideas
             </Text>
+            {<TouchableOpacity style={{ marginHorizontal: 30, marginTop: 25 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.filterProjects()}>
+              <Icon name={this.state.hideIcon} size={28} color="#fff" solid />
+            </TouchableOpacity>}
+          </View>
 
           <ScrollView>
             <View style={styles.container}>
@@ -120,7 +145,7 @@ export default class Dashboard extends React.Component {
                         <TouchableOpacity
                           onPress={() => this.goToEdit(project.key)}>
                           <View>
-                            <Icon name="edit" size={23} color="#666" solid />
+                            <IconEntypo name="edit" size={23} color="#666" solid />
                           </View>
                         </TouchableOpacity>
                       </View>

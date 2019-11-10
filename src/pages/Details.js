@@ -29,6 +29,7 @@ export default class Details extends React.Component {
     projects: [],
     project: {},
     todo: [],
+    isArchived : false,
     todoItem: '',
     checked: false,
     doneTasks: 0,
@@ -70,6 +71,32 @@ export default class Details extends React.Component {
     });
   };
 
+  archiveProject(id) {
+    Alert.alert(
+      'Are you sure?',
+      `You are going to archive ${this.state.project.title}`,
+      [
+        {
+          text: 'Yes', onPress: () => {
+            
+            this.setState({
+              isArchived: true,
+            });
+            
+            this.state.project.isArchived = this.state.isArchived
+            console.log(this.state.projects)
+
+            AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+
+            this.props.navigation.navigate('Dashboard');
+          }
+        },
+        { text: 'No', onPress: () => { return } },
+      ],
+      { cancelable: true },
+    );
+  }
+
   deleteProject(id) {
 
     Alert.alert(
@@ -92,9 +119,6 @@ export default class Details extends React.Component {
       ],
       { cancelable: true },
     );
-
-
-
   }
 
   deleteTodo(i) {
@@ -314,6 +338,10 @@ export default class Details extends React.Component {
           >
             <ActionButton.Item buttonColor='#f44336' title="Delete project" onPress={() => this.deleteProject(key)}>
               <Icon name="trash" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+
+            <ActionButton.Item buttonColor='#00897B' title="Archive project" onPress={() => this.archiveProject(key)}>
+              <Icon name="archive" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
             <ActionButton.Item buttonColor='#3498db' title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
