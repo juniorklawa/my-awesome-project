@@ -29,7 +29,7 @@ export default class Details extends React.Component {
     projects: [],
     project: {},
     todo: [],
-    isArchived : false,
+    isArchived: false,
     todoItem: '',
     checked: false,
     doneTasks: 0,
@@ -78,12 +78,12 @@ export default class Details extends React.Component {
       [
         {
           text: 'Yes', onPress: () => {
-            
+
             this.setState({
               isArchived: true,
             });
-            
-            this.state.project.isArchived = this.state.isArchived
+
+            this.state.project.isArchived = !this.state.project.isArchived
             console.log(this.state.projects)
 
             AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
@@ -340,7 +340,7 @@ export default class Details extends React.Component {
               <Icon name="trash" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#00897B' title="Archive project" onPress={() => this.archiveProject(key)}>
+            <ActionButton.Item buttonColor='#00897B' title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
               <Icon name="archive" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 

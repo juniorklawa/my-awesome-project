@@ -26,7 +26,7 @@ export default class New extends Component {
     shortDescription: '',
     priority: '',
     worktime: '',
-    category:'Application',
+    category: 'Application',
     tags: '',
     todoItem: '',
     date: moment().format('ddd, D[th] MMMM'),
@@ -122,6 +122,7 @@ export default class New extends Component {
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
+      isArchived: false,
       doneTasks: this.state.doneTasks
     });
 
