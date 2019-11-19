@@ -18,6 +18,7 @@ import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
 import { Overlay } from 'react-native-elements';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default class Details extends React.Component {
 
@@ -34,7 +35,8 @@ export default class Details extends React.Component {
     checked: false,
     doneTasks: 0,
     isVisible: false,
-    showAlert: false
+    showAlert: false,
+    showMeConfetti: false
   };
 
   async componentDidMount() {
@@ -301,7 +303,7 @@ export default class Details extends React.Component {
                         containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%' }}
                         checked={task.checked}
                         onLongPress={() => this.deleteTodo(i)}
-                        onPress={() => {
+                        onPress={async () => {
                           task.checked = !task.checked;
                           this.forceUpdate();
 
@@ -322,6 +324,18 @@ export default class Details extends React.Component {
                             'projectss',
                             JSON.stringify(this.state.projects),
                           );
+
+                          if (this.state.project.doneTasks === this.state.project.todo.length) {
+                            this.setState({ showMeConfetti: true })
+
+                            await setTimeout(() => {
+                              this.setState({
+                                showMeConfetti: false
+                              });
+                            }, 4000);
+                          }
+
+
                         }}
                       />
                     ))}
@@ -366,6 +380,12 @@ export default class Details extends React.Component {
           closeOnHardwareBackPress={false}
           confirmButtonColor="#DD6B55"
         />
+        {
+          this.state.showMeConfetti ?
+            <ConfettiCannon fadeOut={true} count={50} origin={{ x: -10, y: -100 }} />
+            : null
+        }
+
       </View>
     );
   }

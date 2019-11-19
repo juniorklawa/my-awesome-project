@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-navigation';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
-import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const height = Dimensions.get('window').height;
@@ -164,16 +163,7 @@ export default class Dashboard extends React.Component {
             buttonColor="#f44336"
           />
         </SafeAreaView>
-
-        <AwesomeAlert
-
-          showProgress={true}
-          progressSize={50}
-          contentContainerStyle={styles.alertStyle}
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          confirmButtonColor="#DD6B55"
-        />
+        
       </LinearGradient>
 
     );
