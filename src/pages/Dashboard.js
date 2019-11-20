@@ -105,7 +105,7 @@ export default class Dashboard extends React.Component {
           <View style={styles.header}>
             <Text
               style={[iOSUIKit.largeTitleEmphasizedObject, styles.headerTitle]}>
-              My ideas
+              {this.state.filterProjects ? 'Archived' : 'My ideas'}
             </Text>
             {
               <TouchableOpacity style={styles.filter} hitSlop={styles.filterHitSlop}
@@ -163,7 +163,7 @@ export default class Dashboard extends React.Component {
             buttonColor="#f44336"
           />
         </SafeAreaView>
-        
+
       </LinearGradient>
 
     );

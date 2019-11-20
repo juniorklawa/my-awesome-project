@@ -74,9 +74,14 @@ export default class Details extends React.Component {
   };
 
   archiveProject(id) {
+    const message = this.state.project.isArchived ?
+      `You are going to unarchive ${this.state.project.title}`
+      :
+      `You are going to archive ${this.state.project.title}`
+
     Alert.alert(
       'Are you sure?',
-      `You are going to archive ${this.state.project.title}`,
+      message,
       [
         {
           text: 'Yes', onPress: () => {
