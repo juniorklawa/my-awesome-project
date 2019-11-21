@@ -211,6 +211,8 @@ export default class New extends Component {
 
                   <TextInput
                     style={styles.input}
+                    editable
+                    multiline
                     autoCorrect={false}
                     autoCapitalize="sentences"
                     placeholderTextColor="#999"
@@ -252,7 +254,7 @@ export default class New extends Component {
                         autoCorrect={false}
                         autoCapitalize="none"
                         placeholder="0"
-                        keyboardType='num'
+                        keyboardType='numeric'
                         placeholderTextColor="#999"
                         value={this.state.estimatedTime}
                         onChangeText={estimatedTime => this.setState({ estimatedTime })}
@@ -302,6 +304,7 @@ export default class New extends Component {
                       <Picker.Item label="Website" value="Website" />
                       <Picker.Item label="Software" value="Software" />
                       <Picker.Item label="Bot" value="Bot" />
+                      <Picker.Item label="Game" value="Bot" />
                       <Picker.Item label="Other" value="Other" />
                     </Picker>
 

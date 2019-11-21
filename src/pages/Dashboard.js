@@ -29,7 +29,7 @@ export default class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
-
+    this.showAlert()
     await this._retrieveData();
     this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
     this.forceUpdate()
@@ -66,7 +66,6 @@ export default class Dashboard extends React.Component {
   };
 
   async _retrieveData() {
-    this.showAlert()
     const data = await AsyncStorage.getItem('projectss');
     const projects = (await JSON.parse(data)) || [];
     const filteredProjects = projects.filter((project) => !project.isArchived)
@@ -124,34 +123,13 @@ export default class Dashboard extends React.Component {
               }
 
 
-              {displayProjects.length > 0 ?
-                (
-                  displayProjects.map((project, i) =>
-                    (
-                      <ProjectCard navigation={this.props.navigation} key={i} project={project} />
-                    )
+              {
+                displayProjects.map((project, i) =>
+                  (
+                    <ProjectCard navigation={this.props.navigation} key={i} project={project} />
                   )
-                ) : (
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      height: height,
-                    }}>
-                    <Image
-                      resizeMode='contain'
-                      style={styles.img}
-                      source={require('../icons/astronaut.png')}
-                    />
-                    <Text
-                      style={[
-                        iOSUIKit.subheadEmphasized,
-                        styles.imgText,
-                      ]}>
-                      Press the + button to create your new awesome idea!
-                </Text>
-                  </View>
-                )}
+                )
+              }
             </View>
           </ScrollView>
 

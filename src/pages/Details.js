@@ -200,6 +200,7 @@ export default class Details extends React.Component {
 
           <Overlay
             height={200}
+            overlayStyle={{borderRadius:10}}
             onBackdropPress={() => {
               this.setState({
                 isVisible: false

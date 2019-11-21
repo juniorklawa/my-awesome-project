@@ -329,6 +329,7 @@ export default class Edit extends Component {
                       <Picker.Item label="Website" value="Website" />
                       <Picker.Item label="Software" value="Software" />
                       <Picker.Item label="Bot" value="Bot" />
+                      <Picker.Item label="Game" value="Bot" />
                       <Picker.Item label="Other" value="Other" />
                     </Picker>
 
