@@ -95,6 +95,7 @@ export default class Dashboard extends React.Component {
   render() {
     StatusBar.setBarStyle('light-content', true);
     const { showAlert, displayProjects } = this.state;
+
     return (
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />

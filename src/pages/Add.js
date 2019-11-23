@@ -15,6 +15,7 @@ import {
   TextInput,
   Image,
   StatusBar,
+  FlatList,
   ScrollView,
   Alert
 } from 'react-native';
@@ -38,7 +39,7 @@ export default class New extends Component {
     doneTasks: 0,
     currentHeight: null,
     isVisible: false,
-    image: Image
+    previews: [],
   };
 
 
@@ -54,7 +55,7 @@ export default class New extends Component {
     await this.setState({
       projects: projects,
     });
-    console.log(this.state.projects);
+    
 
 
   };
@@ -76,7 +77,7 @@ export default class New extends Component {
         'Ops!',
         'This field is obligatory',
         [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
+          { text: 'OK' },
         ],
         { cancelable: false },
       );
@@ -96,48 +97,43 @@ export default class New extends Component {
   };
 
 
-
   handleSelectImage = () => {
 
     const options = {
-      title: 'Select Avatar',
-      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      title: 'Select picture',
       storageOptions: {
         skipBackup: true,
-        path: 'images',
+        quality: 0.1,
+        path: 'myawesomeproject',
       },
     };
 
-    ImagePicker.showImagePicker(options, upload => {
-      if (upload.error) {
-        console.log('Error', upload.error);
-      } else if (upload.didCancel) {
+    ImagePicker.showImagePicker(options, response => {
+      if (response.error) {
+        console.log('Error');
+      } else if (response.didCancel) {
         console.log('Used canceled');
       } else {
-        const preview = {
-          uri: `data:image/jpeg;base64,${upload.data}`,
+
+        const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+
+        const image = {
+          uri: source.uri,
         }
 
-        let prefix;
-        let ext;
-
-        if (upload.fileName) {
-          [prefix, ext] = upload.fileName.split('.')
-          ext = ext.toLowerCase() === 'heic' ? 'jpg' : ext;
-        } else {
-          prefix = new Date().getTime();
-          ext = 'jpg';
-        }
+        this.state.previews.push(image.uri);
 
 
-
-        //this.setState({ preview, image });
-        const source = { uri: 'data:image/jpeg;base64,' + upload.data };
-        this.setState({ image: source })
-        console.log(source)
+        this.setState({ preview: source });
       }
     });
   }
+
+
+
+
+
 
   handleSubmit = async () => {
     const data = new FormData();
@@ -154,14 +150,14 @@ export default class New extends Component {
         'Ops!',
         'Title and description are obligatory',
         [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
+          { text: 'OK'},
         ],
         { cancelable: false },
       );
       return
     }
 
-    this.state.projects.push({
+    await this.state.projects.push({
       title: this.state.title,
       shortDescription: this.state.shortDescription,
       category: this.state.category,
@@ -169,6 +165,7 @@ export default class New extends Component {
       worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
       estimatedTime: this.state.estimatedTime,
       estimatedInterval: this.state.estimatedInterval,
+      images: this.state.previews,
       key: Math.random(),
       date: this.state.date,
       todo: this.state.todo,
@@ -181,7 +178,7 @@ export default class New extends Component {
       JSON.stringify(this.state.projects),
     );
 
-    console.log(this.state.projects);
+    
 
     this.props.navigation.navigate('Dashboard');
   };
@@ -192,13 +189,13 @@ export default class New extends Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-
+    const columns = 3;
     return (
 
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
-          <Image source={this.state.image} style={styles.uploadAvatar} />
+
           <Overlay
             height={200}
             overlayStyle={{ borderRadius: 10 }}
@@ -232,7 +229,7 @@ export default class New extends Component {
               style={styles.shareButton}
               onPress={(category) => {
 
-                console.log(this.state.category)
+                
                 this.setState({ isVisible: false })
               }}>
               <Text style={styles.shareButtonText}>Add</Text>
@@ -264,7 +261,7 @@ export default class New extends Component {
                     currentHeight: contentHeight
                   })
                   this.scrollView.scrollTo({ y: this.state.currentHeight });
-                  console.log('current height:', this.state.currentHeight)
+                  
                 }}
               >
                 <View style={styles.container}>
@@ -301,6 +298,8 @@ export default class New extends Component {
                   <Text style={styles.labelTitle}>
                     Description
               </Text>
+
+
 
                   <TextInput
                     style={styles.input}
@@ -378,7 +377,7 @@ export default class New extends Component {
 
                   <Text style={styles.labelTitle}>
                     Category
-              </Text>
+                </Text>
 
                   <View style={styles.selectInput}>
                     <Picker
@@ -410,13 +409,25 @@ export default class New extends Component {
                     </Picker>
 
                   </View>
+                  <Text style={styles.labelTitle}>
+                    Pictures
+                  </Text>
+
+                  {this.state.previews.length > 0 ?
+                    <ScrollView horizontal={true}>
+                      <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
+                        {this.state.previews.map((l, i) => (
+                          <Image style={styles.preview} source={{ uri: this.state.previews[i] }} />
+                        ))}
+                      </View>
+                    </ScrollView>
+                    : null
+                  }
                   <TouchableOpacity
-                    style={styles.shareButton}
+                    style={styles.newPicture}
                     onPress={() => this.handleSelectImage()}>
                     <Text style={styles.shareButtonText}>Add new picture</Text>
                   </TouchableOpacity>
-
-
                   {
                     this.state.todo.length > 0 ?
                       <Text style={{ fontWeight: 'bold', color: '#1679D9', marginTop: 16, fontSize: 24 }}>
@@ -447,38 +458,40 @@ export default class New extends Component {
 
               </ScrollView>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginHorizontal: 10
-                }}>
-                <TextInput
-                  style={[styles.input, { flex: 10 }]}
-                  autoCorrect={false}
-                  autoCapitalize='sentences'
-                  placeholder="Add new todo"
-                  onSubmitEditing={() => this.addTodo()}
-                  placeholderTextColor="#999"
-                  value={this.state.todoItem}
-                  onChangeText={todoItem => this.setState({ todoItem })}
-                />
-                <TouchableOpacity
-                  onPress={() => this.addTodo()}
-                  hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
+
+              {
+                false && <View
                   style={{
-                    flex: 1,
+                    flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginTop: 10,
+                    marginHorizontal: 10
                   }}>
-                  <Icon name="chevron-right" size={35} color="#1679D9" solid />
-                </TouchableOpacity>
+                  <TextInput
+                    style={[styles.input, { flex: 10 }]}
+                    autoCorrect={false}
+                    autoCapitalize='sentences'
+                    placeholder="Add new todo"
+                    onSubmitEditing={() => this.addTodo()}
+                    placeholderTextColor="#999"
+                    value={this.state.todoItem}
+                    onChangeText={todoItem => this.setState({ todoItem })}
+                  />
+                  <TouchableOpacity
+                    onPress={() => this.addTodo()}
+                    hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginTop: 10,
+                    }}>
+                    <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                  </TouchableOpacity>
 
 
-              </View>
-
+                </View>
+              }
 
               <TouchableOpacity
                 style={styles.shareButton}
@@ -492,6 +505,8 @@ export default class New extends Component {
     );
   }
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -531,11 +546,12 @@ const styles = StyleSheet.create({
     color: '#666',
   },
 
+
   preview: {
     width: 100,
     height: 100,
-    marginTop: 10,
     alignSelf: 'center',
+    margin: 5,
     borderRadius: 4,
   },
 
@@ -554,6 +570,16 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 40,
     margin: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  newPicture: {
+    backgroundColor: '#1679D9',
+    borderRadius: 4,
+    height: 42,
+    marginTop: 15,
+    marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },

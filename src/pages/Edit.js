@@ -20,7 +20,7 @@ import {
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 import AwesomeAlert from 'react-native-awesome-alerts';
-
+console.ignoredYellowBox = true
 
 export default class Edit extends Component {
 

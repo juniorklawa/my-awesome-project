@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Image
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { CheckBox, Input } from 'react-native-elements';
@@ -36,7 +37,8 @@ export default class Details extends React.Component {
     doneTasks: 0,
     isVisible: false,
     showAlert: false,
-    showMeConfetti: false
+    showMeConfetti: false,
+    images: []
   };
 
   async componentDidMount() {
@@ -44,19 +46,19 @@ export default class Details extends React.Component {
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('projectss');
     const projects = (await JSON.parse(data)) || [];
-    this.setState({
+    await this.setState({
       projects: projects,
     });
-
-
-
-
     const detail = await this.state.projects.find(obj => obj.key === projectId);
     const todoDetail = await detail.todo;
     this.setState({
       project: detail,
       todo: todoDetail,
     });
+
+    this.state.images = detail.images
+    this.forceUpdate()
+
 
     this.hideAlert()
   }
@@ -91,7 +93,7 @@ export default class Details extends React.Component {
             });
 
             this.state.project.isArchived = !this.state.project.isArchived
-            console.log(this.state.projects)
+
 
             AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
 
@@ -182,6 +184,7 @@ export default class Details extends React.Component {
 
 
   render() {
+    //console.log(this.state.project)
     StatusBar.setBarStyle('light-content', true);
     const { showAlert } = this.state;
     const {
@@ -192,7 +195,10 @@ export default class Details extends React.Component {
       category,
       worktime,
       date,
+      images
     } = this.state.project;
+
+
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
@@ -200,7 +206,7 @@ export default class Details extends React.Component {
 
           <Overlay
             height={200}
-            overlayStyle={{borderRadius:10}}
+            overlayStyle={{ borderRadius: 10 }}
             onBackdropPress={() => {
               this.setState({
                 isVisible: false
@@ -257,7 +263,10 @@ export default class Details extends React.Component {
           </LinearGradient>
           <ScrollView >
 
+
+
             <View key={key} style={styles.container}>
+
               <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
                 <View style={{ margin: 20 }}>
                   <Text
@@ -295,6 +304,25 @@ export default class Details extends React.Component {
                     </Text>
                   </View> : null}
                 </View>
+
+                {
+
+                  images && images.length > 0 ?
+                    <View style={{ margin: 20 }}>
+                      <Text
+                        style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22 }]}>
+                        Pictures
+                    </Text>
+                      <ScrollView horizontal={true}>
+                        <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
+                          {images.map((l, i) => (
+                            <Image style={styles.preview} source={{ uri: images[i] }} />
+                          ))}
+                        </View>
+                      </ScrollView>
+                    </View>
+                    : null
+                }
               </View>
 
               {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
@@ -421,6 +449,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     color: '#FFF',
+  },
+  preview: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    margin: 5,
+    borderRadius: 4,
   },
   shareButton: {
     backgroundColor: '#1679D9',

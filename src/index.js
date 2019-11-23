@@ -11,6 +11,8 @@ import Edit from './pages/Edit'
 import { fromRight,fadeIn } from 'react-navigation-transitions';
 import { createStackNavigator } from 'react-navigation-stack';
 
+console.ignoredYellowBox = true
+
 const RootStack = createStackNavigator(
   {
     Dashboard: Dashboard,
@@ -34,3 +36,5 @@ export default class App extends React.Component {
     return <AppContainer />;
   }
 }
+
+
