@@ -33,8 +33,6 @@ export default class Dashboard extends React.Component {
     await this._retrieveData();
     this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
     this.forceUpdate()
-
-
   }
 
   filterProjects() {
@@ -66,13 +64,17 @@ export default class Dashboard extends React.Component {
   };
 
   async _retrieveData() {
-    const data = await AsyncStorage.getItem('projectss');
-    const projects = (await JSON.parse(data)) || [];
-    const filteredProjects = projects.filter((project) => !project.isArchived)
-    await this.setState({
-      projects: projects,
-      displayProjects: filteredProjects
-    });
+    try {
+      const data = await AsyncStorage.getItem('projectss');
+      const projects = (await JSON.parse(data)) || [];
+      const filteredProjects = projects.filter((project) => !project.isArchived)
+      await this.setState({
+        projects: projects,
+        displayProjects: filteredProjects
+      });
+    } catch (e) {
+      console.log(e)
+    }
     this.hideAlert()
   }
 

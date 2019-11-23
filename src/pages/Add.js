@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
-import { Header, ListItem } from 'react-native-elements';
-import { Label, Form, Item, Picker } from 'native-base';
+import { Header, ListItem, Overlay } from 'react-native-elements';
+import { Label, Form, Picker } from 'native-base';
+import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
 import {
@@ -35,8 +36,11 @@ export default class New extends Component {
     estimatedTime: '',
     estimatedInterval: 'day(s)',
     doneTasks: 0,
-    currentHeight: null
+    currentHeight: null,
+    isVisible: false,
+    image: Image
   };
+
 
 
   static navigationOptions = {
@@ -51,6 +55,8 @@ export default class New extends Component {
       projects: projects,
     });
     console.log(this.state.projects);
+
+
   };
 
   deleteTodo(i) {
@@ -89,6 +95,50 @@ export default class New extends Component {
 
   };
 
+
+
+  handleSelectImage = () => {
+
+    const options = {
+      title: 'Select Avatar',
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, upload => {
+      if (upload.error) {
+        console.log('Error', upload.error);
+      } else if (upload.didCancel) {
+        console.log('Used canceled');
+      } else {
+        const preview = {
+          uri: `data:image/jpeg;base64,${upload.data}`,
+        }
+
+        let prefix;
+        let ext;
+
+        if (upload.fileName) {
+          [prefix, ext] = upload.fileName.split('.')
+          ext = ext.toLowerCase() === 'heic' ? 'jpg' : ext;
+        } else {
+          prefix = new Date().getTime();
+          ext = 'jpg';
+        }
+
+
+
+        //this.setState({ preview, image });
+        const source = { uri: 'data:image/jpeg;base64,' + upload.data };
+        this.setState({ image: source })
+        console.log(source)
+      }
+    });
+  }
+
   handleSubmit = async () => {
     const data = new FormData();
 
@@ -123,7 +173,7 @@ export default class New extends Component {
       date: this.state.date,
       todo: this.state.todo,
       isArchived: false,
-      doneTasks: this.state.doneTasks
+      doneTasks: this.state.doneTasks,
     });
 
     await AsyncStorage.setItem(
@@ -148,6 +198,49 @@ export default class New extends Component {
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
         <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
+          <Image source={this.state.image} style={styles.uploadAvatar} />
+          <Overlay
+            height={200}
+            overlayStyle={{ borderRadius: 10 }}
+            onBackdropPress={() => {
+              this.setState({
+                isVisible: false
+              })
+            }}
+            isVisible={this.state.isVisible}>
+            <Text
+              style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginLeft: 10 }]}>
+              New Category
+              </Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginHorizontal: 10
+              }}>
+              <TextInput
+                style={[styles.input, { flex: 10 }]}
+                autoCorrect={false}
+                placeholder="Add new category"
+                placeholderTextColor="#999"
+                onChangeText={category => this.setState({ category })}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.shareButton}
+              onPress={(category) => {
+
+                console.log(this.state.category)
+                this.setState({ isVisible: false })
+              }}>
+              <Text style={styles.shareButtonText}>Add</Text>
+            </TouchableOpacity>
+
+          </Overlay>
+
+
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
               <LinearGradient colors={['#1679D9', '#0E56B9']}>
@@ -296,7 +389,14 @@ export default class New extends Component {
                       onChangeText={category => this.setState({ category })}
                       placeholder="Select one option"
                       selectedValue={this.state.category}
-                      onValueChange={category => this.setState({ category })}
+                      onValueChange={category => {
+                        if (category === 'new') {
+                          this.setState({ isVisible: true })
+                        } else {
+                          this.setState({ category })
+                        }
+
+                      }}
                       placeholderStyle={{ color: "#bfc6ea" }}
                       placeholderIconColor="#007aff"
                     >
@@ -306,10 +406,15 @@ export default class New extends Component {
                       <Picker.Item label="Bot" value="Bot" />
                       <Picker.Item label="Game" value="Bot" />
                       <Picker.Item label="Other" value="Other" />
+                      <Picker.Item label="Create new..." value="new" />
                     </Picker>
 
                   </View>
-
+                  <TouchableOpacity
+                    style={styles.shareButton}
+                    onPress={() => this.handleSelectImage()}>
+                    <Text style={styles.shareButtonText}>Add new picture</Text>
+                  </TouchableOpacity>
 
 
                   {
@@ -338,6 +443,8 @@ export default class New extends Component {
                     ))}
                   </View>
                 </View>
+
+
               </ScrollView>
 
               <View
@@ -368,7 +475,11 @@ export default class New extends Component {
                   }}>
                   <Icon name="chevron-right" size={35} color="#1679D9" solid />
                 </TouchableOpacity>
+
+
               </View>
+
+
               <TouchableOpacity
                 style={styles.shareButton}
                 onPress={() => this.handleSubmit()}>
