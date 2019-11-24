@@ -5,6 +5,7 @@ import { Header, ListItem, Overlay } from 'react-native-elements';
 import { Label, Form, Picker } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import moment from 'moment';
 import {
   View,
@@ -17,7 +18,8 @@ import {
   StatusBar,
   FlatList,
   ScrollView,
-  Alert
+  Alert,
+  Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -39,7 +41,10 @@ export default class New extends Component {
     doneTasks: 0,
     currentHeight: null,
     isVisible: false,
+    visibleModal: false,
+    imgViewerUri: '',
     previews: [],
+    defaultCategory: true
   };
 
 
@@ -64,6 +69,13 @@ export default class New extends Component {
     const newTodoList = this.state.todo.filter((task, index) => index !== i)
     this.setState({
       todo: newTodoList
+    })
+  }
+
+  deleteImage(i) {
+    const newImages = this.state.previews.filter((imagePath, index) => index !== i)
+    this.setState({
+      previews: newImages
     })
   }
 
@@ -351,7 +363,7 @@ export default class New extends Component {
                         onChangeText={estimatedTime => this.setState({ estimatedTime })}
                       />
                     </View>
-                    <View style={[styles.selectInput, { height: 50, marginLeft: 10 }]}>
+                    <View style={[styles.selectInput, { height: 57, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }]}>
                       <Picker
                         mode="dropdown"
                         iosIcon={<Icon color='#1679D9' name="chevron-down" />}
@@ -377,50 +389,84 @@ export default class New extends Component {
                   <Text style={styles.labelTitle}>
                     Category
                 </Text>
+                  {
+                    this.state.defaultCategory ? <View style={styles.selectInput}>
+                      <Picker
+                        mode="dropdown"
+                        iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                        style={{ width: '100%' }}
+                        value={this.state.category}
+                        onChangeText={category => this.setState({ category })}
+                        placeholder="Select one option"
+                        selectedValue={this.state.category}
+                        onValueChange={category => {
+                          if (category === 'new') {
+                            this.setState({ defaultCategory: false })
+                          } else {
+                            this.setState({ category })
+                          }
 
-                  <View style={styles.selectInput}>
-                    <Picker
-                      mode="dropdown"
-                      iosIcon={<Icon color='#1679D9' name="chevron-down" />}
-                      style={{ width: '100%' }}
-                      value={this.state.category}
-                      onChangeText={category => this.setState({ category })}
-                      placeholder="Select one option"
-                      selectedValue={this.state.category}
-                      onValueChange={category => {
-                        if (category === 'new') {
-                          this.setState({ isVisible: true })
-                        } else {
-                          this.setState({ category })
-                        }
+                        }}
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                      >
+                        <Picker.Item label="Application" value="Application" />
+                        <Picker.Item label="Website" value="Website" />
+                        <Picker.Item label="Software" value="Software" />
+                        <Picker.Item label="Bot" value="Bot" />
+                        <Picker.Item label="Game" value="Bot" />
+                        <Picker.Item label="Other" value="Other" />
+                        <Picker.Item label="Create new..." value="new" />
+                      </Picker>
 
-                      }}
-                      placeholderStyle={{ color: "#bfc6ea" }}
-                      placeholderIconColor="#007aff"
-                    >
-                      <Picker.Item label="Application" value="Application" />
-                      <Picker.Item label="Website" value="Website" />
-                      <Picker.Item label="Software" value="Software" />
-                      <Picker.Item label="Bot" value="Bot" />
-                      <Picker.Item label="Game" value="Bot" />
-                      <Picker.Item label="Other" value="Other" />
-                      <Picker.Item label="Create new..." value="new" />
-                    </Picker>
+                    </View> :
+                      <View>
+                        <TextInput
+                          style={styles.input}
+                          autoCorrect={false}
+                          autoFocus={true}
+                          autoCapitalize="words"
+                          placeholderTextColor="#999"
+                          onChangeText={category => this.setState({ category })}
+                        />
+                      </View>
+                  }
 
-                  </View>
                   <Text style={styles.labelTitle}>
                     Pictures
                   </Text>
 
-                  {this.state.previews && this.state.previews.length > 0 ? <ScrollView horizontal={true}>
-                    <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
-                      {this.state.previews.map((path, i) => (
-                        <Image style={styles.preview} source={{ uri: `file://${path}` }} />
-                      ))}
-                    </View>
-                  </ScrollView> :
+                  {this.state.previews && this.state.previews.length > 0 ?
+                    <ScrollView horizontal={true}>
+                      <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
+                        {this.state.previews.map((path, i) => (
+                          <TouchableOpacity
+                            key={i}
+                            onPress={() => {
+                              this.setState({
+                                imgViewerUri: path,
+                                visibleModal: true
+                              })
+                            }}
+                            onLongPress={() => this.deleteImage(i)}>
+                            <Image style={styles.preview} source={{ uri: `file://${path}` }} />
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </ScrollView> :
                     null
                   }
+
+                  <Modal
+                    onRequestClose={() => this.setState({ visibleModal: false })}
+
+                    visible={this.state.visibleModal}
+                    transparent={true}>
+                    <ImageViewer
+                      renderIndicator={() => null}
+                      menus={() => () => null}
+                      imageUrls={[{ url: `file://${this.state.imgViewerUri}` }]} />
+                  </Modal>
 
 
                   <TouchableOpacity

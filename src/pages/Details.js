@@ -8,7 +8,8 @@ import {
   TextInput,
   ScrollView,
   Alert,
-  Image
+  Image,
+  Modal
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { CheckBox, Input } from 'react-native-elements';
@@ -20,6 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Overlay } from 'react-native-elements';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 export default class Details extends React.Component {
 
@@ -38,7 +40,9 @@ export default class Details extends React.Component {
     isVisible: false,
     showAlert: false,
     showMeConfetti: false,
-    images: []
+    images: [],
+    visibleModal: false,
+    imgViewerUri: ''
   };
 
   async componentDidMount() {
@@ -144,6 +148,17 @@ export default class Details extends React.Component {
     this.state.project.todo = this.state.todo
 
     AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+  }
+
+  deleteImage(i) {
+    try {
+      this.state.project.images = this.state.project.images.filter((imagePath, index) => index !== i)
+      this.forceUpdate()
+      AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   goToDashBoard() {
@@ -305,9 +320,13 @@ export default class Details extends React.Component {
                   </View> : null}
                 </View>
 
-                {
 
-                  images && images.length > 0 ?
+              </View>
+
+              {
+
+                images && images.length > 0 ?
+                  <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
                     <View style={{ margin: 20 }}>
                       <Text
                         style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22 }]}>
@@ -316,14 +335,24 @@ export default class Details extends React.Component {
                       <ScrollView horizontal={true}>
                         <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
                           {images.map((path, i) => (
-                            <Image style={styles.preview} source={{ uri: `file://${path}` }} />
+                            <TouchableOpacity
+                              key={i}
+                              onPress={() => {
+                                this.setState({
+                                  imgViewerUri: path,
+                                  visibleModal: true
+                                })
+                              }}
+                              onLongPress={() => this.deleteImage(i)}>
+                              <Image style={styles.preview} source={{ uri: `file://${path}` }} />
+                            </TouchableOpacity>
                           ))}
                         </View>
                       </ScrollView>
                     </View>
-                    : null
-                }
-              </View>
+                  </View>
+                  : null
+              }
 
               {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
                 <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
@@ -379,7 +408,6 @@ export default class Details extends React.Component {
             </View>
           </ScrollView>
 
-
           <ActionButton
             style={{ marginBottom: 15 }}
             buttonColor="#0E56B9"
@@ -414,6 +442,17 @@ export default class Details extends React.Component {
           closeOnHardwareBackPress={false}
           confirmButtonColor="#DD6B55"
         />
+
+        <Modal
+          onRequestClose={() => this.setState({ visibleModal: false })}
+
+          visible={this.state.visibleModal}
+          transparent={true}>
+          <ImageViewer
+            renderIndicator={() => null}
+            menus={() => () => null}
+            imageUrls={[{ url: `file://${this.state.imgViewerUri}` }]} />
+        </Modal>
         {
           this.state.showMeConfetti ?
             <ConfettiCannon fadeOut={true} count={50} origin={{ x: -10, y: -100 }} />

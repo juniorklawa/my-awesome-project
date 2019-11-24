@@ -310,7 +310,7 @@ export default class Edit extends Component {
 
                   <Text style={styles.labelTitle}>
                     Category
-              </Text>
+                  </Text>
 
                   <View style={styles.selectInput}>
                     <Picker
