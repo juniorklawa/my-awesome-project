@@ -315,8 +315,8 @@ export default class Details extends React.Component {
                     </Text>
                       <ScrollView horizontal={true}>
                         <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
-                          {images.map((l, i) => (
-                            <Image style={styles.preview} source={{ uri: images[i] }} />
+                          {images.map((path, i) => (
+                            <Image style={styles.preview} source={{ uri: `file://${path}` }} />
                           ))}
                         </View>
                       </ScrollView>

@@ -55,7 +55,7 @@ export default class New extends Component {
     await this.setState({
       projects: projects,
     });
-    
+
 
 
   };
@@ -118,14 +118,13 @@ export default class New extends Component {
         const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
 
-        const image = {
-          uri: source.uri,
-        }
-
-        this.state.previews.push(image.uri);
 
 
-        this.setState({ preview: source });
+        this.state.previews.push(response.path);
+        this.forceUpdate()
+
+        console.log(this.state.previews)
+
       }
     });
   }
@@ -150,7 +149,7 @@ export default class New extends Component {
         'Ops!',
         'Title and description are obligatory',
         [
-          { text: 'OK'},
+          { text: 'OK' },
         ],
         { cancelable: false },
       );
@@ -178,7 +177,7 @@ export default class New extends Component {
       JSON.stringify(this.state.projects),
     );
 
-    
+
 
     this.props.navigation.navigate('Dashboard');
   };
@@ -229,7 +228,7 @@ export default class New extends Component {
               style={styles.shareButton}
               onPress={(category) => {
 
-                
+
                 this.setState({ isVisible: false })
               }}>
               <Text style={styles.shareButtonText}>Add</Text>
@@ -261,7 +260,7 @@ export default class New extends Component {
                     currentHeight: contentHeight
                   })
                   this.scrollView.scrollTo({ y: this.state.currentHeight });
-                  
+
                 }}
               >
                 <View style={styles.container}>
@@ -413,16 +412,17 @@ export default class New extends Component {
                     Pictures
                   </Text>
 
-                  {this.state.previews.length > 0 ?
-                    <ScrollView horizontal={true}>
-                      <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
-                        {this.state.previews.map((l, i) => (
-                          <Image style={styles.preview} source={{ uri: this.state.previews[i] }} />
-                        ))}
-                      </View>
-                    </ScrollView>
-                    : null
+                  {this.state.previews && this.state.previews.length > 0 ? <ScrollView horizontal={true}>
+                    <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
+                      {this.state.previews.map((path, i) => (
+                        <Image style={styles.preview} source={{ uri: `file://${path}` }} />
+                      ))}
+                    </View>
+                  </ScrollView> :
+                    null
                   }
+
+
                   <TouchableOpacity
                     style={styles.newPicture}
                     onPress={() => this.handleSelectImage()}>
