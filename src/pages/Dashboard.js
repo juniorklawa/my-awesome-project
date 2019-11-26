@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
-import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
 
@@ -49,6 +48,24 @@ export default class Dashboard extends React.Component {
       filterProjects: !this.state.filterProjects,
     })
 
+  }
+
+  deleteAll() {
+
+    Alert.alert(
+      'Are you sure?',
+      `You are going to delete all data`,
+      [
+        {
+          text: 'Yes', onPress: () => {
+            AsyncStorage.clear()
+            this.setState({ displayProjects: [] })
+          }
+        },
+        { text: 'No', onPress: () => { return } },
+      ],
+      { cancelable: true },
+    );
   }
 
   showAlert = () => {
@@ -126,26 +143,64 @@ export default class Dashboard extends React.Component {
               }
 
 
-              {
+              {displayProjects.length !== 0 ?
                 displayProjects.map((project, i) =>
                   (
                     <ProjectCard navigation={this.props.navigation} key={i} project={project} />
                   )
-                )
+                ) : <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: height,
+                  }}>
+                  <Image
+                    style={{
+                      width: 300,
+                      height: 300,
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      marginBottom: 16,
+                      resizeMode: 'contain',
+                      marginTop: 16,
+                    }}
+                    source={require('../icons/rocket.png')}
+                  />
+                  <Text
+                    style={[
+                      iOSUIKit.subheadEmphasized,
+                      {
+                        color: 'white',
+                        fontSize: 18,
+                        marginTop: 20,
+                        margin: 20,
+                        alignContent: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                      },
+                    ]}>
+                    Press the + button to launch your new awesome idea!
+            </Text>
+                </View>
               }
             </View>
           </ScrollView>
 
           <ActionButton
-            onPress={() => {
-              this.props.navigation.navigate('Add');
-            }}
             style={{ marginBottom: 15 }}
             buttonColor="#f44336"
-          />
+          >
+            <ActionButton.Item buttonColor='#00897B' title='Delete all data' onPress={() => this.deleteAll()}>
+              <Icon size={25} name="delete" color={'#fff'} />
+            </ActionButton.Item>
+
+            <ActionButton.Item buttonColor='#3498db' title="New Project" onPress={() => this.props.navigation.navigate('Add')}>
+              <Icon name="file-document" size={25} color={'#fff'} />
+            </ActionButton.Item>
+          </ActionButton>
         </SafeAreaView>
 
-      </LinearGradient>
+      </LinearGradient >
 
     );
   }

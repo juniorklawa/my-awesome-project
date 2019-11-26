@@ -200,7 +200,6 @@ export default class New extends Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-    const columns = 3;
     return (
 
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>

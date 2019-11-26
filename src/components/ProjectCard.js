@@ -34,12 +34,6 @@ export default class ProjectCard extends Component {
               ]}>
               {project.title}
             </Text>
-            <TouchableOpacity
-              onPress={() => this.goToEdit(project.key)}>
-              <View>
-                <IconEntypo name="edit" size={23} color="#666" solid />
-              </View>
-            </TouchableOpacity>
           </View>
           <Text
             style={[

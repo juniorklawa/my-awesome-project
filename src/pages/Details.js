@@ -12,7 +12,7 @@ import {
   Modal
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { CheckBox, Input } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -263,11 +263,16 @@ export default class Details extends React.Component {
                 <Icon name="chevron-thin-left" size={30} color="#fff" solid />
               </TouchableOpacity>
             </View>
-
-            <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18 }]}>
-              {this.state.project.title}
-            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text
+                style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18 }]}>
+                {this.state.project.title}
+              </Text>
+              <TouchableOpacity
+                onPress={() => this.deleteProject(key)}>
+                <Icon style={{ marginRight: 25, marginTop: 10 }} name="trash" size={23} color="#fff" solid />
+              </TouchableOpacity>
+            </View>
             <Text
               style={[
                 iOSUIKit.subheadEmphasized,
@@ -412,9 +417,6 @@ export default class Details extends React.Component {
             style={{ marginBottom: 15 }}
             buttonColor="#0E56B9"
           >
-            <ActionButton.Item buttonColor='#f44336' title="Delete project" onPress={() => this.deleteProject(key)}>
-              <Icon name="trash" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
 
             <ActionButton.Item buttonColor='#00897B' title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
               <Icon name="archive" style={styles.actionButtonIcon} />
