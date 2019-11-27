@@ -18,7 +18,7 @@ import {
   Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AwesomeAlert from 'react-native-awesome-alerts';
 console.ignoredYellowBox = true
 
@@ -175,11 +175,11 @@ export default class Edit extends Component {
 
 
       <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
-        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
+        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
-              <LinearGradient colors={['#1679D9', '#0E56B9']}>
+              <LinearGradient colors={['#0D4DB0', '#1679D9']}>
                 <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
                   <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
                     <Icon name="chevron-left" size={45} color="#fff" solid />

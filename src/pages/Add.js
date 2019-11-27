@@ -23,7 +23,7 @@ import {
   Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class New extends Component {
   state = {
@@ -197,8 +197,8 @@ export default class New extends Component {
     StatusBar.setBarStyle('light-content', true);
     return (
 
-      <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
-        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
+      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
 
           <Overlay
@@ -242,10 +242,9 @@ export default class New extends Component {
 
           </Overlay>
 
-
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
-              <LinearGradient colors={['#1679D9', '#0E56B9']}>
+              <LinearGradient colors={['#0D4DB0', '#1679D9']}>
                 <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
                   <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
                     <Icon name="chevron-left" size={45} color="#fff" solid />

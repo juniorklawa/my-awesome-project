@@ -244,7 +244,7 @@ export default class Details extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
+        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
 
           <Overlay
@@ -285,7 +285,7 @@ export default class Details extends React.Component {
             </TouchableOpacity>
 
           </Overlay>
-          <LinearGradient colors={['#1679D9', '#0E56B9']}>
+          <LinearGradient colors={['#0D4DB0', '#1679D9']}>
             <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
               <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
                 <Icon name="chevron-left" size={45} color="#fff" solid />
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
   category: {
     fontWeight: 'bold',
     color: '#1679D9',
-    marginLeft:5
+    marginLeft: 5
   },
   projectContainer: {
     backgroundColor: '#ffffff',
