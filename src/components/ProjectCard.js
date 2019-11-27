@@ -3,9 +3,35 @@ import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } fr
 import { iOSUIKit } from 'react-native-typography';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
+import { Badge } from 'react-native-elements'
 
 
 export default class ProjectCard extends Component {
+
+  switchLabel(priority) {
+
+    switch (priority) {
+      case 'High':
+        return (
+          <Badge status="error" />
+        )
+      case 'Medium':
+        return (
+          <Badge status="warning" />
+        )
+
+      case 'Low':
+        return (
+          <Badge status="success" />
+        )
+
+      default:
+        return (
+          null
+        )
+    }
+
+  }
 
 
   async goToProjectDetails(id) {
@@ -34,6 +60,10 @@ export default class ProjectCard extends Component {
               ]}>
               {project.title}
             </Text>
+            {
+              this.switchLabel(project.priority)
+            }
+
           </View>
           <Text
             style={[
@@ -42,9 +72,10 @@ export default class ProjectCard extends Component {
             ]}>
             {`${project.date}`}
           </Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View>
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
+
           <Text style={styles.projectTags}>{project.tags}</Text>
           {
             project.todo.length > 0 ?

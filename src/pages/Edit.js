@@ -181,8 +181,8 @@ export default class Edit extends Component {
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
               <LinearGradient colors={['#1679D9', '#0E56B9']}>
                 <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, }}>
-                  <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
-                    <Icon name="chevron-thin-left" size={30} color="#fff" solid />
+                  <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
+                    <Icon name="chevron-left" size={45} color="#fff" solid />
                   </TouchableOpacity>
                 </View>
 

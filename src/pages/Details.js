@@ -22,6 +22,7 @@ import { Overlay } from 'react-native-elements';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { Badge } from 'react-native-elements'
 
 export default class Details extends React.Component {
 
@@ -108,6 +109,32 @@ export default class Details extends React.Component {
       ],
       { cancelable: true },
     );
+  }
+
+
+  switchLabel(priority) {
+
+    switch (priority) {
+      case 'High':
+        return (
+          <Badge status="error" />
+        )
+      case 'Medium':
+        return (
+          <Badge status="warning" />
+        )
+
+      case 'Low':
+        return (
+          <Badge status="success" />
+        )
+
+      default:
+        return (
+          null
+        )
+    }
+
   }
 
   deleteProject(id) {
@@ -333,11 +360,15 @@ export default class Details extends React.Component {
                         style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 16, marginTop: 8 }]}>
                         Priority
                      </Text>
-
-                      <Text
-                        style={styles.category}>
-                        {priority}
-                      </Text>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {
+                          this.switchLabel(priority)
+                        }
+                        <Text
+                          style={styles.category}>
+                          {priority}
+                        </Text>
+                      </View>
                     </View> : null}
 
                 </View>
@@ -490,7 +521,8 @@ const styles = StyleSheet.create({
   },
   category: {
     fontWeight: 'bold',
-    color: '#1679D9'
+    color: '#1679D9',
+    marginLeft:5
   },
   projectContainer: {
     backgroundColor: '#ffffff',

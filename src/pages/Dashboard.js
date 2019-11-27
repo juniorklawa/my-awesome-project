@@ -7,7 +7,8 @@ import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
-import UUIDGenerator from 'react-native-uuid-generator';
+
+
 
 
 const height = Dimensions.get('window').height;
@@ -109,15 +110,13 @@ export default class Dashboard extends React.Component {
     );
   }
 
-
-
   render() {
     StatusBar.setBarStyle('light-content', true);
     const { showAlert, displayProjects } = this.state;
 
     return (
-      <LinearGradient style={{ flex: 1 }} colors={['#1679D9', '#0E56B9', '#0D4DB0']}>
-        <StatusBar backgroundColor="#1679D9" barStyle="light-content" />
+      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
             onWillFocus={() => this._retrieveData()}
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   headerTitle: {
-    color: 'white',
+    color: '#FFF',
     marginLeft: 18,
     marginTop: 32
   },
