@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { iOSUIKit } from 'react-native-typography';
-import IconEntypo from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
 
 
@@ -40,18 +40,11 @@ export default class ProjectCard extends Component {
               iOSUIKit.subheadEmphasized,
               styles.projectDate,
             ]}>
-            {project.date}
+            {`${project.date}`}
           </Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
-          <Text
-            style={[
-              iOSUIKit.bodyWhite,
-              styles.projectDescription,
-            ]}>
-            {project.shortDescription}
-          </Text>
           <Text style={styles.projectTags}>{project.tags}</Text>
           {
             project.todo.length > 0 ?
@@ -59,15 +52,19 @@ export default class ProjectCard extends Component {
                 <ProgressCircle
                   percent={(project.doneTasks / project.todo.length * 100)}
                   radius={40}
-                  borderWidth={5}
-                  color="#1679D9"
+                  borderWidth={6}
+                  color={project.doneTasks === project.todo.length ? "#059B79" : "#1679D9"}
                   shadowColor="#f0f0f0"
                   bgColor="#fff">
-                  <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#1679D9' }]}>
-                    {
-                      project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
-                    }
-                  </Text>
+                  {project.doneTasks === project.todo.length ?
+                    <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
+                    :
+                    <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#1679D9' }]}>
+                      {
+                        project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
+                      }
+                    </Text>
+                  }
                 </ProgressCircle>
               </View> : null
           }

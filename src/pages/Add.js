@@ -6,6 +6,7 @@ import { Label, Form, Picker } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import UUIDGenerator from 'react-native-uuid-generator';
 import moment from 'moment';
 import {
   View,
@@ -28,12 +29,12 @@ export default class New extends Component {
   state = {
     title: '',
     shortDescription: '',
-    priority: '',
+    priority: 'None',
     worktime: '',
     category: 'Application',
     tags: '',
     todoItem: '',
-    date: moment().format('ddd, D[th] MMMM'),
+    date: moment().format('ddd, D[th] MMMM/YYYY'),
     todo: [],
     projects: [],
     estimatedTime: '',
@@ -60,7 +61,6 @@ export default class New extends Component {
     await this.setState({
       projects: projects,
     });
-
 
 
   };
@@ -126,17 +126,8 @@ export default class New extends Component {
       } else if (response.didCancel) {
         console.log('Used canceled');
       } else {
-
-        const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-
-
-
         this.state.previews.push(response.path);
         this.forceUpdate()
-
-        console.log(this.state.previews)
-
       }
     });
   }
@@ -168,16 +159,18 @@ export default class New extends Component {
       return
     }
 
+
     await this.state.projects.push({
       title: this.state.title,
       shortDescription: this.state.shortDescription,
       category: this.state.category,
       tags: this.state.tags,
+      priority: this.state.priority,
       worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
       estimatedTime: this.state.estimatedTime,
       estimatedInterval: this.state.estimatedInterval,
       images: this.state.previews,
-      key: Math.random(),
+      key: await UUIDGenerator.getRandomUUID(),
       date: this.state.date,
       todo: this.state.todo,
       isArchived: false,
@@ -188,6 +181,8 @@ export default class New extends Component {
       'projectss',
       JSON.stringify(this.state.projects),
     );
+
+    console.log(this.state.projects)
 
 
 
@@ -430,6 +425,29 @@ export default class New extends Component {
                         />
                       </View>
                   }
+
+                  <Text style={styles.labelTitle}>
+                    Priority
+                  </Text>
+                  <View style={styles.selectInput}>
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                      style={{ width: '100%' }}
+                      value={this.state.priority}
+                      onChangeText={priority => this.setState({ priority })}
+                      placeholder="Select one option"
+                      selectedValue={this.state.priority}
+                      onValueChange={priority => this.setState({ priority })}
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                    >
+                      <Picker.Item label="None" value="None" />
+                      <Picker.Item label="High" value="High" />
+                      <Picker.Item label="Medium" value="Medium" />
+                      <Picker.Item label="Low" value="Low" />
+                    </Picker>
+                  </View>
 
                   <Text style={styles.labelTitle}>
                     Pictures

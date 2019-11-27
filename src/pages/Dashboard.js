@@ -7,6 +7,7 @@ import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
+import UUIDGenerator from 'react-native-uuid-generator';
 
 
 const height = Dimensions.get('window').height;
@@ -32,6 +33,7 @@ export default class Dashboard extends React.Component {
     await this._retrieveData();
     this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
     this.forceUpdate()
+    
   }
 
   filterProjects() {

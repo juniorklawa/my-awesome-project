@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { CheckBox } from 'react-native-elements';
 import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
 import { Overlay } from 'react-native-elements';
@@ -206,6 +206,7 @@ export default class Details extends React.Component {
       key,
       title,
       shortDescription,
+      priority,
       tags,
       category,
       worktime,
@@ -259,8 +260,8 @@ export default class Details extends React.Component {
           </Overlay>
           <LinearGradient colors={['#1679D9', '#0E56B9']}>
             <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-              <TouchableOpacity style={{ marginStart: 15 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
-                <Icon name="chevron-thin-left" size={30} color="#fff" solid />
+              <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
+                <Icon name="chevron-left" size={45} color="#fff" solid />
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -270,7 +271,7 @@ export default class Details extends React.Component {
               </Text>
               <TouchableOpacity
                 onPress={() => this.deleteProject(key)}>
-                <Icon style={{ marginRight: 25, marginTop: 10 }} name="trash" size={23} color="#fff" solid />
+                <Icon style={{ marginRight: 25, marginTop: 10 }} name="delete" size={28} color="#fff" solid />
               </TouchableOpacity>
             </View>
             <Text
@@ -312,17 +313,33 @@ export default class Details extends React.Component {
                     Category
               </Text>
                   <Text style={styles.category}>{category}</Text>
-                  {this.state.project.estimatedTime != '' ? <View>
-                    <Text
-                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
-                      Estimate
-              </Text>
+                  {this.state.project.estimatedTime != '' ?
+                    <View>
+                      <Text
+                        style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                        Estimate
+                     </Text>
 
-                    <Text
-                      style={styles.category}>
-                      {worktime}
-                    </Text>
-                  </View> : null}
+                      <Text
+                        style={styles.category}>
+                        {worktime}
+                      </Text>
+                    </View> : null}
+
+
+                  {this.state.project.priority != 'None' ?
+                    <View>
+                      <Text
+                        style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 16, marginTop: 8 }]}>
+                        Priority
+                     </Text>
+
+                      <Text
+                        style={styles.category}>
+                        {priority}
+                      </Text>
+                    </View> : null}
+
                 </View>
 
 
@@ -423,7 +440,7 @@ export default class Details extends React.Component {
             </ActionButton.Item>
 
             <ActionButton.Item buttonColor='#3498db' title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
-              <Icon name="edit" style={styles.actionButtonIcon} />
+              <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
             <ActionButton.Item buttonColor='#1abc9c' title="New to-do" onPress={() => this.setState({
