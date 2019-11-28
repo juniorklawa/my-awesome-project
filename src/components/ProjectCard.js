@@ -55,7 +55,7 @@ export default class ProjectCard extends Component {
             }}>
             <Text
               style={[
-                iOSUIKit.largeTitleEmphasizedObject,
+
                 styles.projectTitle
               ]}>
               {project.title}
@@ -90,7 +90,7 @@ export default class ProjectCard extends Component {
                   {project.doneTasks === project.todo.length ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[iOSUIKit.bodyEmphasized, { fontSize: 22, color: '#1679D9' }]}>
+                    <Text style={[{ fontSize: 22, color: '#1679D9', fontFamily: 'Poppins-SemiBold'  }]}>
                       {
                         project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
                       }
@@ -108,7 +108,7 @@ export default class ProjectCard extends Component {
 
 const styles = StyleSheet.create({
   projectCategory: {
-    fontWeight: 'bold',
+    fontFamily: 'Roboto-Bold',
     color: '#949494'
   },
   projectContainer: {
@@ -129,17 +129,19 @@ const styles = StyleSheet.create({
     fontSize: 23,
     marginTop: 10,
     padding: 0,
+    fontFamily: 'Roboto-Black',
     width: '80%',
     lineHeight: 24
   },
   projectDate: {
     color: '#929699',
     fontSize: 14,
+    fontFamily: 'Roboto-Medium',
     marginTop: 3
   },
   projectTags: {
     color: '#1679D9',
-    fontWeight: 'bold',
+    fontFamily: 'Roboto-Bold',
     width: '60%',
     marginTop: 10
   },

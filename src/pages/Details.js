@@ -23,6 +23,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { Badge } from 'react-native-elements'
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 
 export default class Details extends React.Component {
 
@@ -49,7 +50,7 @@ export default class Details extends React.Component {
   async componentDidMount() {
     this.showAlert()
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
-    const data = await AsyncStorage.getItem('projectss');
+    const data = await AsyncStorage.getItem('keyProjects');
     const projects = (await JSON.parse(data)) || [];
     await this.setState({
       projects: projects,
@@ -60,11 +61,8 @@ export default class Details extends React.Component {
       project: detail,
       todo: todoDetail,
     });
-
     this.state.images = detail.images
     this.forceUpdate()
-
-
     this.hideAlert()
   }
 
@@ -80,7 +78,7 @@ export default class Details extends React.Component {
     });
   };
 
-  archiveProject(id) {
+  archiveProject() {
     const message = this.state.project.isArchived ?
       `You are going to unarchive ${this.state.project.title}`
       :
@@ -100,7 +98,7 @@ export default class Details extends React.Component {
             this.state.project.isArchived = !this.state.project.isArchived
 
 
-            AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+            AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
 
             this.props.navigation.navigate('Dashboard');
           }
@@ -150,7 +148,7 @@ export default class Details extends React.Component {
               projects: newProjects,
             });
 
-            AsyncStorage.setItem('projectss', JSON.stringify(newProjects));
+            AsyncStorage.setItem('keyProjects', JSON.stringify(newProjects));
 
             this.props.navigation.navigate('Dashboard');
           }
@@ -174,14 +172,14 @@ export default class Details extends React.Component {
 
     this.state.project.todo = this.state.todo
 
-    AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
   }
 
   deleteImage(i) {
     try {
       this.state.project.images = this.state.project.images.filter((imagePath, index) => index !== i)
       this.forceUpdate()
-      AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+      AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
 
     } catch (e) {
       console.log(e)
@@ -220,13 +218,12 @@ export default class Details extends React.Component {
     this.setState({
       isVisible: false
     })
-    AsyncStorage.setItem('projectss', JSON.stringify(this.state.projects));
+    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
   };
 
 
 
   render() {
-    //console.log(this.state.project)
     StatusBar.setBarStyle('light-content', true);
     const { showAlert } = this.state;
     const {
@@ -291,23 +288,36 @@ export default class Details extends React.Component {
                 <Icon name="chevron-left" size={45} color="#fff" solid />
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text
-                style={[iOSUIKit.largeTitleEmphasizedObject, { color: 'white', fontSize: 32, paddingHorizontal: 18 }]}>
-                {this.state.project.title}
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.deleteProject(key)}>
-                <Icon style={{ marginRight: 25, marginTop: 10 }} name="delete" size={28} color="#fff" solid />
-              </TouchableOpacity>
-            </View>
-            <Text
-              style={[
-                iOSUIKit.subheadEmphasized,
-                { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal: 18 },
-              ]}>
-              Created at {date}
-            </Text>
+
+            {
+              showAlert ?
+                <View style={{ justifyContent: 'space-between' }}>
+                  <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 25, width: 250, borderRadius: 5 }} autoRun={true} />
+                  <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
+                </View>
+                :
+                <View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text
+                      style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Roboto-Black' }]}>
+                      {this.state.project.title}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => this.deleteProject(key)}>
+                      <Icon style={{ marginRight: 25, marginTop: 10 }} name="delete" size={28} color="#fff" solid />
+                    </TouchableOpacity>
+                  </View>
+                  <Text
+                    style={[
+
+                      { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal: 18, fontFamily: 'Roboto-Regular' },
+                    ]}>
+                    Created at {date}
+                  </Text>
+                </View>
+            }
+
+
           </LinearGradient>
           <ScrollView >
 
@@ -315,66 +325,74 @@ export default class Details extends React.Component {
 
             <View key={key} style={styles.container}>
 
-              <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
-                <View style={{ margin: 20 }}>
-                  <Text
-                    style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24 }]}>
-                    Description
-              </Text>
-                  <Text
-                    style={[
-                      iOSUIKit.subhead,
-                      { color: '#4b4b4b', fontSize: 16, marginTop: 5 },
-                    ]}>
-                    {shortDescription}
-                  </Text>
-                  {tags != '' ? <View>
+              {showAlert
+                ?
+                <View style={{ marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                  <ShimmerPlaceHolder style={[styles.placeHolder, { height: 300 }]} autoRun={true} />
+                  <ShimmerPlaceHolder style={[styles.placeHolder, { height: 200 }]} autoRun={true} />
+                  <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
+                </View>
+                :
+                <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 15, marginTop: 20 }}>
+                  <View style={{ margin: 20 }}>
                     <Text
-                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
-                      Tags
-              </Text>
-                    <Text style={styles.tags}>{tags}</Text>
-                  </View> : null}
-                  <Text
-                    style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
-                    Category
-              </Text>
-                  <Text style={styles.category}>{category}</Text>
-                  {this.state.project.estimatedTime != '' ?
-                    <View>
+                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24 }]}>
+                      Description
+                  </Text>
+                    <Text
+                      style={[
+                        iOSUIKit.subhead,
+                        { color: '#4b4b4b', fontSize: 16, marginTop: 5 },
+                      ]}>
+                      {shortDescription}
+                    </Text>
+                    {tags != '' ? <View>
                       <Text
                         style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
-                        Estimate
-                     </Text>
-
-                      <Text
-                        style={styles.category}>
-                        {worktime}
-                      </Text>
+                        Tags
+                    </Text>
+                      <Text style={styles.tags}>{tags}</Text>
                     </View> : null}
-
-
-                  {this.state.project.priority != 'None' ?
-                    <View>
-                      <Text
-                        style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 16, marginTop: 8 }]}>
-                        Priority
+                    <Text
+                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                      Category
+                  </Text>
+                    <Text style={styles.category}>{category}</Text>
+                    {this.state.project.estimatedTime != '' ?
+                      <View>
+                        <Text
+                          style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                          Estimate
                      </Text>
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {
-                          this.switchLabel(priority)
-                        }
+
                         <Text
                           style={styles.category}>
-                          {priority}
+                          {worktime}
                         </Text>
-                      </View>
-                    </View> : null}
-
-                </View>
+                      </View> : null}
 
 
-              </View>
+                    {this.state.project.priority != 'None' ?
+                      <View>
+                        <Text
+                          style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 16, marginTop: 8 }]}>
+                          Priority
+                     </Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                          {
+                            this.switchLabel(priority)
+                          }
+                          <Text
+                            style={styles.category}>
+                            {priority}
+                          </Text>
+                        </View>
+                      </View> : null}
+
+                  </View>
+
+
+                </View>}
 
               {
 
@@ -408,7 +426,7 @@ export default class Details extends React.Component {
               }
 
               {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
-                <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                   <View style={{ margin: 20 }}>
                     <Text style={[styles.category, { fontSize: 25, color: '#4b4b4b' }]}>To-do</Text>
                     {this.state.todo.map((task, i) => (
@@ -437,7 +455,7 @@ export default class Details extends React.Component {
                             });
 
                           AsyncStorage.setItem(
-                            'projectss',
+                            'keyProjects',
                             JSON.stringify(this.state.projects),
                           );
 
@@ -484,7 +502,6 @@ export default class Details extends React.Component {
 
         </SafeAreaView>
         <AwesomeAlert
-          show={showAlert}
           showProgress={true}
           progressSize={50}
           contentContainerStyle={{ height: 100, width: 200, alignItems: 'center', justifyContent: 'center' }}
@@ -495,7 +512,6 @@ export default class Details extends React.Component {
 
         <Modal
           onRequestClose={() => this.setState({ visibleModal: false })}
-
           visible={this.state.visibleModal}
           transparent={true}>
           <ImageViewer
@@ -568,6 +584,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     lineHeight: 24,
+  },
+  placeHolder: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    margin: 5,
+    width: '98%',
+    height: 150
   },
 
   movieButton: {

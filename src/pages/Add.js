@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
-import { Header, ListItem, Overlay } from 'react-native-elements';
-import { Label, Form, Picker } from 'native-base';
+import { ListItem, Overlay } from 'react-native-elements';
+import { Picker } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -17,7 +17,6 @@ import {
   TextInput,
   Image,
   StatusBar,
-  FlatList,
   ScrollView,
   Alert,
   Modal
@@ -56,13 +55,11 @@ export default class New extends Component {
 
 
   componentDidMount = async () => {
-    const data = await AsyncStorage.getItem('projectss');
-    this.state.projects = (await JSON.parse(data)) || [];
+    const data = await AsyncStorage.getItem('keyProjects');
+    const projects = (await JSON.parse(data)) || [];
     await this.setState({
       projects: projects,
     });
-
-
   };
 
   deleteTodo(i) {
@@ -104,8 +101,6 @@ export default class New extends Component {
     this.setState({
       todoItem: '',
     });
-
-
   };
 
 
@@ -131,11 +126,6 @@ export default class New extends Component {
       }
     });
   }
-
-
-
-
-
 
   handleSubmit = async () => {
     const data = new FormData();
@@ -178,14 +168,9 @@ export default class New extends Component {
     });
 
     await AsyncStorage.setItem(
-      'projectss',
+      'keyProjects',
       JSON.stringify(this.state.projects),
     );
-
-    console.log(this.state.projects)
-
-
-
     this.props.navigation.navigate('Dashboard');
   };
 
@@ -288,7 +273,7 @@ export default class New extends Component {
 
                   <Text style={styles.labelTitle}>
                     Project Name
-              </Text>
+                </Text>
                   <TextInput
                     style={styles.input}
                     autoCorrect={false}
@@ -488,7 +473,7 @@ export default class New extends Component {
                   <TouchableOpacity
                     style={styles.newPicture}
                     onPress={() => this.handleSelectImage()}>
-                    <Text style={styles.shareButtonText}>Add new picture</Text>
+                    <Text style={[styles.shareButtonText, { color: '#1679D9' }]}>Add new picture</Text>
                   </TouchableOpacity>
                   {
                     this.state.todo.length > 0 ?
@@ -629,15 +614,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#1679D9',
     borderRadius: 4,
     height: 42,
-    marginTop: 15,
-    marginBottom: 40,
+    marginVertical: 10,
     margin: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   newPicture: {
-    backgroundColor: '#1679D9',
+
+    borderColor: '#1679D9',
+    borderWidth: 2,
     borderRadius: 4,
     height: 42,
     marginTop: 15,

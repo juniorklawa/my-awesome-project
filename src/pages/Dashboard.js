@@ -1,15 +1,21 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  StatusBar,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Alert
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
-import { iOSUIKit } from 'react-native-typography';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
-
-
-
 
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
@@ -34,7 +40,7 @@ export default class Dashboard extends React.Component {
     await this._retrieveData();
     this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
     this.forceUpdate()
-    
+
   }
 
   filterProjects() {
@@ -85,7 +91,7 @@ export default class Dashboard extends React.Component {
 
   async _retrieveData() {
     try {
-      const data = await AsyncStorage.getItem('projectss');
+      const data = await AsyncStorage.getItem('keyProjects');
       const projects = (await JSON.parse(data)) || [];
       const filteredProjects = projects.filter((project) => !project.isArchived)
       await this.setState({
@@ -105,7 +111,7 @@ export default class Dashboard extends React.Component {
     });
 
     await AsyncStorage.setItem(
-      'projectss',
+      'keyProjects',
       JSON.stringify(this.state.projects),
     );
   }
@@ -119,13 +125,15 @@ export default class Dashboard extends React.Component {
         <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
-            onWillFocus={() => this._retrieveData()}
+            onWillFocus={() => {
+              this.showAlert()
+              this._retrieveData()
+            }}
           />
-
           <View style={styles.header}>
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, styles.headerTitle]}>
-              {this.state.filterProjects ? 'Archived' : 'My ideas'}
+              style={[styles.headerTitle]}>
+              {this.state.filterProjects ? 'Archived' : 'My projects'}
             </Text>
             {
               <TouchableOpacity style={styles.filter} hitSlop={styles.filterHitSlop}
@@ -137,12 +145,10 @@ export default class Dashboard extends React.Component {
 
           <ScrollView>
             <View style={styles.container}>
-
               {
                 showAlert ?
                   <Placeholder /> : null
               }
-
 
               {displayProjects.length !== 0 ?
                 displayProjects.map((project, i) =>
@@ -156,29 +162,13 @@ export default class Dashboard extends React.Component {
                     height: height,
                   }}>
                   <Image
-                    style={{
-                      width: 300,
-                      height: 300,
-                      justifyContent: 'flex-end',
-                      alignItems: 'center',
-                      marginBottom: 16,
-                      resizeMode: 'contain',
-                      marginTop: 16,
-                    }}
+                    style={styles.imgOnboarding}
                     source={require('../icons/rocket.png')}
                   />
                   <Text
                     style={[
-                      iOSUIKit.subheadEmphasized,
-                      {
-                        color: 'white',
-                        fontSize: 18,
-                        marginTop: 20,
-                        margin: 20,
-                        alignContent: 'center',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                      },
+
+                      styles.onboardingText,
                     ]}>
                     Press the + button to launch your new awesome idea!
             </Text>
@@ -219,6 +209,8 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#FFF',
+    fontFamily: 'Roboto-Black',
+    fontSize: 32,
     marginLeft: 18,
     marginTop: 32
   },
@@ -246,6 +238,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop: 16,
   },
+  imgOnboarding: {
+    width: 300,
+    height: 300,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 16,
+    resizeMode: 'contain',
+    marginTop: 16,
+  },
   imgText: {
     color: 'white',
     fontSize: 18,
@@ -261,5 +262,15 @@ const styles = StyleSheet.create({
     margin: 5,
     width: '98%',
     height: 150
+  },
+  onboardingText: {
+    color: 'white',
+    fontSize: 18,
+    marginTop: 20,
+    margin: 20,
+    fontFamily: 'Roboto-Thin',
+    alignContent: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   }
 });

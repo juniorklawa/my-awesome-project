@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { iOSUIKit } from 'react-native-typography';
-import { Header, ListItem } from 'react-native-elements';
-import { Label, Form, Item, Picker } from 'native-base';
+import { Picker } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
-import moment from 'moment';
 import {
   View,
   StyleSheet,
@@ -19,7 +17,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AwesomeAlert from 'react-native-awesome-alerts';
 console.ignoredYellowBox = true
 
 export default class Edit extends Component {
@@ -54,7 +51,7 @@ export default class Edit extends Component {
     this.showAlert()
     try {
       const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
-      const data = await AsyncStorage.getItem('projectss');
+      const data = await AsyncStorage.getItem('keyProjects');
       const projects = (await JSON.parse(data)) || [];
       await this.setState({
         projects: projects,
@@ -155,7 +152,7 @@ export default class Edit extends Component {
 
 
     await AsyncStorage.setItem(
-      'projectss',
+      'keyProjects',
       JSON.stringify(this.state.projects),
     );
 
