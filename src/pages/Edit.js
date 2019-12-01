@@ -197,7 +197,6 @@ export default class Edit extends Component {
                     currentHeight: contentHeight
                   })
                   this.scrollView.scrollTo({ y: this.state.currentHeight });
-                  console.log('current height:', this.state.currentHeight)
                 }}
               >
                 <View style={styles.container}>

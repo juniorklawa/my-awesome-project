@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
     marginTop: 10,
     padding: 0,
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Roboto-Bold',
     width: '80%',
     lineHeight: 24
   },

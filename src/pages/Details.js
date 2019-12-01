@@ -96,10 +96,7 @@ export default class Details extends React.Component {
             });
 
             this.state.project.isArchived = !this.state.project.isArchived
-
-
             AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
-
             this.props.navigation.navigate('Dashboard');
           }
         },
@@ -254,7 +251,7 @@ export default class Details extends React.Component {
             }}
             isVisible={this.state.isVisible}>
             <Text
-              style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24, marginLeft: 10 }]}>
+              style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Roboto-Bold' }]}>
               New Todo
               </Text>
 
@@ -333,10 +330,10 @@ export default class Details extends React.Component {
                   <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
                 </View>
                 :
-                <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 15, marginTop: 20 }}>
+                <View style={styles.cardContainer}>
                   <View style={{ margin: 20 }}>
                     <Text
-                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 24 }]}>
+                      style={styles.divTitle}>
                       Description
                   </Text>
                     <Text
@@ -348,20 +345,20 @@ export default class Details extends React.Component {
                     </Text>
                     {tags != '' ? <View>
                       <Text
-                        style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                        style={styles.divTitle}>
                         Tags
                     </Text>
                       <Text style={styles.tags}>{tags}</Text>
                     </View> : null}
                     <Text
-                      style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                      style={styles.divTitle}>
                       Category
                   </Text>
                     <Text style={styles.category}>{category}</Text>
                     {this.state.project.estimatedTime != '' ?
                       <View>
                         <Text
-                          style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22, marginTop: 8 }]}>
+                          style={styles.divTitle}>
                           Estimate
                      </Text>
 
@@ -488,7 +485,7 @@ export default class Details extends React.Component {
               <Icon name="archive" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#3498db' title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
+            <ActionButton.Item buttonColor='#3498db' title="Edit project" onPress={() => this.props.navigation.navigate('Add', { projectId: key })}>
               <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
@@ -551,6 +548,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
+  cardContainer: {
+    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    borderRadius: 15,
+    marginTop: 20
+  },
   shareButtonText: {
     fontWeight: 'bold',
     fontSize: 16,
@@ -562,6 +565,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 5,
     borderRadius: 4,
+  },
+  divTitle: {
+    color: '#4b4b4b',
+    fontSize: 22,
+    marginTop: 8,
+    fontFamily: 'Roboto-Bold'
   },
   shareButton: {
     backgroundColor: '#1679D9',
@@ -591,17 +600,6 @@ const styles = StyleSheet.create({
     margin: 5,
     width: '98%',
     height: 150
-  },
-
-  movieButton: {
-    height: 42,
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: '#E8B708',
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
   },
   tags: {
     color: '#1679D9',

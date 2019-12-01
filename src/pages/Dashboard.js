@@ -37,10 +37,13 @@ export default class Dashboard extends React.Component {
 
   async componentDidMount() {
     this.showAlert()
-    await this._retrieveData();
-    this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
-    this.forceUpdate()
-
+    try {
+      await this._retrieveData();
+      this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
+      this.forceUpdate()
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   filterProjects() {
@@ -105,15 +108,20 @@ export default class Dashboard extends React.Component {
   }
 
   async deleteProject(id) {
-    const newProjects = this.state.projects.filter(obj => obj.key != id);
-    this.setState({
-      projects: newProjects,
-    });
+    try {
+      const newProjects = this.state.projects.filter(obj => obj.key != id);
+      this.setState({
+        projects: newProjects,
+      });
 
-    await AsyncStorage.setItem(
-      'keyProjects',
-      JSON.stringify(this.state.projects),
-    );
+      await AsyncStorage.setItem(
+        'keyProjects',
+        JSON.stringify(this.state.projects),
+      );
+    } catch (e) {
+      console.log(e)
+    }
+
   }
 
   render() {
@@ -150,35 +158,29 @@ export default class Dashboard extends React.Component {
                   <Placeholder /> : null
               }
 
-              {displayProjects.length !== 0 ?
-                displayProjects.map((project, i) =>
-                  (
-                    <ProjectCard navigation={this.props.navigation} key={i} project={project} />
-                  )
-                ) : <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: height,
-                  }}>
-                  <Image
-                    style={styles.imgOnboarding}
-                    source={require('../icons/rocket.png')}
-                  />
-                  <Text
-                    style={[
-
-                      styles.onboardingText,
-                    ]}>
-                    Press the + button to launch your new awesome idea!
-            </Text>
-                </View>
+              {
+                displayProjects.length !== 0 ?
+                  displayProjects.map((project, i) =>
+                    (
+                      <ProjectCard navigation={this.props.navigation} key={i} project={project} />
+                    )
+                  ) : <View
+                    style={styles.imgContainer}>
+                    <Image
+                      style={styles.imgOnboarding}
+                      source={require('../icons/therocket.png')}
+                    />
+                    <Text
+                      style={[
+                        styles.onboardingText,
+                      ]}>
+                      Press the + button to launch your new awesome idea!
+                   </Text>
+                  </View>
               }
             </View>
           </ScrollView>
-
           <ActionButton
-            style={{ marginBottom: 15 }}
             buttonColor="#f44336"
           >
             <ActionButton.Item buttonColor='#00897B' title='Delete all data' onPress={() => this.deleteAll()}>
@@ -190,7 +192,6 @@ export default class Dashboard extends React.Component {
             </ActionButton.Item>
           </ActionButton>
         </SafeAreaView>
-
       </LinearGradient >
 
     );
@@ -230,14 +231,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  img: {
-    width: '100%',
-    height: 280,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 16,
-    marginTop: 16,
-  },
   imgOnboarding: {
     width: 300,
     height: 300,
@@ -246,6 +239,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     resizeMode: 'contain',
     marginTop: 16,
+  },
+  imgContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: height,
   },
   imgText: {
     color: 'white',
