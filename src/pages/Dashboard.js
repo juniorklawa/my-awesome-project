@@ -16,6 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
+import FlashMessage from "react-native-flash-message";
 
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
@@ -175,7 +176,7 @@ export default class Dashboard extends React.Component {
                           ¯\_(ツ)_/¯
                         </Text>
                         <Text
-                          style={{ fontFamily: 'Roboto-Thin', fontSize: 16, color: '#fff', marginTop:16 }}>
+                          style={{ fontFamily: 'Roboto-Thin', fontSize: 16, color: '#fff', marginTop: 16 }}>
                           your archived list is empty...
                         </Text>
 
@@ -210,6 +211,10 @@ export default class Dashboard extends React.Component {
             </ActionButton.Item>
           </ActionButton>
         </SafeAreaView>
+        {/*              showMessage({
+                message: "Long press on item to delete it",
+                type: "warning",
+              });*/}
       </LinearGradient >
 
     );
