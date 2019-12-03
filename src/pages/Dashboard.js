@@ -164,18 +164,36 @@ export default class Dashboard extends React.Component {
                     (
                       <ProjectCard navigation={this.props.navigation} key={i} project={project} />
                     )
-                  ) : <View
+                  ) :
+                  <View
                     style={styles.imgContainer}>
-                    <Image
-                      style={styles.imgOnboarding}
-                      source={require('../icons/therocket.png')}
-                    />
-                    <Text
-                      style={[
-                        styles.onboardingText,
-                      ]}>
-                      Press the + button to launch your new awesome idea!
-                   </Text>
+                    {this.state.filterProjects ?
+                      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+
+                        <Text
+                          style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
+                          ¯\_(ツ)_/¯
+                        </Text>
+                        <Text
+                          style={{ fontFamily: 'Roboto-Thin', fontSize: 16, color: '#fff', marginTop:16 }}>
+                          your archived list is empty...
+                        </Text>
+
+                      </View> :
+                      <View>
+                        <Image
+                          style={styles.imgOnboarding}
+                          source={require('../icons/therocket.png')}
+                        />
+                        <Text
+                          style={[
+                            styles.onboardingText,
+                          ]}>
+                          Press the + button to launch your new awesome idea!
+                      </Text>
+                      </View>
+                    }
+
                   </View>
               }
             </View>
