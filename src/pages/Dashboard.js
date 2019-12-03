@@ -16,7 +16,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
-import FlashMessage from "react-native-flash-message";
 
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
@@ -45,6 +44,7 @@ export default class Dashboard extends React.Component {
     } catch (e) {
       console.log(e)
     }
+    this.hideAlert()
   }
 
   filterProjects() {
@@ -105,7 +105,6 @@ export default class Dashboard extends React.Component {
     } catch (e) {
       console.log(e)
     }
-    this.hideAlert()
   }
 
   async deleteProject(id) {
@@ -137,6 +136,7 @@ export default class Dashboard extends React.Component {
             onWillFocus={() => {
               this.showAlert()
               this._retrieveData()
+              this.hideAlert()
             }}
           />
           <View style={styles.header}>
@@ -155,48 +155,53 @@ export default class Dashboard extends React.Component {
           <ScrollView>
             <View style={styles.container}>
               {
-                showAlert ?
-                  <Placeholder /> : null
-              }
+                showAlert === true ?
+                  <Placeholder /> :
 
-              {
-                displayProjects.length !== 0 ?
-                  displayProjects.map((project, i) =>
-                    (
-                      <ProjectCard navigation={this.props.navigation} key={i} project={project} />
-                    )
-                  ) :
-                  <View
-                    style={styles.imgContainer}>
-                    {this.state.filterProjects ?
-                      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <View>
 
-                        <Text
-                          style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
-                          ¯\_(ツ)_/¯
+                    {
+                      displayProjects.length > 0 && showAlert === false ? 
+                        displayProjects.map((project, i) =>
+                          (
+                            <ProjectCard navigation={this.props.navigation} key={i} project={project} />
+                          )
+                        ) :
+                        <View
+                          style={styles.imgContainer}>
+                          {this.state.filterProjects ?
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+
+                              <Text
+                                style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
+                                ¯\_(ツ)_/¯
                         </Text>
-                        <Text
-                          style={{ fontFamily: 'Roboto-Thin', fontSize: 16, color: '#fff', marginTop: 16 }}>
-                          your archived list is empty...
+                              <Text
+                                style={{ fontFamily: 'Roboto-Thin', fontSize: 16, color: '#fff', marginTop: 16 }}>
+                                your archived list is empty...
                         </Text>
 
-                      </View> :
-                      <View>
-                        <Image
-                          style={styles.imgOnboarding}
-                          source={require('../icons/therocket.png')}
-                        />
-                        <Text
-                          style={[
-                            styles.onboardingText,
-                          ]}>
-                          Press the + button to launch your new awesome idea!
+                            </View> :
+                            <View>
+                              <Image
+                                style={styles.imgOnboarding}
+                                source={require('../icons/therocket.png')}
+                              />
+                              <Text
+                                style={[
+                                  styles.onboardingText,
+                                ]}>
+                                Press the + button to launch your new awesome idea!
                       </Text>
-                      </View>
-                    }
+                            </View>
+                          }
 
+                        </View>
+                    }
                   </View>
               }
+
+
             </View>
           </ScrollView>
           <ActionButton
@@ -211,10 +216,6 @@ export default class Dashboard extends React.Component {
             </ActionButton.Item>
           </ActionButton>
         </SafeAreaView>
-        {/*              showMessage({
-                message: "Long press on item to delete it",
-                type: "warning",
-              });*/}
       </LinearGradient >
 
     );

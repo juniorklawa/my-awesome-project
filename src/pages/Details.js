@@ -23,6 +23,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { Badge } from 'react-native-elements'
+import { showMessage, hideMessage } from "react-native-flash-message";
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 
 export default class Details extends React.Component {
@@ -208,6 +209,13 @@ export default class Details extends React.Component {
       task: this.state.todoItem,
       checked: false,
     });
+
+    if (this.state.todo.length === 1) {
+      showMessage({
+        message: "Long press on item to delete it",
+        type: "default",
+      });
+    }
 
     this.setState({
       todoItem: '',

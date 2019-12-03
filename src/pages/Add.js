@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { iOSUIKit } from 'react-native-typography';
+import { showMessage, hideMessage } from "react-native-flash-message";
 import { ListItem, Overlay } from 'react-native-elements';
 import { Picker } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
@@ -158,6 +158,12 @@ export default class New extends Component {
         console.log('Used canceled');
       } else {
         this.state.previews.push(response.path);
+        if (this.state.previews.length === 1) {
+          showMessage({
+            message: "Long press on image to delete it",
+            type: "defautl",
+          });
+        }
         this.forceUpdate()
       }
     });
@@ -195,7 +201,7 @@ export default class New extends Component {
 
     } else {
 
-      await this.state.projects.push({
+      await this.state.projects.unshift({
         title: this.state.title,
         shortDescription: this.state.shortDescription,
         category: this.state.category,
