@@ -8,13 +8,15 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Alert
+  Alert,
+  Animated
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as Animatable from 'react-native-animatable';
 import { NavigationEvents } from 'react-navigation';
 
 const height = Dimensions.get('window').height;
@@ -158,10 +160,10 @@ export default class Dashboard extends React.Component {
                 showAlert === true ?
                   <Placeholder /> :
 
-                  <View>
+                  <Animatable.View animation="fadeIn">
 
                     {
-                      displayProjects.length > 0 && showAlert === false ? 
+                      displayProjects.length > 0 && showAlert === false ?
                         displayProjects.map((project, i) =>
                           (
                             <ProjectCard navigation={this.props.navigation} key={i} project={project} />
@@ -198,20 +200,20 @@ export default class Dashboard extends React.Component {
 
                         </View>
                     }
-                  </View>
+                  </Animatable.View>
               }
 
 
             </View>
           </ScrollView>
           <ActionButton
-            buttonColor="#f44336"
+            buttonColor="#0DB070"
           >
-            <ActionButton.Item buttonColor='#00897B' title='Delete all data' onPress={() => this.deleteAll()}>
+            <ActionButton.Item textStyle={{fontFamily:'CoreSansA55Medium'}}  buttonColor='#B00D17' title='Delete all data' onPress={() => this.deleteAll()}>
               <Icon size={25} name="delete" color={'#fff'} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#3498db' title="New Project" onPress={() => this.props.navigation.navigate('Add')}>
+            <ActionButton.Item  textStyle={{fontFamily:'CoreSansA55Medium'}} buttonColor='#4DB00D' title="New Project" onPress={() => this.props.navigation.navigate('Add')}>
               <Icon name="file-document" size={25} color={'#fff'} />
             </ActionButton.Item>
           </ActionButton>
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#FFF',
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'CoreSansA75ExtraBold',
     fontSize: 32,
     marginLeft: 18,
     marginTop: 32

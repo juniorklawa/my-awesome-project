@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Animated } from 'react-native';
 import { iOSUIKit } from 'react-native-typography';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import { Badge } from 'react-native-elements'
+import * as Animatable from 'react-native-animatable';
 
 
 export default class ProjectCard extends Component {
@@ -47,6 +48,7 @@ export default class ProjectCard extends Component {
     return (
       <TouchableWithoutFeedback
         onPress={() => this.goToProjectDetails(project.key)}>
+
         <View style={styles.projectContainer}>
           <View
             style={{
@@ -65,13 +67,16 @@ export default class ProjectCard extends Component {
             }
 
           </View>
-          <Text
-            style={[
-              iOSUIKit.subheadEmphasized,
-              styles.projectDate,
-            ]}>
-            {`${project.date}`}
-          </Text>
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+          <Icon name="calendar" size={15} color={"#1679D9"} style={{marginRight: 5}}  />
+            <Text
+              style={[
+                iOSUIKit.subheadEmphasized,
+                styles.projectDate,
+              ]}>
+              {`${project.date}`}
+            </Text>
+          </View>
           <View>
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
@@ -90,7 +95,7 @@ export default class ProjectCard extends Component {
                   {project.doneTasks === project.todo.length ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[{ fontSize: 22, color: '#1679D9', fontFamily: 'Poppins-SemiBold'  }]}>
+                    <Text style={[{ fontSize: 22, color: '#1679D9', fontFamily: 'CoreSansA65Bold' }]}>
                       {
                         project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
                       }
@@ -99,7 +104,7 @@ export default class ProjectCard extends Component {
                 </ProgressCircle>
               </View> : null
           }
-        </View>
+        </View >
       </TouchableWithoutFeedback>
     );
   }
@@ -108,7 +113,7 @@ export default class ProjectCard extends Component {
 
 const styles = StyleSheet.create({
   projectCategory: {
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'CoreSansA55Medium',
     color: '#949494'
   },
   projectContainer: {
@@ -125,23 +130,22 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   projectTitle: {
-    color: '#4b4b4b',
+    color: '#3F3E51',
     fontSize: 23,
     marginTop: 10,
     padding: 0,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'CoreSansA65Bold',
     width: '80%',
     lineHeight: 24
   },
   projectDate: {
     color: '#929699',
     fontSize: 14,
-    fontFamily: 'Roboto-Medium',
-    marginTop: 3
+    fontFamily: 'CoreSansA45Regular',
   },
   projectTags: {
     color: '#1679D9',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'CoreSansA65Bold',
     width: '60%',
     marginTop: 10
   },

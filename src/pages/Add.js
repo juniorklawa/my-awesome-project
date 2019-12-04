@@ -302,7 +302,7 @@ export default class New extends Component {
                 </View>
                 <Text
                   style={styles.headerTitle}>
-                  What's your idea?
+                {this.state.projectId ? 'Edit your idea' : `What's your idea?`}
                 </Text>
               </LinearGradient>
               <ScrollView

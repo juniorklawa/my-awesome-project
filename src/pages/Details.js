@@ -259,7 +259,7 @@ export default class Details extends React.Component {
             }}
             isVisible={this.state.isVisible}>
             <Text
-              style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Roboto-Bold' }]}>
+              style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'CoreSansA65Bold' }]}>
               New Todo
               </Text>
 
@@ -304,21 +304,25 @@ export default class Details extends React.Component {
                 <View>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text
-                      style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Roboto-Black' }]}>
+                      style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'CoreSansA75ExtraBold', flex: 3 }]}>
                       {this.state.project.title}
                     </Text>
                     <TouchableOpacity
+                      style={{ justifyContent: 'center' }}
                       onPress={() => this.deleteProject(key)}>
-                      <Icon style={{ marginRight: 25, marginTop: 10 }} name="delete" size={28} color="#fff" solid />
+                      <Icon style={{ marginRight: 25 }} name="delete" size={28} color="#fff" solid />
                     </TouchableOpacity>
                   </View>
-                  <Text
-                    style={[
+                  <View style={{ flexDirection: 'row', paddingHorizontal: 18, }}>
+                    <Icon name="calendar" size={15} color={"#fff"} style={{ marginRight: 5 }} />
+                    <Text
+                      style={[
 
-                      { color: '#eeeeee', fontSize: 14, marginBottom: 20, paddingHorizontal: 18, fontFamily: 'Roboto-Regular' },
-                    ]}>
-                    Created at {date}
-                  </Text>
+                        { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'CoreSansA45Regular' },
+                      ]}>
+                      Created at {date}
+                    </Text>
+                  </View>
                 </View>
             }
 
@@ -346,8 +350,7 @@ export default class Details extends React.Component {
                   </Text>
                     <Text
                       style={[
-                        iOSUIKit.subhead,
-                        { color: '#4b4b4b', fontSize: 16, marginTop: 5 },
+                        { color: '#B3B3B3', fontSize: 16, marginTop: 5, fontFamily: 'CoreSansA45Regular' },
                       ]}>
                       {shortDescription}
                     </Text>
@@ -362,7 +365,7 @@ export default class Details extends React.Component {
                       style={styles.divTitle}>
                       Category
                   </Text>
-                    <Text style={styles.category}>{category}</Text>
+                    <Text style={[{ color: '#B3B3B3', fontSize: 16, marginTop: 5, fontFamily: 'CoreSansA55Medium' },]}>{category}</Text>
                     {this.state.project.estimatedTime != '' ?
                       <View>
                         <Text
@@ -371,7 +374,7 @@ export default class Details extends React.Component {
                      </Text>
 
                         <Text
-                          style={styles.category}>
+                          style={[{ color: '#B3B3B3', fontSize: 16, marginTop: 5, fontFamily: 'CoreSansA45Regular' },]}>
                           {worktime}
                         </Text>
                       </View> : null}
@@ -380,7 +383,7 @@ export default class Details extends React.Component {
                     {this.state.project.priority != 'None' ?
                       <View>
                         <Text
-                          style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 16, marginTop: 8 }]}>
+                          style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'CoreSansA65Bold' }]}>
                           Priority
                      </Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -388,7 +391,7 @@ export default class Details extends React.Component {
                             this.switchLabel(priority)
                           }
                           <Text
-                            style={styles.category}>
+                            style={[styles.category, { marginLeft: 5, fontFamily:'CoreSansA55Medium' }]}>
                             {priority}
                           </Text>
                         </View>
@@ -405,7 +408,7 @@ export default class Details extends React.Component {
                   <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
                     <View style={{ margin: 20 }}>
                       <Text
-                        style={[iOSUIKit.largeTitleEmphasizedObject, { color: '#4b4b4b', fontSize: 22 }]}>
+                        style={styles.divTitle}>
                         Pictures
                     </Text>
                       <ScrollView horizontal={true}>
@@ -433,13 +436,14 @@ export default class Details extends React.Component {
               {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
                 <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                   <View style={{ margin: 20 }}>
-                    <Text style={[styles.category, { fontSize: 25, color: '#4b4b4b' }]}>To-do</Text>
+                    <Text style={styles.divTitle}>To-do</Text>
                     {this.state.todo.map((task, i) => (
                       <CheckBox
                         key={i}
+                        fontFamily='CoreSansA45Regular'
                         style={{ width: '100%' }}
                         title={task.task}
-                        containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%' }}
+                        containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
                         checked={task.checked}
                         onLongPress={() => this.deleteTodo(i)}
                         onPress={async () => {
@@ -489,15 +493,15 @@ export default class Details extends React.Component {
             buttonColor="#0E56B9"
           >
 
-            <ActionButton.Item buttonColor='#00897B' title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
+            <ActionButton.Item buttonColor='#00897B' textStyle={{fontFamily:'CoreSansA55Medium'}} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
               <Icon name="archive" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#3498db' title="Edit project" onPress={() => this.props.navigation.navigate('Add', { projectId: key })}>
+            <ActionButton.Item buttonColor='#3498db' textStyle={{fontFamily:'CoreSansA55Medium'}}  title="Edit project" onPress={() => this.props.navigation.navigate('Add', { projectId: key })}>
               <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#1abc9c' title="New to-do" onPress={() => this.setState({
+            <ActionButton.Item buttonColor='#1abc9c' textStyle={{fontFamily:'CoreSansA55Medium'}}  title="New to-do" onPress={() => this.setState({
               isVisible: true
             })}>
               <Icon name="check" style={styles.actionButtonIcon} />
@@ -541,20 +545,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F7F7',
   },
   category: {
-    fontWeight: 'bold',
+    fontFamily: 'CoreSansA65Bold',
     color: '#1679D9',
-    marginLeft: 5
   },
   projectContainer: {
     backgroundColor: '#ffffff',
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
-  },
-  movieTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
   },
   cardContainer: {
     backgroundColor: '#fff',
@@ -564,6 +562,7 @@ const styles = StyleSheet.create({
   },
   shareButtonText: {
     fontWeight: 'bold',
+    fontFamily:'CoreSansA65Bold',
     fontSize: 16,
     color: '#FFF',
   },
@@ -571,14 +570,13 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     alignSelf: 'center',
-    margin: 5,
     borderRadius: 4,
   },
   divTitle: {
-    color: '#4b4b4b',
+    color: '#3F3E51',
     fontSize: 22,
     marginTop: 8,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'CoreSansA65Bold'
   },
   shareButton: {
     backgroundColor: '#1679D9',
@@ -595,12 +593,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     padding: 15,
     marginTop: 10,
+    fontFamily:'CoreSansA55Medium',
     fontSize: 16,
-  },
-  moviePlot: {
-    fontSize: 16,
-    marginTop: 5,
-    lineHeight: 24,
   },
   placeHolder: {
     backgroundColor: '#ffffff',
@@ -611,7 +605,7 @@ const styles = StyleSheet.create({
   },
   tags: {
     color: '#1679D9',
-    fontWeight: 'bold',
+    fontFamily: 'CoreSansA65Bold'
   },
 
   actionButtonIcon: {

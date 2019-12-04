@@ -166,6 +166,22 @@
 		<string>Roboto-Regular.ttf</string>
 		<string>Roboto-Thin.ttf</string>
 		<string>Roboto-ThinItalic.ttf</string>
+		<string>CoreSansA15Thin-Italic.otf</string>
+		<string>CoreSansA15Thin.otf</string>
+		<string>CoreSansA25ExtraLight-Italic.otf</string>
+		<string>CoreSansA25ExtraLight.otf</string>
+		<string>CoreSansA35Light-Italic.otf</string>
+		<string>CoreSansA35Light.otf</string>
+		<string>CoreSansA45Regular-Italic.otf</string>
+		<string>CoreSansA45Regular.otf</string>
+		<string>CoreSansA55Medium-Italic.otf</string>
+		<string>CoreSansA55Medium.otf</string>
+		<string>CoreSansA65Bold-Italic.otf</string>
+		<string>CoreSansA65Bold.otf</string>
+		<string>CoreSansA75ExtraBold-Italic.otf</string>
+		<string>CoreSansA75ExtraBold.otf</string>
+		<string>CoreSansA85Heavy-Italic.otf</string>
+		<string>CoreSansA85Heavy.otf</string>
 	</array>
 </dict>
 </plist>
