@@ -55,6 +55,9 @@ export default class New extends Component {
     priorityLabel: false,
     projectId: null,
 
+    //
+    step:0,
+
   };
 
   static navigationOptions = {
@@ -403,7 +406,7 @@ export default class New extends Component {
                       <Picker
                         mode="dropdown"
                         iosIcon={<Icon color='#1679D9' name="chevron-down" />}
-                        style={{ width: '100%', fontFamily: 'Roboto-Medium' }}
+                        style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
                         value={estimatedInterval}
                         onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
                         placeholder="Select one option"
@@ -617,7 +620,7 @@ const styles = StyleSheet.create({
   labelTitle: {
     color: '#1679D9',
     fontSize: 16,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Gilroy-Bold',
     marginTop: 16
   },
   imgSlider: {
@@ -669,7 +672,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     paddingHorizontal: 18,
     marginBottom: 10,
-    fontFamily: 'Roboto-Black'
+    fontFamily: 'Gilroy-Black'
   },
   selectInput: {
     borderRadius: 4,
@@ -693,7 +696,7 @@ const styles = StyleSheet.create({
   fieldTitle: {
     color: '#4b4b4b',
     fontSize: 24,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Gilroy-Bold'
   },
   heroImg: {
     width: '100%',
@@ -715,7 +718,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "#F7F7F7",
     padding: 15,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: 'Gilroy-Medium',
     marginTop: 10,
     fontSize: 16,
   },
@@ -743,7 +746,7 @@ const styles = StyleSheet.create({
   },
 
   shareButtonText: {
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Gilroy-Black',
     fontSize: 16,
     color: '#FFF',
   },

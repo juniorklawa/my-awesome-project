@@ -182,6 +182,26 @@
 		<string>CoreSansA75ExtraBold.otf</string>
 		<string>CoreSansA85Heavy-Italic.otf</string>
 		<string>CoreSansA85Heavy.otf</string>
+		<string>Gilroy-Black.otf</string>
+		<string>Gilroy-BlackItalic.otf</string>
+		<string>Gilroy-Bold.otf</string>
+		<string>Gilroy-BoldItalic.otf</string>
+		<string>Gilroy-Extrabold.otf</string>
+		<string>Gilroy-ExtraboldItalic.otf</string>
+		<string>Gilroy-Heavy.otf</string>
+		<string>Gilroy-HeavyItalic.otf</string>
+		<string>Gilroy-Light.otf</string>
+		<string>Gilroy-LightItalic.otf</string>
+		<string>Gilroy-Medium.otf</string>
+		<string>Gilroy-MediumItalic.otf</string>
+		<string>Gilroy-Regular.otf</string>
+		<string>Gilroy-RegularItalic.otf</string>
+		<string>Gilroy-Semibold.otf</string>
+		<string>Gilroy-SemiboldItalic.otf</string>
+		<string>Gilroy-Thin.otf</string>
+		<string>Gilroy-ThinItalic.otf</string>
+		<string>Gilroy-UltraLight.otf</string>
+		<string>Gilroy-UltraLightItalic.otf</string>
 	</array>
 </dict>
 </plist>

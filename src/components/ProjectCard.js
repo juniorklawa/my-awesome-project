@@ -4,7 +4,7 @@ import { iOSUIKit } from 'react-native-typography';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import { Badge } from 'react-native-elements'
-import * as Animatable from 'react-native-animatable';
+
 
 
 export default class ProjectCard extends Component {
@@ -67,8 +67,8 @@ export default class ProjectCard extends Component {
             }
 
           </View>
-          <View style={{flexDirection:'row', alignItems:'center'}}>
-          <Icon name="calendar" size={15} color={"#1679D9"} style={{marginRight: 5}}  />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon name="calendar" size={15} color={"#1679D9"} style={{ marginRight: 5 }} />
             <Text
               style={[
                 iOSUIKit.subheadEmphasized,
@@ -80,8 +80,10 @@ export default class ProjectCard extends Component {
           <View>
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
+          {
+            project.tags ? <Text style={styles.projectTags}>{project.tags}</Text> : null
+          }
 
-          <Text style={styles.projectTags}>{project.tags}</Text>
           {
             project.todo.length > 0 ?
               <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
@@ -95,7 +97,7 @@ export default class ProjectCard extends Component {
                   {project.doneTasks === project.todo.length ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[{ fontSize: 22, color: '#1679D9', fontFamily: 'CoreSansA65Bold' }]}>
+                    <Text style={[{ fontSize: 22, color: '#1679D9', fontFamily: 'Gilroy-Bold' }]}>
                       {
                         project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
                       }
@@ -113,7 +115,7 @@ export default class ProjectCard extends Component {
 
 const styles = StyleSheet.create({
   projectCategory: {
-    fontFamily: 'CoreSansA55Medium',
+    fontFamily: 'Gilroy-Semibold',
     color: '#949494'
   },
   projectContainer: {
@@ -134,18 +136,18 @@ const styles = StyleSheet.create({
     fontSize: 23,
     marginTop: 10,
     padding: 0,
-    fontFamily: 'CoreSansA65Bold',
+    fontFamily: 'Gilroy-Extrabold',
     width: '80%',
     lineHeight: 24
   },
   projectDate: {
     color: '#929699',
     fontSize: 14,
-    fontFamily: 'CoreSansA45Regular',
+    fontFamily: 'Gilroy-Regular',
   },
   projectTags: {
     color: '#1679D9',
-    fontFamily: 'CoreSansA65Bold',
+    fontFamily: 'Gilroy-Bold',
     width: '60%',
     marginTop: 10
   },

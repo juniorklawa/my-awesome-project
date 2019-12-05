@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
-  Animated
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
@@ -179,8 +178,8 @@ export default class Dashboard extends React.Component {
                                 ¯\_(ツ)_/¯
                         </Text>
                               <Text
-                                style={{ fontFamily: 'Roboto-Thin', fontSize: 16, color: '#fff', marginTop: 16 }}>
-                                your archived list is empty...
+                                style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
+                                Your archived list is empty...
                         </Text>
 
                             </View> :
@@ -209,11 +208,11 @@ export default class Dashboard extends React.Component {
           <ActionButton
             buttonColor="#0DB070"
           >
-            <ActionButton.Item textStyle={{fontFamily:'CoreSansA55Medium'}}  buttonColor='#B00D17' title='Delete all data' onPress={() => this.deleteAll()}>
+            <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#B00D17' title='Delete all data' onPress={() => this.deleteAll()}>
               <Icon size={25} name="delete" color={'#fff'} />
             </ActionButton.Item>
 
-            <ActionButton.Item  textStyle={{fontFamily:'CoreSansA55Medium'}} buttonColor='#4DB00D' title="New Project" onPress={() => this.props.navigation.navigate('Add')}>
+            <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#4DB00D' title="New Project" onPress={() => this.props.navigation.navigate('Add')}>
               <Icon name="file-document" size={25} color={'#fff'} />
             </ActionButton.Item>
           </ActionButton>
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#FFF',
-    fontFamily: 'CoreSansA75ExtraBold',
+    fontFamily: 'Gilroy-Extrabold',
     fontSize: 32,
     marginLeft: 18,
     marginTop: 32

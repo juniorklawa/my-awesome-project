@@ -259,7 +259,7 @@ export default class Details extends React.Component {
             }}
             isVisible={this.state.isVisible}>
             <Text
-              style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'CoreSansA65Bold' }]}>
+              style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Gilroy-Extrabold' }]}>
               New Todo
               </Text>
 
@@ -304,7 +304,7 @@ export default class Details extends React.Component {
                 <View>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text
-                      style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'CoreSansA75ExtraBold', flex: 3 }]}>
+                      style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
                       {this.state.project.title}
                     </Text>
                     <TouchableOpacity
@@ -318,7 +318,7 @@ export default class Details extends React.Component {
                     <Text
                       style={[
 
-                        { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'CoreSansA45Regular' },
+                        { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Gilroy-Regular' },
                       ]}>
                       Created at {date}
                     </Text>
@@ -350,7 +350,7 @@ export default class Details extends React.Component {
                   </Text>
                     <Text
                       style={[
-                        { color: '#B3B3B3', fontSize: 16, marginTop: 5, fontFamily: 'CoreSansA45Regular' },
+                        { color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
                       ]}>
                       {shortDescription}
                     </Text>
@@ -365,7 +365,7 @@ export default class Details extends React.Component {
                       style={styles.divTitle}>
                       Category
                   </Text>
-                    <Text style={[{ color: '#B3B3B3', fontSize: 16, marginTop: 5, fontFamily: 'CoreSansA55Medium' },]}>{category}</Text>
+                    <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Medium' },]}>{category}</Text>
                     {this.state.project.estimatedTime != '' ?
                       <View>
                         <Text
@@ -374,7 +374,7 @@ export default class Details extends React.Component {
                      </Text>
 
                         <Text
-                          style={[{ color: '#B3B3B3', fontSize: 16, marginTop: 5, fontFamily: 'CoreSansA45Regular' },]}>
+                          style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },]}>
                           {worktime}
                         </Text>
                       </View> : null}
@@ -383,7 +383,7 @@ export default class Details extends React.Component {
                     {this.state.project.priority != 'None' ?
                       <View>
                         <Text
-                          style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'CoreSansA65Bold' }]}>
+                          style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Gilroy-Bold' }]}>
                           Priority
                      </Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -391,7 +391,7 @@ export default class Details extends React.Component {
                             this.switchLabel(priority)
                           }
                           <Text
-                            style={[styles.category, { marginLeft: 5, fontFamily:'CoreSansA55Medium' }]}>
+                            style={[styles.category, { marginLeft: 5, fontFamily:'Gilroy-Medium' }]}>
                             {priority}
                           </Text>
                         </View>
@@ -440,7 +440,7 @@ export default class Details extends React.Component {
                     {this.state.todo.map((task, i) => (
                       <CheckBox
                         key={i}
-                        fontFamily='CoreSansA45Regular'
+                        fontFamily={'Gilroy-Medium'}
                         style={{ width: '100%' }}
                         title={task.task}
                         containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
@@ -493,15 +493,15 @@ export default class Details extends React.Component {
             buttonColor="#0E56B9"
           >
 
-            <ActionButton.Item buttonColor='#00897B' textStyle={{fontFamily:'CoreSansA55Medium'}} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
+            <ActionButton.Item buttonColor='#00897B' textStyle={{fontFamily:'Gilroy-Semibold'}} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
               <Icon name="archive" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#3498db' textStyle={{fontFamily:'CoreSansA55Medium'}}  title="Edit project" onPress={() => this.props.navigation.navigate('Add', { projectId: key })}>
+            <ActionButton.Item buttonColor='#3498db' textStyle={{fontFamily:'Gilroy-Semibold'}}  title="Edit project" onPress={() => this.props.navigation.navigate('Add', { projectId: key })}>
               <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#1abc9c' textStyle={{fontFamily:'CoreSansA55Medium'}}  title="New to-do" onPress={() => this.setState({
+            <ActionButton.Item buttonColor='#1abc9c' textStyle={{fontFamily:'Gilroy-Semibold'}}  title="New to-do" onPress={() => this.setState({
               isVisible: true
             })}>
               <Icon name="check" style={styles.actionButtonIcon} />
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F7F7',
   },
   category: {
-    fontFamily: 'CoreSansA65Bold',
+    fontFamily: 'Gilroy-Bold',
     color: '#1679D9',
   },
   projectContainer: {
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
   },
   shareButtonText: {
     fontWeight: 'bold',
-    fontFamily:'CoreSansA65Bold',
+    fontFamily:'Gilroy-Bold',
     fontSize: 16,
     color: '#FFF',
   },
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
     color: '#3F3E51',
     fontSize: 22,
     marginTop: 8,
-    fontFamily: 'CoreSansA65Bold'
+    fontFamily: 'Gilroy-Bold'
   },
   shareButton: {
     backgroundColor: '#1679D9',
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     padding: 15,
     marginTop: 10,
-    fontFamily:'CoreSansA55Medium',
+    fontFamily:'Gilroy-Medium',
     fontSize: 16,
   },
   placeHolder: {
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
   },
   tags: {
     color: '#1679D9',
-    fontFamily: 'CoreSansA65Bold'
+    fontFamily: 'Gilroy-Bold'
   },
 
   actionButtonIcon: {
