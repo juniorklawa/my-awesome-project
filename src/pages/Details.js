@@ -542,7 +542,7 @@ export default class Details extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#F2F6FF',
   },
   category: {
     fontFamily: 'Gilroy-Bold',
