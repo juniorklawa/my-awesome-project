@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { CheckBox } from 'react-native-elements';
-import { iOSUIKit } from 'react-native-typography';
+import * as Animatable from 'react-native-animatable';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
@@ -301,7 +301,7 @@ export default class Details extends React.Component {
                   <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
                 </View>
                 :
-                <View>
+                <Animatable.View animation="fadeIn">
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text
                       style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
@@ -323,7 +323,7 @@ export default class Details extends React.Component {
                       Created at {date}
                     </Text>
                   </View>
-                </View>
+                </Animatable.View>
             }
 
 
@@ -332,7 +332,7 @@ export default class Details extends React.Component {
 
 
 
-            <View key={key} style={styles.container}>
+            <View  key={key} style={styles.container}>
 
               {showAlert
                 ?
@@ -342,7 +342,7 @@ export default class Details extends React.Component {
                   <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
                 </View>
                 :
-                <View style={styles.cardContainer}>
+                <Animatable.View animation="fadeInLeft" style={styles.cardContainer}>
                   <View style={{ margin: 20 }}>
                     <Text
                       style={styles.divTitle}>
@@ -400,12 +400,12 @@ export default class Details extends React.Component {
                   </View>
 
 
-                </View>}
+                </Animatable.View>}
 
               {
 
                 images && images.length > 0 ?
-                  <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                  <Animatable.View animation="fadeInRight"  style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
                     <View style={{ margin: 20 }}>
                       <Text
                         style={styles.divTitle}>
@@ -429,12 +429,12 @@ export default class Details extends React.Component {
                         </View>
                       </ScrollView>
                     </View>
-                  </View>
+                  </Animatable.View>
                   : null
               }
 
               {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
-                <View style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
+                <Animatable.View animation="fadeInUp"  style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                   <View style={{ margin: 20 }}>
                     <Text style={styles.divTitle}>To-do</Text>
                     {this.state.todo.map((task, i) => (
@@ -483,7 +483,7 @@ export default class Details extends React.Component {
                       />
                     ))}
                   </View>
-                </View>
+                </Animatable.View>
               </View> : null}
             </View>
           </ScrollView>
