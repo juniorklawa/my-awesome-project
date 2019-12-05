@@ -497,7 +497,7 @@ export default class Details extends React.Component {
               <Icon name="archive" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
-            <ActionButton.Item buttonColor='#3498db' textStyle={{fontFamily:'Gilroy-Semibold'}}  title="Edit project" onPress={() => this.props.navigation.navigate('Add', { projectId: key })}>
+            <ActionButton.Item buttonColor='#3498db' textStyle={{fontFamily:'Gilroy-Semibold'}}  title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
               <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
 
