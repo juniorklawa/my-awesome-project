@@ -302,19 +302,14 @@ export default class Edit extends Component {
                 </View>
                 <Text
                   style={styles.headerTitle}>
-                {this.state.projectId ? 'Edit your idea' : `What's your idea?`}
+                  {this.state.projectId ? 'Edit your idea' : `What's your idea?`}
                 </Text>
               </LinearGradient>
               <ScrollView
                 ref={(view) => {
                   this.scrollView = view;
                 }}
-                onContentSizeChange={(contentWidth, contentHeight) => {
-                  this.setState({
-                    currentHeight: contentHeight
-                  })
-                  this.scrollView.scrollTo({ y: this.state.currentHeight });
-                }}>
+              >
 
                 <View style={styles.container}>
                   <Image

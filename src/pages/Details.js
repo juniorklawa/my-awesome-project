@@ -247,269 +247,269 @@ export default class Details extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
+        <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+          <SafeAreaView style={{ flex: 1 }}>
 
-          <Overlay
-            height={200}
-            overlayStyle={{ borderRadius: 10 }}
-            onBackdropPress={() => {
-              this.setState({
-                isVisible: false
-              })
-            }}
-            isVisible={this.state.isVisible}>
-            <Text
-              style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Gilroy-Extrabold' }]}>
-              New Todo
+            <Overlay
+              height={200}
+              overlayStyle={{ borderRadius: 10 }}
+              onBackdropPress={() => {
+                this.setState({
+                  isVisible: false
+                })
+              }}
+              isVisible={this.state.isVisible}>
+              <Text
+                style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Gilroy-Extrabold' }]}>
+                New Todo
               </Text>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginHorizontal: 10
-              }}>
-              <TextInput
-                style={[styles.input, { flex: 10 }]}
-                autoCorrect={false}
-                placeholder="Add new todo"
-                onSubmitEditing={() => this.addTodo()}
-                placeholderTextColor="#999"
-                value={this.state.todoItem}
-                onChangeText={todoItem => this.setState({ todoItem })}
-              />
-            </View>
-            <TouchableOpacity
-              style={styles.shareButton}
-              onPress={() => this.addTodo()}>
-              <Text style={styles.shareButtonText}>Add</Text>
-            </TouchableOpacity>
-
-          </Overlay>
-          <LinearGradient colors={['#0D4DB0', '#1679D9']}>
-            <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-              <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
-                <Icon name="chevron-left" size={45} color="#fff" solid />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginHorizontal: 10
+                }}>
+                <TextInput
+                  style={[styles.input, { flex: 10 }]}
+                  autoCorrect={false}
+                  placeholder="Add new todo"
+                  onSubmitEditing={() => this.addTodo()}
+                  placeholderTextColor="#999"
+                  value={this.state.todoItem}
+                  onChangeText={todoItem => this.setState({ todoItem })}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.shareButton}
+                onPress={() => this.addTodo()}>
+                <Text style={styles.shareButtonText}>Add</Text>
               </TouchableOpacity>
-            </View>
 
-            {
-              showAlert ?
-                <View style={{ justifyContent: 'space-between' }}>
-                  <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 25, width: 250, borderRadius: 5 }} autoRun={true} />
-                  <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
-                </View>
-                :
-                <Animatable.View animation="fadeIn">
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text
-                      style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
-                      {this.state.project.title}
-                    </Text>
-                    <TouchableOpacity
-                      style={{ justifyContent: 'center' }}
-                      onPress={() => this.deleteProject(key)}>
-                      <Icon style={{ marginRight: 25 }} name="delete" size={28} color="#fff" solid />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{ flexDirection: 'row', paddingHorizontal: 18, }}>
-                    <Icon name="calendar" size={15} color={"#fff"} style={{ marginRight: 5 }} />
-                    <Text
-                      style={[
-
-                        { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Gilroy-Regular' },
-                      ]}>
-                      Created at {date}
-                    </Text>
-                  </View>
-                </Animatable.View>
-            }
-
-
-          </LinearGradient>
-          <ScrollView >
-
-
-
-            <View  key={key} style={styles.container}>
-
-              {showAlert
-                ?
-                <View style={{ marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
-                  <ShimmerPlaceHolder style={[styles.placeHolder, { height: 300 }]} autoRun={true} />
-                  <ShimmerPlaceHolder style={[styles.placeHolder, { height: 200 }]} autoRun={true} />
-                  <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
-                </View>
-                :
-                <Animatable.View animation="fadeInLeft" style={styles.cardContainer}>
-                  <View style={{ margin: 20 }}>
-                    <Text
-                      style={styles.divTitle}>
-                      Description
-                  </Text>
-                    <Text
-                      style={[
-                        { color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
-                      ]}>
-                      {shortDescription}
-                    </Text>
-                    {tags != '' ? <View>
-                      <Text
-                        style={styles.divTitle}>
-                        Tags
-                    </Text>
-                      <Text style={styles.tags}>{tags}</Text>
-                    </View> : null}
-                    <Text
-                      style={styles.divTitle}>
-                      Category
-                  </Text>
-                    <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Medium' },]}>{category}</Text>
-                    {this.state.project.estimatedTime != '' ?
-                      <View>
-                        <Text
-                          style={styles.divTitle}>
-                          Estimate
-                     </Text>
-
-                        <Text
-                          style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },]}>
-                          {worktime}
-                        </Text>
-                      </View> : null}
-
-
-                    {this.state.project.priority != 'None' ?
-                      <View>
-                        <Text
-                          style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Gilroy-Bold' }]}>
-                          Priority
-                     </Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          {
-                            this.switchLabel(priority)
-                          }
-                          <Text
-                            style={[styles.category, { marginLeft: 5, fontFamily:'Gilroy-Medium' }]}>
-                            {priority}
-                          </Text>
-                        </View>
-                      </View> : null}
-
-                  </View>
-
-
-                </Animatable.View>}
+            </Overlay>
+            <View >
+              <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
+                  <Icon name="chevron-left" size={45} color="#fff" solid />
+                </TouchableOpacity>
+              </View>
 
               {
+                showAlert ?
+                  <View style={{ justifyContent: 'space-between' }}>
+                    <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 25, width: 250, borderRadius: 5 }} autoRun={true} />
+                    <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
+                  </View>
+                  :
+                  <Animatable.View animation="fadeIn">
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text
+                        style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
+                        {this.state.project.title}
+                      </Text>
+                      <TouchableOpacity
+                        style={{ justifyContent: 'center' }}
+                        onPress={() => this.deleteProject(key)}>
+                        <Icon style={{ marginRight: 25 }} name="delete" size={28} color="#fff" solid />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row', paddingHorizontal: 18, }}>
+                      <Icon name="calendar" size={15} color={"#fff"} style={{ marginRight: 5 }} />
+                      <Text
+                        style={[
 
-                images && images.length > 0 ?
-                  <Animatable.View animation="fadeInRight"  style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                          { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Gilroy-Regular' },
+                        ]}>
+                        Created at {date}
+                      </Text>
+                    </View>
+                  </Animatable.View>
+              }
+            </View>
+            <ScrollView >
+
+
+
+              <View key={key} style={styles.container}>
+
+                {showAlert
+                  ?
+                  <View style={{ marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                    <ShimmerPlaceHolder style={[styles.placeHolder, { height: 300 }]} autoRun={true} />
+                    <ShimmerPlaceHolder style={[styles.placeHolder, { height: 200 }]} autoRun={true} />
+                    <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
+                  </View>
+                  :
+                  <Animatable.View animation="fadeInLeft" style={styles.cardContainer}>
                     <View style={{ margin: 20 }}>
                       <Text
                         style={styles.divTitle}>
-                        Pictures
+                        Description
+                  </Text>
+                      <Text
+                        style={[
+                          { color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
+                        ]}>
+                        {shortDescription}
+                      </Text>
+                      {tags != '' ? <View>
+                        <Text
+                          style={styles.divTitle}>
+                          Tags
                     </Text>
-                      <ScrollView horizontal={true}>
-                        <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
-                          {images.map((path, i) => (
-                            <TouchableOpacity
-                              key={i}
-                              onPress={() => {
+                        <Text style={styles.tags}>{tags}</Text>
+                      </View> : null}
+                      <Text
+                        style={styles.divTitle}>
+                        Category
+                  </Text>
+                      <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Medium' },]}>{category}</Text>
+                      {this.state.project.estimatedTime != '' ?
+                        <View>
+                          <Text
+                            style={styles.divTitle}>
+                            Estimate
+                     </Text>
+
+                          <Text
+                            style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },]}>
+                            {worktime}
+                          </Text>
+                        </View> : null}
+
+
+                      {this.state.project.priority != 'None' ?
+                        <View>
+                          <Text
+                            style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Gilroy-Bold' }]}>
+                            Priority
+                     </Text>
+                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {
+                              this.switchLabel(priority)
+                            }
+                            <Text
+                              style={[styles.category, { marginLeft: 5, fontFamily: 'Gilroy-Medium' }]}>
+                              {priority}
+                            </Text>
+                          </View>
+                        </View> : null}
+
+                    </View>
+
+
+                  </Animatable.View>}
+
+                {
+
+                  images && images.length > 0 ?
+                    <Animatable.View animation="fadeInRight" style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                      <View style={{ margin: 20 }}>
+                        <Text
+                          style={styles.divTitle}>
+                          Pictures
+                    </Text>
+                        <ScrollView horizontal={true}>
+                          <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
+                            {images.map((path, i) => (
+                              <TouchableOpacity
+                                key={i}
+                                onPress={() => {
+                                  this.setState({
+                                    imgViewerUri: path,
+                                    visibleModal: true
+                                  })
+                                }}
+                                onLongPress={() => this.deleteImage(i)}>
+                                <Image style={styles.preview} source={{ uri: `file://${path}` }} />
+                              </TouchableOpacity>
+                            ))}
+                          </View>
+                        </ScrollView>
+                      </View>
+                    </Animatable.View>
+                    : null
+                }
+
+                {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
+                  <Animatable.View animation="fadeInUp" style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
+                    <View style={{ margin: 20 }}>
+                      <Text style={styles.divTitle}>To-do</Text>
+                      {this.state.todo.map((task, i) => (
+                        <CheckBox
+                          key={i}
+                          fontFamily={'Gilroy-Medium'}
+                          style={{ width: '100%' }}
+                          title={task.task}
+                          containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
+                          checked={task.checked}
+                          onLongPress={() => this.deleteTodo(i)}
+                          onPress={async () => {
+                            task.checked = !task.checked;
+                            this.forceUpdate();
+
+                            const trueArray = this.state.project.todo.filter(
+                              doneTasks => doneTasks.checked,
+                            ).length;
+
+                            this.state.projects
+                              .filter(project => {
+                                return project.key === this.state.project.key;
+                              })
+                              .map(project => {
+                                project.todo = this.state.project.todo;
+                                project.doneTasks = trueArray;
+                              });
+
+                            AsyncStorage.setItem(
+                              'keyProjects',
+                              JSON.stringify(this.state.projects),
+                            );
+
+                            if (this.state.project.doneTasks === this.state.project.todo.length) {
+                              this.setState({ showMeConfetti: true })
+
+                              await setTimeout(() => {
                                 this.setState({
-                                  imgViewerUri: path,
-                                  visibleModal: true
-                                })
-                              }}
-                              onLongPress={() => this.deleteImage(i)}>
-                              <Image style={styles.preview} source={{ uri: `file://${path}` }} />
-                            </TouchableOpacity>
-                          ))}
-                        </View>
-                      </ScrollView>
+                                  showMeConfetti: false
+                                });
+                              }, 4000);
+                            }
+
+
+                          }}
+                        />
+                      ))}
                     </View>
                   </Animatable.View>
-                  : null
-              }
+                </View> : null}
+              </View>
+            </ScrollView>
 
-              {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
-                <Animatable.View animation="fadeInUp"  style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
-                  <View style={{ margin: 20 }}>
-                    <Text style={styles.divTitle}>To-do</Text>
-                    {this.state.todo.map((task, i) => (
-                      <CheckBox
-                        key={i}
-                        fontFamily={'Gilroy-Medium'}
-                        style={{ width: '100%' }}
-                        title={task.task}
-                        containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
-                        checked={task.checked}
-                        onLongPress={() => this.deleteTodo(i)}
-                        onPress={async () => {
-                          task.checked = !task.checked;
-                          this.forceUpdate();
+            <ActionButton
+              style={{ marginBottom: 15 }}
+              buttonColor="#4DB00D"
+            >
 
-                          const trueArray = this.state.project.todo.filter(
-                            doneTasks => doneTasks.checked,
-                          ).length;
+              <ActionButton.Item buttonColor='#00897B' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
+                <Icon name="archive" style={styles.actionButtonIcon} />
+              </ActionButton.Item>
 
-                          this.state.projects
-                            .filter(project => {
-                              return project.key === this.state.project.key;
-                            })
-                            .map(project => {
-                              project.todo = this.state.project.todo;
-                              project.doneTasks = trueArray;
-                            });
+              <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
+                <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
+              </ActionButton.Item>
 
-                          AsyncStorage.setItem(
-                            'keyProjects',
-                            JSON.stringify(this.state.projects),
-                          );
+              <ActionButton.Item buttonColor='#1abc9c' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
+                isVisible: true
+              })}>
+                <Icon name="check" style={styles.actionButtonIcon} />
+              </ActionButton.Item>
 
-                          if (this.state.project.doneTasks === this.state.project.todo.length) {
-                            this.setState({ showMeConfetti: true })
+            </ActionButton>
 
-                            await setTimeout(() => {
-                              this.setState({
-                                showMeConfetti: false
-                              });
-                            }, 4000);
-                          }
-
-
-                        }}
-                      />
-                    ))}
-                  </View>
-                </Animatable.View>
-              </View> : null}
-            </View>
-          </ScrollView>
-
-          <ActionButton
-            style={{ marginBottom: 15 }}
-            buttonColor="#0E56B9"
-          >
-
-            <ActionButton.Item buttonColor='#00897B' textStyle={{fontFamily:'Gilroy-Semibold'}} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
-              <Icon name="archive" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-
-            <ActionButton.Item buttonColor='#3498db' textStyle={{fontFamily:'Gilroy-Semibold'}}  title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
-              <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-
-            <ActionButton.Item buttonColor='#1abc9c' textStyle={{fontFamily:'Gilroy-Semibold'}}  title="New to-do" onPress={() => this.setState({
-              isVisible: true
-            })}>
-              <Icon name="check" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-
-          </ActionButton>
-
-        </SafeAreaView>
+          </SafeAreaView>
+        </LinearGradient>
         <AwesomeAlert
           showProgress={true}
           progressSize={50}
@@ -542,14 +542,12 @@ export default class Details extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F6FF',
   },
   category: {
     fontFamily: 'Gilroy-Bold',
     color: '#1679D9',
   },
   projectContainer: {
-    backgroundColor: '#ffffff',
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
@@ -562,7 +560,7 @@ const styles = StyleSheet.create({
   },
   shareButtonText: {
     fontWeight: 'bold',
-    fontFamily:'Gilroy-Bold',
+    fontFamily: 'Gilroy-Bold',
     fontSize: 16,
     color: '#FFF',
   },
@@ -570,6 +568,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     alignSelf: 'center',
+    margin: 5,
     borderRadius: 4,
   },
   divTitle: {
@@ -593,7 +592,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     padding: 15,
     marginTop: 10,
-    fontFamily:'Gilroy-Medium',
+    fontFamily: 'Gilroy-Medium',
     fontSize: 16,
   },
   placeHolder: {

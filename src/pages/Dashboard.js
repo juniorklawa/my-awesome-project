@@ -159,7 +159,7 @@ export default class Dashboard extends React.Component {
                 showAlert === true ?
                   <Placeholder /> :
 
-                  <Animatable.View animation="fadeInUp">
+                  <Animatable.View animation="fadeInUp" duration={700}>
 
                     {
                       displayProjects.length > 0 && showAlert === false ?

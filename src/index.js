@@ -37,7 +37,7 @@ export default class App extends React.Component {
   render() {
     return (<View style={{ flex: 1 }}>
       <AppContainer />
-      <FlashMessage position="bottom" />
+      <FlashMessage textStyle={{fontFamily:'Gilroy-Bold'}} position="bottom" />
     </View>)
   }
 }

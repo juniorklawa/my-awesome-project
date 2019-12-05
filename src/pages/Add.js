@@ -26,6 +26,17 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class New extends Component {
+
+  handleViewRefText = reference => this.ref = reference;
+  handleViewRef = ref => this.view = ref;
+
+
+  fadeInRight = () => {
+    this.view.fadeInRight(500)
+    this.ref.fadeInRight(500);
+  };
+  bounce = () => this.view.bounce(800);
+
   state = {
     title: '',
     shortDescription: '',
@@ -55,7 +66,9 @@ export default class New extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
-    step: 0,
+    step: 3,
+    stepLength: 3
+
   };
 
   static navigationOptions = {
@@ -102,10 +115,40 @@ export default class New extends Component {
 
   };
 
-
-
-
-
+  switchText(step) {
+    switch (step) {
+      case 0:
+        return (
+          <Animatable.View duration={500} animation='fadeInRight'>
+            <Text
+              style={styles.headerTitle}>
+              About your idea...
+         </Text>
+          </Animatable.View>
+        )
+      case 1:
+        return (
+          <Text
+            style={styles.headerTitle}>
+            More details...
+          </Text>
+        )
+      case 2:
+        return (
+          <Text
+            style={styles.headerTitle}>
+            Sketches, drawings etc...
+          </Text>
+        )
+      case 3:
+        return (
+          <Text
+            style={styles.headerTitle}>
+            Your awesome To-do list...
+            </Text>
+        )
+    }
+  }
 
   switchStep(step) {
     const {
@@ -125,57 +168,60 @@ export default class New extends Component {
       defaultCategory
     } = this.state
 
+    //this.switchText(step)
+
     switch (step) {
+
       case 0:
         return (
-          <Animatable.View animation="fadeInRight" style={styles.card} >
-            <Image
-              style={styles.heroImg}
-              source={require('../icons/newidea.png')}></Image>
-            <Text
-              style={styles.fieldTitle}>
-              Required information
+          <Animatable.View animation="fadeInRight" duration={500} style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <View animation="fadeInRight" duration={500} style={styles.card} >
+
+              <Text
+                style={styles.fieldTitle}>
+                Required information
             </Text>
 
-            <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : '#1679D9' }]}>
-              Project Name
+              <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                Project Name
             </Text>
-            <TextInput
-              style={styles.input}
-              autoCorrect={false}
-              onFocus={() => this.setState({ titleLabel: !this.props.titleLabel })}
-              onBlur={() => this.setState({ titleLabel: !this.state.titleLabel })}
-              autoCapitalize='words'
-              placeholder="Ex: My Awesome Idea"
-              placeholderTextColor="#999"
-              value={title}
-              onChangeText={title => this.setState({ title })}
-            />
+              <TextInput
+                style={styles.input}
+                autoCorrect={false}
+                onFocus={() => this.setState({ titleLabel: !this.props.titleLabel })}
+                onBlur={() => this.setState({ titleLabel: !this.state.titleLabel })}
+                autoCapitalize='words'
+                placeholder="Ex: My Awesome Idea"
+                placeholderTextColor="#999"
+                value={title}
+                onChangeText={title => this.setState({ title })}
+              />
 
-            <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : '#1679D9' }]}>
-              Description
+              <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                Description
             </Text>
-            <TextInput
-              style={styles.input}
-              editable
-              multiline
-              onFocus={() => this.setState({ descriptionLabel: !this.props.descriptionLabel })}
-              onBlur={() => this.setState({ descriptionLabel: !this.state.descriptionLabel })}
-              autoCorrect={false}
-              autoCapitalize="sentences"
-              placeholderTextColor="#999"
-              value={shortDescription}
-              placeholder="Ex: An app that tracks awesome ideas"
-              onChangeText={shortDescription =>
-                this.setState({ shortDescription })
-              }
-            />
+              <TextInput
+                style={styles.input}
+                editable
+                multiline
+                onFocus={() => this.setState({ descriptionLabel: !this.props.descriptionLabel })}
+                onBlur={() => this.setState({ descriptionLabel: !this.state.descriptionLabel })}
+                autoCorrect={false}
+                autoCapitalize="sentences"
+                placeholderTextColor="#999"
+                value={shortDescription}
+                placeholder="Ex: An app that tracks awesome ideas"
+                onChangeText={shortDescription =>
+                  this.setState({ shortDescription })
+                }
+              />
+            </View>
           </Animatable.View>
         )
       case 1:
         return (
 
-          <Animatable.View animation="fadeInRight" style={styles.card} >
+          <Animatable.View animation="fadeInRight" duration={500} style={styles.card} >
             <Text
               style={[styles.fieldTitle, { marginTop: 16 }]}>
               Additional information
@@ -312,10 +358,11 @@ export default class New extends Component {
       case 2:
         return (
 
-          <View>
-            <Text style={styles.labelTitle}>
+          <View style={styles.card}>
+            <Text
+              style={styles.fieldTitle}>
               Pictures
-        </Text>
+            </Text>
 
             {previews && previews.length > 0 ?
               <ScrollView horizontal={true}>
@@ -358,17 +405,25 @@ export default class New extends Component {
         )
       case 3:
         return (
-          <View>
+          <View style={styles.card}>
             {
               todo.length > 0 ?
-                <Text style={styles.fieldTitle}>
-                  To-do
-            </Text>
-                : null
+                  <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                    To-do
+                </Text>
+
+                : <View>
+                  <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                    To-do
+              </Text>
+                  <Text style={{color:'#666',  marginLeft:3,  fontFamily: 'Gilroy-Regular'}}>
+                    Empty list...
+                  </Text>
+                </View>
             }
 
 
-            <View style={{ marginTop: 10, flex: 1 }}>
+            <View style={{ marginTop: 0, flex: 1 }}>
               {this.state.todo.map((l, i) => (
                 <ListItem
                   containerStyle={styles.todoContainer}
@@ -377,7 +432,7 @@ export default class New extends Component {
                   rightIcon={
                     <TouchableOpacity
                       onPress={() => this.deleteTodo(i)}
-                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
                       <Icon name="delete" size={23} color="#666" solid />
                     </TouchableOpacity>
                   }
@@ -391,7 +446,7 @@ export default class New extends Component {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  marginHorizontal: 10
+                  marginHorizontal: 0
                 }}>
                 <TextInput
                   style={[styles.input, { flex: 10 }]}
@@ -483,7 +538,7 @@ export default class New extends Component {
         if (this.state.previews.length === 1) {
           showMessage({
             message: "Long press on image to delete it",
-            type: "defautl",
+            type: "default",
           });
         }
         this.forceUpdate()
@@ -492,21 +547,21 @@ export default class New extends Component {
   }
 
   handleSubmit = async () => {
+
+
     if ((!this.state.title || !this.state.shortDescription) && this.state.step === 0) {
-      Alert.alert(
-        'Ops!',
-        'Title and description are obligatory',
-        [
-          { text: 'OK' },
-        ],
-        { cancelable: false },
-      );
+      this.bounce()
+      showMessage({
+        message: 'Title and description are obligatory',
+        type: "danger",
+      });
       return
     }
-    if (this.state.step < 3) {
+    if (this.state.step < this.state.stepLength) {
       this.setState({
         step: this.state.step + 1
       })
+      this.fadeInRight()
 
       return
     }
@@ -604,41 +659,57 @@ export default class New extends Component {
             </TouchableOpacity>
           </Overlay>
 
-          <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
-            <View style={{ backgroundColor: '#F2F6FF', flex: 1 }}>
-              <LinearGradient colors={['#0D4DB0', '#1679D9']}>
-                <View style={styles.chevron}>
-                  <TouchableOpacity
-                    style={{ marginStart: 0 }} hitSlop={styles.hitSlop}
-                    onPress={() => this.goToDashBoard()}>
-                    <Icon name="chevron-left" size={45} color="#fff" solid />
-                  </TouchableOpacity>
-                </View>
-                <Text
-                  style={styles.headerTitle}>
-                  {this.state.projectId ? 'Edit your idea' : `What's your idea?`}
-                </Text>
-              </LinearGradient>
+          <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 }}>
+
+              <View style={styles.chevron}>
+                <TouchableOpacity
+                  style={{ marginStart: 0 }} hitSlop={styles.hitSlop}
+                  onPress={() => this.goToDashBoard()}>
+                  <Icon name="chevron-left" size={45} color="#fff" solid />
+                </TouchableOpacity>
+                {
+                  this.state.step !== 0 && this.state.step < this.state.stepLength ? <TouchableOpacity
+                    style={{ marginEnd: 32 }} hitSlop={styles.hitSlop}
+                    onPress={() => this.setState({
+                      step: this.state.step + 1
+                    })}>
+                    <Text style={{ fontFamily: 'Gilroy-Black', color: '#84A9DC' }}>
+                      Skip
+                  </Text>
+                  </TouchableOpacity> : null
+                }
+
+              </View>
               <ScrollView>
+                <TouchableOpacity onPress={this.fadeInRight}>
+                  <Animatable.View ref={this.handleViewRefText}>
+                    {this.switchText(this.state.step)}
+                  </Animatable.View>
+                </TouchableOpacity>
+
                 <View style={styles.container}>
 
-                  <View style={{
+                  <Animatable.View ref={this.handleViewRef} style={{
                     justifyContent: 'center',
                     alignItems: 'center',
 
                     width: '100%'
                   }}>
                     {this.switchStep(this.state.step)}
-                  </View>
+
+
+
+                  </Animatable.View>
                   <TouchableOpacity
                     style={styles.shareButton}
                     onPress={() => this.handleSubmit()}>
-                    <Text style={styles.shareButtonText}>{this.state.projectId ? 'Update project' : 'Create new project'}</Text>
+                    <Text style={styles.shareButtonText}>{this.state.step < this.state.stepLength ? 'Next step' : 'Create new project'}</Text>
                   </TouchableOpacity>
                 </View>
               </ScrollView>
             </View>
-          </KeyboardAvoidingView>
+          </View>
         </SafeAreaView>
       </LinearGradient>
     );
@@ -648,13 +719,15 @@ export default class New extends Component {
 const styles = StyleSheet.create({
   container: {
     margin: 15,
-    backgroundColor: '#F2F6FF',
     justifyContent: 'center',
     alignItems: 'center',
   },
   chevron: {
     height: 60,
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginTop: 16,
   },
   labelTitle: {
@@ -688,7 +761,7 @@ const styles = StyleSheet.create({
     top: 10,
     bottom: 10,
     left: 10,
-    right: 10,
+    //right: 10,
   },
   card: {
     backgroundColor: '#fff',
@@ -770,8 +843,8 @@ const styles = StyleSheet.create({
   },
 
   shareButton: {
-    backgroundColor: '#1679D9',
-    borderRadius: 4,
+    backgroundColor: '#56B90E',
+    borderRadius: 8,
     height: 42,
     width: '100%',
     marginVertical: 10,
@@ -784,7 +857,7 @@ const styles = StyleSheet.create({
 
     borderColor: '#1679D9',
     borderWidth: 2,
-    borderRadius: 4,
+    borderRadius: 8,
     height: 42,
     marginTop: 15,
     marginBottom: 10,
@@ -795,6 +868,7 @@ const styles = StyleSheet.create({
   shareButtonText: {
     fontFamily: 'Gilroy-Black',
     fontSize: 16,
+    borderRadius: 8,
     color: '#FFF',
   },
 });
