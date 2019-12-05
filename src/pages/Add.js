@@ -7,6 +7,7 @@ import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import UUIDGenerator from 'react-native-uuid-generator';
+import * as Animatable from 'react-native-animatable'
 import moment from 'moment';
 import {
   View,
@@ -127,7 +128,7 @@ export default class New extends Component {
     switch (step) {
       case 0:
         return (
-          <View>
+          <Animatable.View animation="fadeInRight" style={styles.card} >
             <Image
               style={styles.heroImg}
               source={require('../icons/newidea.png')}></Image>
@@ -169,21 +170,20 @@ export default class New extends Component {
                 this.setState({ shortDescription })
               }
             />
-          </View>
+          </Animatable.View>
         )
       case 1:
         return (
 
-          <View>
-
+          <Animatable.View animation="fadeInRight" style={styles.card} >
             <Text
               style={[styles.fieldTitle, { marginTop: 16 }]}>
               Additional information
-        </Text>
+            </Text>
 
             <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : '#1679D9' }]}>
               Keywords
-        </Text>
+            </Text>
 
             <TextInput
               style={styles.input}
@@ -199,7 +199,7 @@ export default class New extends Component {
 
             <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : '#1679D9' }]}>
               Estimated time
-        </Text>
+            </Text>
 
             <View style={styles.timeContainer}>
               <View>
@@ -240,7 +240,7 @@ export default class New extends Component {
 
             <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#1679D9' }]}>
               Category
-        </Text>
+            </Text>
             {
               defaultCategory ? <View style={styles.selectInput}>
                 <Picker
@@ -286,7 +286,7 @@ export default class New extends Component {
 
             <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#1679D9' }]}>
               Priority
-        </Text>
+            </Text>
             <View style={styles.selectInput}>
               <Picker
                 mode="dropdown"
@@ -306,7 +306,7 @@ export default class New extends Component {
                 <Picker.Item label="Low" value="Low" />
               </Picker>
             </View>
-          </View>
+          </Animatable.View>
         )
 
       case 2:
@@ -623,10 +623,9 @@ export default class New extends Component {
                 <View style={styles.container}>
 
                   <View style={{
-                    backgroundColor: '#fff',
-                    padding: 20,
-                    borderRadius: 10,
-                    margin: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+
                     width: '100%'
                   }}>
                     {this.switchStep(this.state.step)}
@@ -690,6 +689,13 @@ const styles = StyleSheet.create({
     bottom: 10,
     left: 10,
     right: 10,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    margin: 10,
+    width: '100%'
   },
   todoBtn: {
     flex: 1,
