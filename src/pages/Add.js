@@ -66,8 +66,8 @@ export default class New extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
-    step: 3,
-    stepLength: 0
+    step: 0,
+    stepLength: 3
 
   };
 
@@ -112,7 +112,7 @@ export default class New extends Component {
       });
 
     }
-
+    
   };
 
   switchText(step) {
@@ -364,7 +364,7 @@ export default class New extends Component {
               Pictures
             </Text>
 
-            {previews && previews.length > 0 ?
+            {previews ?
               <ScrollView horizontal={true}>
                 <View style={styles.imgSlider}>
                   {previews.map((path, i) => (
@@ -380,6 +380,12 @@ export default class New extends Component {
                       <Image style={styles.preview} source={{ uri: `file://${path}` }} />
                     </TouchableOpacity>
                   ))}
+                  <TouchableOpacity
+                    style={styles.newPicture}
+                    onPress={() => this.handleSelectImage()}>
+                    <Icon name="image" size={35} color={"#1679D9"} style={styles.actionButtonIcon} />
+                    <Text style={{ color: '#1679D9', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                  </TouchableOpacity>
                 </View>
               </ScrollView> :
               null
@@ -396,11 +402,7 @@ export default class New extends Component {
             </Modal>
 
 
-            <TouchableOpacity
-              style={styles.newPicture}
-              onPress={() => this.handleSelectImage()}>
-              <Text style={[styles.shareButtonText, { color: '#1679D9' }]}>Add new picture</Text>
-            </TouchableOpacity>
+
           </View>
         )
       case 3:
@@ -408,15 +410,15 @@ export default class New extends Component {
           <View style={styles.card}>
             {
               todo.length > 0 ?
-                  <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
-                    To-do
+                <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                  To-do
                 </Text>
 
                 : <View>
                   <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
                     To-do
               </Text>
-                  <Text style={{color:'#666',  marginLeft:3,  fontFamily: 'Gilroy-Regular'}}>
+                  <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
                     Empty list...
                   </Text>
                 </View>
@@ -854,15 +856,14 @@ const styles = StyleSheet.create({
   },
 
   newPicture: {
-
-    borderColor: '#1679D9',
-    borderWidth: 2,
-    borderRadius: 8,
-    height: 42,
-    marginTop: 15,
-    marginBottom: 10,
+    borderColor: '#eee',
+    borderWidth: 3,
     justifyContent: 'center',
     alignItems: 'center',
+    width: 100,
+    height: 100,
+    margin: 5,
+    borderRadius: 4,
   },
 
   shareButtonText: {

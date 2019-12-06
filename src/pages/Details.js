@@ -22,6 +22,7 @@ import { Overlay } from 'react-native-elements';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import ImagePicker from 'react-native-image-picker';
 import { Badge } from 'react-native-elements'
 import { showMessage, hideMessage } from "react-native-flash-message";
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
@@ -105,6 +106,36 @@ export default class Details extends React.Component {
       ],
       { cancelable: true },
     );
+  }
+
+  handleSelectImage = () => {
+
+    const options = {
+      title: 'Select picture',
+      storageOptions: {
+        skipBackup: true,
+        quality: 0.1,
+        path: 'myawesomeproject',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (response.error) {
+        console.log('Error');
+      } else if (response.didCancel) {
+        console.log('Used canceled');
+      } else {
+        this.state.images.push(response.path);
+        if (this.state.images.length === 1) {
+          showMessage({
+            message: "Long press on image to delete it",
+            type: "default",
+          });
+        }
+        AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+        this.forceUpdate()
+      }
+    });
   }
 
 
@@ -403,7 +434,7 @@ export default class Details extends React.Component {
 
                 {
 
-                  images && images.length > 0 ?
+                  images ?
                     <Animatable.View animation="fadeInRight" style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
                       <View style={{ margin: 20 }}>
                         <Text
@@ -425,6 +456,15 @@ export default class Details extends React.Component {
                                 <Image style={styles.preview} source={{ uri: `file://${path}` }} />
                               </TouchableOpacity>
                             ))}
+
+                            <TouchableOpacity
+                              style={styles.newPicture}
+                              onPress={() => this.handleSelectImage()}>
+                              <Icon name="image" size={35} color={"#1679D9"} />
+                              <Text style={{ color: '#1679D9', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                            </TouchableOpacity>
+
+
                           </View>
                         </ScrollView>
                       </View>
@@ -557,6 +597,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 15,
     marginTop: 20
+  },
+  newPicture: {
+    borderColor: '#eee',
+    borderWidth: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 100,
+    height: 100,
+    margin: 5,
+    borderRadius: 4,
   },
   shareButtonText: {
     fontWeight: 'bold',
