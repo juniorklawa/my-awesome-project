@@ -333,7 +333,7 @@ export default class Details extends React.Component {
                     <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
                   </View>
                   :
-                  <Animatable.View animation="fadeIn">
+                  <Animatable.View animation="fadeIn" duration={700}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <Text
                         style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
@@ -372,7 +372,7 @@ export default class Details extends React.Component {
                     <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
                   </View>
                   :
-                  <Animatable.View animation="fadeInLeft" style={styles.cardContainer}>
+                  <Animatable.View animation="fadeInLeft" duration={350} style={styles.cardContainer}>
                     <View style={{ margin: 20 }}>
                       <Text
                         style={styles.divTitle}>
@@ -435,7 +435,7 @@ export default class Details extends React.Component {
                 {
 
                   images ?
-                    <Animatable.View animation="fadeInRight" style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                    <Animatable.View animation="fadeInRight" duration={500} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
                       <View style={{ margin: 20 }}>
                         <Text
                           style={styles.divTitle}>
@@ -473,7 +473,7 @@ export default class Details extends React.Component {
                 }
 
                 {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
-                  <Animatable.View animation="fadeInUp" style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
+                  <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                     <View style={{ margin: 20 }}>
                       <Text style={styles.divTitle}>To-do</Text>
                       {this.state.todo.map((task, i) => (

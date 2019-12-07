@@ -31,6 +31,9 @@ export default class Dashboard extends React.Component {
     filterProjects: false
   };
 
+  handleViewRef = ref => this.view = ref;
+  
+  fadeInUp = () => this.view.fadeInUp(500)
 
   static navigationOptions = {
     header: null,
@@ -46,9 +49,11 @@ export default class Dashboard extends React.Component {
       console.log(e)
     }
     this.hideAlert()
+    this.fadeInUp()
   }
 
   filterProjects() {
+    
 
     if (!this.state.filterProjects) {
       this.setState({ hideIcon: 'eye-off' })
@@ -103,6 +108,7 @@ export default class Dashboard extends React.Component {
         projects: projects,
         displayProjects: filteredProjects
       });
+      
     } catch (e) {
       console.log(e)
     }
@@ -137,6 +143,7 @@ export default class Dashboard extends React.Component {
             onWillFocus={() => {
               this.showAlert()
               this._retrieveData()
+              this.fadeInUp()
               this.hideAlert()
             }}
           />
@@ -159,45 +166,45 @@ export default class Dashboard extends React.Component {
                 showAlert === true ?
                   <Placeholder /> :
 
-                  <Animatable.View animation="fadeInUp" duration={700}>
+                  <Animatable.View ref={this.handleViewRef}>
 
-                    {
+                    {displayProjects &&
                       displayProjects.length > 0 && showAlert === false ?
-                        displayProjects.map((project, i) =>
-                          (
-                            <ProjectCard navigation={this.props.navigation} key={i} project={project} />
-                          )
-                        ) :
-                        <View
-                          style={styles.imgContainer}>
-                          {this.state.filterProjects ?
-                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                      displayProjects.map((project, i) =>
+                        (
+                          <ProjectCard navigation={this.props.navigation} key={i} project={project} />
+                        )
+                      ) :
+                      <View
+                        style={styles.imgContainer}>
+                        {this.state.filterProjects ?
+                          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 
-                              <Text
-                                style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
-                                ¯\_(ツ)_/¯
+                            <Text
+                              style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
+                              ¯\_(ツ)_/¯
                         </Text>
-                              <Text
-                                style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
-                                Your archived list is empty...
+                            <Text
+                              style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
+                              Your archived list is empty...
                         </Text>
 
-                            </View> :
-                            <View>
-                              <Image
-                                style={styles.imgOnboarding}
-                                source={require('../icons/therocket.png')}
-                              />
-                              <Text
-                                style={[
-                                  styles.onboardingText,
-                                ]}>
-                                Press the + button to launch your new awesome idea!
+                          </View> :
+                          <View>
+                            <Image
+                              style={styles.imgOnboarding}
+                              source={require('../icons/therocket.png')}
+                            />
+                            <Text
+                              style={[
+                                styles.onboardingText,
+                              ]}>
+                              Press the + button to launch your new awesome idea!
                       </Text>
-                            </View>
-                          }
+                          </View>
+                        }
 
-                        </View>
+                      </View>
                     }
                   </Animatable.View>
               }

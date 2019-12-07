@@ -57,7 +57,7 @@ export default class ProjectCard extends Component {
             }}>
             <Text
               style={[
-
+                
                 styles.projectTitle
               ]}>
               {project.title}
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 0,
     fontFamily: 'Gilroy-Extrabold',
-    width: '80%',
+    width: '65%',
     lineHeight: 24
   },
   projectDate: {
