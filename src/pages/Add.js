@@ -7,6 +7,7 @@ import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import UUIDGenerator from 'react-native-uuid-generator';
+import LottieView from 'lottie-react-native';
 import * as Animatable from 'react-native-animatable'
 import moment from 'moment';
 import {
@@ -15,6 +16,7 @@ import {
   TouchableOpacity,
   Text,
   KeyboardAvoidingView,
+  TouchableHighlight,
   TextInput,
   Image,
   StatusBar,
@@ -57,6 +59,7 @@ export default class New extends Component {
     imgViewerUri: '',
     previews: [],
     defaultCategory: true,
+    finishModal: false,
     //onFocus
     project: {},
     titleLabel: false,
@@ -112,7 +115,7 @@ export default class New extends Component {
       });
 
     }
-    
+
   };
 
   switchText(step) {
@@ -614,7 +617,12 @@ export default class New extends Component {
       'keyProjects',
       JSON.stringify(this.state.projects),
     );
-    this.props.navigation.navigate('Dashboard');
+
+    this.setState({ finishModal: true })
+    setTimeout(() => {
+      this.props.navigation.navigate('Dashboard');
+    }, 800);
+
   };
 
   goToDashBoard() {
@@ -711,6 +719,18 @@ export default class New extends Component {
                 </View>
               </ScrollView>
             </View>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.finishModal}>
+              <View style={{ flex: 1, backgroundColor: '#0D4DB0', justifyContent: 'center', alignItems: 'center' }}>
+                <LottieView style={{ height: 150, width: '50%' }} source={require('../icons/animation.json')} autoPlay  />
+                <Animatable.View duration={800} animation='fadeInUpBig'>
+                  <Text style={{ fontFamily: 'Gilroy-Bold', color: '#fff', fontSize: 25 }} animation='fadeIn'>Project created!</Text>
+                </Animatable.View>
+
+              </View>
+            </Modal>
           </View>
         </SafeAreaView>
       </LinearGradient>

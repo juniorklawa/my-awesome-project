@@ -364,6 +364,9 @@ export default class Details extends React.Component {
 
               <View key={key} style={styles.container}>
 
+
+              
+
                 {showAlert
                   ?
                   <View style={{ marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>

@@ -21,6 +21,7 @@ import { NavigationEvents } from 'react-navigation';
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
 import Placeholder from '../components/Placeholder'
+import LottieView from 'lottie-react-native';
 
 export default class Dashboard extends React.Component {
   state = {
@@ -32,8 +33,8 @@ export default class Dashboard extends React.Component {
   };
 
   handleViewRef = ref => this.view = ref;
-  
-  fadeInUp = () => this.view.fadeInUp(500)
+
+  fadeInUp = () => console.log('fadeInUp')//this.view.fadeInUp(500)
 
   static navigationOptions = {
     header: null,
@@ -53,7 +54,7 @@ export default class Dashboard extends React.Component {
   }
 
   filterProjects() {
-    
+
 
     if (!this.state.filterProjects) {
       this.setState({ hideIcon: 'eye-off' })
@@ -108,7 +109,7 @@ export default class Dashboard extends React.Component {
         projects: projects,
         displayProjects: filteredProjects
       });
-      
+
     } catch (e) {
       console.log(e)
     }
@@ -184,6 +185,7 @@ export default class Dashboard extends React.Component {
                               style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
                               ¯\_(ツ)_/¯
                         </Text>
+                           
                             <Text
                               style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
                               Your archived list is empty...
