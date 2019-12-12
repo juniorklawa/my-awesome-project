@@ -21,7 +21,7 @@ import { NavigationEvents } from 'react-navigation';
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
 import Placeholder from '../components/Placeholder'
-import LottieView from 'lottie-react-native';
+
 
 export default class Dashboard extends React.Component {
   state = {
@@ -29,12 +29,13 @@ export default class Dashboard extends React.Component {
     displayProjects: [],
     showAlert: false,
     hideIcon: 'eye',
-    filterProjects: false
+    filterProjects: false,
+    shouldReload: false
   };
 
   handleViewRef = ref => this.view = ref;
 
-  fadeInUp = () => console.log('fadeInUp')//this.view.fadeInUp(500)
+  fadeInUp = () => this.view.fadeInUp(500)
 
   static navigationOptions = {
     header: null,
@@ -47,7 +48,7 @@ export default class Dashboard extends React.Component {
       this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
       this.forceUpdate()
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
     this.hideAlert()
     this.fadeInUp()
@@ -111,7 +112,7 @@ export default class Dashboard extends React.Component {
       });
 
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
   }
 
@@ -134,7 +135,7 @@ export default class Dashboard extends React.Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-    const { showAlert, displayProjects } = this.state;
+    const { showAlert, displayProjects, shouldReload,filterProjects } = this.state;
 
     return (
       <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
@@ -142,16 +143,22 @@ export default class Dashboard extends React.Component {
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
             onWillFocus={() => {
-              this.showAlert()
+              const param = this.props.navigation.getParam('isFirst');
+              this.setState({ shouldReload: param })
               this._retrieveData()
-              this.fadeInUp()
-              this.hideAlert()
+              if (param) {
+                this.setState({hideIcon:'eye'})
+                this.setState({filterProjects:false})
+                this.showAlert()
+                this.hideAlert()
+                this.fadeInUp()
+              }
             }}
           />
           <View style={styles.header}>
             <Text
               style={[styles.headerTitle]}>
-              {this.state.filterProjects ? 'Archived' : 'My projects'}
+              {filterProjects ? 'Archived' : 'My projects'}
             </Text>
             {
               <TouchableOpacity style={styles.filter} hitSlop={styles.filterHitSlop}
@@ -185,7 +192,7 @@ export default class Dashboard extends React.Component {
                               style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
                               ¯\_(ツ)_/¯
                         </Text>
-                           
+
                             <Text
                               style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
                               Your archived list is empty...

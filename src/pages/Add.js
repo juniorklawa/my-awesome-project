@@ -69,7 +69,7 @@ export default class New extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
-    step: 0,
+    step: 3,
     stepLength: 3
 
   };
@@ -315,7 +315,7 @@ export default class New extends Component {
                   <Picker.Item label="Website" value="Website" />
                   <Picker.Item label="Software" value="Software" />
                   <Picker.Item label="Bot" value="Bot" />
-                  <Picker.Item label="Game" value="Bot" />
+                  <Picker.Item label="Game" value="Game" />
                   <Picker.Item label="Other" value="Other" />
                   <Picker.Item label="Create new..." value="new" />
                 </Picker>
@@ -410,68 +410,105 @@ export default class New extends Component {
         )
       case 3:
         return (
-          <View style={styles.card}>
-            {
-              todo.length > 0 ?
-                <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
-                  To-do
-                </Text>
-
-                : <View>
+          <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.card}>
+              {
+                todo.length > 0 ?
                   <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
                     To-do
-              </Text>
-                  <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
-                    Empty list...
+                </Text>
+
+                  : <View>
+                    <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                      To-do
+                </Text>
+                    <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
+                      Simple, and general tasks
                   </Text>
+                  </View>
+              }
+
+
+              <View style={{ marginTop: 0, flex: 1 }}>
+                {this.state.todo.map((l, i) => (
+                  <ListItem
+                    containerStyle={styles.todoContainer}
+                    key={i}
+                    title={l.task}
+                    rightIcon={
+                      <TouchableOpacity
+                        onPress={() => this.deleteTodo(i)}
+                        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                        <Icon name="delete" size={20} color="#666" solid />
+                      </TouchableOpacity>
+                    }
+                  />
+                ))}
+
+                <View
+                  style={{
+                    marginTop: 5,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginHorizontal: 0
+                  }}>
+                  <TextInput
+                    style={[styles.input, { flex: 10 }]}
+                    autoCorrect={false}
+                    autoCapitalize='sentences'
+                    placeholder="Add new todo"
+                    onSubmitEditing={() => this.addTodo()}
+                    placeholderTextColor="#999"
+                    value={this.state.todoItem}
+                    onChangeText={todoItem => this.setState({ todoItem })}
+                  />
+                  <TouchableOpacity
+                    onPress={() => this.addTodo()}
+                    hitSlop={styles.hitSlop}
+                    style={styles.todoBtn}>
+                    <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                  </TouchableOpacity>
                 </View>
-            }
-
-
-            <View style={{ marginTop: 0, flex: 1 }}>
-              {this.state.todo.map((l, i) => (
-                <ListItem
-                  containerStyle={styles.todoContainer}
-                  key={i}
-                  title={l.task}
-                  rightIcon={
-                    <TouchableOpacity
-                      onPress={() => this.deleteTodo(i)}
-                      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
-                      <Icon name="delete" size={23} color="#666" solid />
-                    </TouchableOpacity>
-                  }
-                />
-              ))}
+              </View>
             </View>
+            <View style={styles.card}>
+              {
+                todo.length > 0 ?
+                  <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                    Sections
+                  </Text>
 
-            {
-              true && <View
+                  : <View>
+                    <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                      Sections
+                </Text>
+                    <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
+                      Groups of tasks, like a version, or a step of your project/idea
+                  </Text>
+                  </View>
+              }
+              <View
                 style={{
+                  marginTop: 30,
                   flexDirection: 'row',
+                  borderRadius: 10,
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  backgroundColor: '#F7F7F7',
+                  justifyContent: 'space-between',
+                  padding: 10,
                   marginHorizontal: 0
                 }}>
-                <TextInput
-                  style={[styles.input, { flex: 10 }]}
-                  autoCorrect={false}
-                  autoCapitalize='sentences'
-                  placeholder="Add new todo"
-                  onSubmitEditing={() => this.addTodo()}
-                  placeholderTextColor="#999"
-                  value={this.state.todoItem}
-                  onChangeText={todoItem => this.setState({ todoItem })}
-                />
-                <TouchableOpacity
-                  onPress={() => this.addTodo()}
-                  hitSlop={styles.hitSlop}
-                  style={styles.todoBtn}>
-                  <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                <Text style={{ fontFamily: 'Gilroy-Medium', color: '#999', fontSize: 16, marginLeft: 10 }}>
+                  Add new section
+            </Text>
+                <TouchableOpacity style={{ height: 50, width: 50, borderRadius: 50 / 2, backgroundColor: '#1679D9', justifyContent: 'center', alignItems: 'center' }}>
+                  <Icon name="plus" size={23} color="#fff" />
                 </TouchableOpacity>
               </View>
-            }
+            </View>
           </View>
+
         )
 
       default:
@@ -620,7 +657,7 @@ export default class New extends Component {
 
     this.setState({ finishModal: true })
     setTimeout(() => {
-      this.props.navigation.navigate('Dashboard');
+      this.props.navigation.navigate('Dashboard', { isFirst: false });
     }, 800);
 
   };
@@ -724,7 +761,7 @@ export default class New extends Component {
               transparent={false}
               visible={this.state.finishModal}>
               <View style={{ flex: 1, backgroundColor: '#0D4DB0', justifyContent: 'center', alignItems: 'center' }}>
-                <LottieView style={{ height: 150, width: '50%' }} source={require('../icons/animation.json')} autoPlay  />
+                <LottieView style={{ height: 150, width: '50%' }} source={require('../icons/animation.json')} autoPlay />
                 <Animatable.View duration={800} animation='fadeInUpBig'>
                   <Text style={{ fontFamily: 'Gilroy-Bold', color: '#fff', fontSize: 25 }} animation='fadeIn'>Project created!</Text>
                 </Animatable.View>
@@ -825,7 +862,7 @@ const styles = StyleSheet.create({
   },
 
   todoContainer: {
-    marginRight: 50,
+    //marginRight: 50,
     backgroundColor: '#ECEFF1',
     borderRadius: 4, marginTop: 2,
     marginBottom: 2
@@ -856,7 +893,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    borderRadius: 4,
+    borderRadius: 10,
     backgroundColor: "#F7F7F7",
     padding: 15,
     fontFamily: 'Gilroy-Medium',

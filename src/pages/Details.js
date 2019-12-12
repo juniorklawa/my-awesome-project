@@ -99,7 +99,7 @@ export default class Details extends React.Component {
 
             this.state.project.isArchived = !this.state.project.isArchived
             AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
-            this.props.navigation.navigate('Dashboard');
+            this.props.navigation.navigate('Dashboard', { isFirst: true });
           }
         },
         { text: 'No', onPress: () => { return } },
@@ -179,7 +179,7 @@ export default class Details extends React.Component {
 
             AsyncStorage.setItem('keyProjects', JSON.stringify(newProjects));
 
-            this.props.navigation.navigate('Dashboard');
+            this.props.navigation.navigate('Dashboard', { isFirst: true });
           }
         },
         { text: 'No', onPress: () => { return } },
@@ -216,7 +216,7 @@ export default class Details extends React.Component {
   }
 
   goToDashBoard() {
-    this.props.navigation.navigate('Dashboard');
+    this.props.navigation.navigate('Dashboard', { isFirst: true });
   }
 
   addTodo = async () => {
@@ -365,7 +365,7 @@ export default class Details extends React.Component {
               <View key={key} style={styles.container}>
 
 
-              
+
 
                 {showAlert
                   ?

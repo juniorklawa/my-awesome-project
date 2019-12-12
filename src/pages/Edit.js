@@ -231,11 +231,11 @@ export default class Edit extends Component {
       'keyProjects',
       JSON.stringify(this.state.projects),
     );
-    this.props.navigation.navigate('Dashboard');
+    this.props.navigation.navigate('Dashboard', { isFirst: true });
   };
 
   goToDashBoard() {
-    this.props.navigation.navigate('Dashboard');
+    this.props.navigation.navigate('Dashboard', { isFirst: true });
   }
 
   render() {
