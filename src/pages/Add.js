@@ -9,6 +9,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import UUIDGenerator from 'react-native-uuid-generator';
 import LottieView from 'lottie-react-native';
 import * as Animatable from 'react-native-animatable'
+import { Backdrop } from "react-native-backdrop";
 import moment from 'moment';
 import {
   View,
@@ -60,6 +61,7 @@ export default class New extends Component {
     previews: [],
     defaultCategory: true,
     finishModal: false,
+    backdrop: true,
     //onFocus
     project: {},
     titleLabel: false,
@@ -734,7 +736,6 @@ export default class New extends Component {
                     {this.switchText(this.state.step)}
                   </Animatable.View>
                 </TouchableOpacity>
-
                 <View style={styles.container}>
 
                   <Animatable.View ref={this.handleViewRef} style={{
@@ -768,6 +769,99 @@ export default class New extends Component {
 
               </View>
             </Modal>
+
+            <Backdrop
+              visible={this.state.backdrop}
+              //handleOpen={handleOpen}
+              //handleClose={handleClose}
+              onClose={() => { }}
+              swipeConfig={{
+                velocityThreshold: 0.3,
+                directionalOffsetThreshold: 80,
+              }}
+              animationConfig={{
+                speed: 14,
+                bounciness: 4,
+              }}
+              overlayColor="rgba(0,0,0,0.32)"
+              backdropStyle={{
+                backgroundColor: '#F2F6FF',
+              }}>
+              <ScrollView>
+                <View style={{ justifyContent: 'flex-start', alignItems: 'center', minHeight: 400 }}>
+                  <View style={[styles.card, { flex: 1 }]}>
+                    <Text style={[styles.fieldTitle]}>
+                      Section title
+                  </Text>
+                    <TextInput
+                      style={styles.input}
+                      //editable
+                      //onFocus={() => this.setState({ descriptionLabel: !this.props.descriptionLabel })}
+                      //onBlur={() => this.setState({ descriptionLabel: !this.state.descriptionLabel })}
+                      autoCorrect={false}
+                      autoCapitalize="sentences"
+                      placeholderTextColor="#999"
+                      value={'My new section title'}
+                      placeholder="Ex: An app that tracks awesome ideas"
+                      onChangeText={shortDescription =>
+                        this.setState({ shortDescription })
+                      }
+                    />
+                    <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
+                      Section To-do
+                  </Text>
+                    <View style={{ marginTop: 0, flex: 1 }}>
+                      {this.state.todo.map((l, i) => (
+                        <ListItem
+                          containerStyle={styles.todoContainer}
+                          key={i}
+                          title={l.task}
+                          rightIcon={
+                            <TouchableOpacity
+                              onPress={() => this.deleteTodo(i)}
+                              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                              <Icon name="delete" size={20} color="#666" solid />
+                            </TouchableOpacity>
+                          }
+                        />
+                      ))}
+
+                      <View
+                        style={{
+                          marginTop: 5,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginHorizontal: 0
+                        }}>
+                        <TextInput
+                          style={[styles.input, { flex: 10 }]}
+                          autoCorrect={false}
+                          autoCapitalize='sentences'
+                          placeholder="Add new section todo"
+                          onSubmitEditing={() => this.addTodo()}
+                          placeholderTextColor="#999"
+                          value={this.state.todoItem}
+                          onChangeText={todoItem => this.setState({ todoItem })}
+                        />
+                        <TouchableOpacity
+                          onPress={() => this.addTodo()}
+                          hitSlop={styles.hitSlop}
+                          style={styles.todoBtn}>
+                          <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={[styles.shareButton, { backgroundColor: '#1679D9' }]}
+                    onPress={() => this.handleSubmit()}>
+                    <Text style={[styles.shareButtonText]}>Create new section</Text>
+                  </TouchableOpacity>
+
+                </View>
+              </ScrollView>
+            </Backdrop>
           </View>
         </SafeAreaView>
       </LinearGradient>

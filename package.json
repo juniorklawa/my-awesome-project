@@ -20,6 +20,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-animatable": "^1.3.3",
     "react-native-awesome-alerts": "^1.2.0",
+    "react-native-backdrop": "^1.0.16",
     "react-native-confetti-cannon": "^1.1.3",
     "react-native-draggable-flatlist": "^1.1.9",
     "react-native-elements": "^1.2.3",
