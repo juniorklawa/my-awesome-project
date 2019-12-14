@@ -48,8 +48,12 @@ export default class New extends Component {
     category: 'Application',
     tags: '',
     todoItem: '',
+    todoSectionItem: '',
+    sectionTitle: '',
     date: moment().format('ddd, D[th] MMMM/YYYY'),
     todo: [],
+    todoSection: [],
+    sections: [],
     projects: [],
     estimatedTime: '',
     estimatedInterval: 'day(s)',
@@ -529,6 +533,13 @@ export default class New extends Component {
     })
   }
 
+  // deleteSectionTodo(i) {
+  //   const newSectionTodoList = this.state.todo.filter((task, index) => index !== i)
+  //   this.setState({
+  //     todo: newSectionTodoList
+  //   })
+  // }
+
   deleteImage(i) {
     const newImages = this.state.previews.filter((imagePath, index) => index !== i)
     this.setState({
@@ -560,6 +571,42 @@ export default class New extends Component {
     });
   };
 
+  addSectionTodo = async () => {
+
+    if (!this.state.todoSectionItem) {
+      Alert.alert(
+        'Ops!',
+        'This field is obligatory',
+        [
+          { text: 'OK' },
+        ],
+        { cancelable: false },
+      );
+      return
+    }
+
+    this.state.todoSection.push({
+      task: this.state.todoSectionItem,
+      checked: false,
+    });
+
+    this.setState({
+      todoSectionItem: '',
+    });
+  };
+
+
+  handleSectionSubmit = () => {
+    this.state.sections.push({
+      title: this.state.sectionTitle,
+      tasks: this.state.todoSection
+    })
+    this.setState({
+      todoSection: {},
+      sectionTitle: ''
+    })
+    console.log('sections', this.state.sections)
+  }
 
   handleSelectImage = () => {
 
@@ -642,6 +689,7 @@ export default class New extends Component {
         key: await UUIDGenerator.getRandomUUID(),
         date: this.state.date,
         todo: this.state.todo,
+        sections: this.state.sections,
         isArchived: false,
         doneTasks: this.state.doneTasks,
       });
@@ -772,9 +820,10 @@ export default class New extends Component {
 
             <Backdrop
               visible={this.state.backdrop}
-              //handleOpen={handleOpen}
+              //handleOpen={() => { }}
               //handleClose={handleClose}
-              onClose={() => { }}
+              closedHeight={32}
+              onClose={() => { this.setState({ backdrop: false }) }}
               swipeConfig={{
                 velocityThreshold: 0.3,
                 directionalOffsetThreshold: 80,
@@ -787,80 +836,77 @@ export default class New extends Component {
               backdropStyle={{
                 backgroundColor: '#F2F6FF',
               }}>
-              <ScrollView>
-                <View style={{ justifyContent: 'flex-start', alignItems: 'center', minHeight: 400 }}>
-                  <View style={[styles.card, { flex: 1 }]}>
-                    <Text style={[styles.fieldTitle]}>
-                      Section title
-                  </Text>
-                    <TextInput
-                      style={styles.input}
-                      //editable
-                      //onFocus={() => this.setState({ descriptionLabel: !this.props.descriptionLabel })}
-                      //onBlur={() => this.setState({ descriptionLabel: !this.state.descriptionLabel })}
-                      autoCorrect={false}
-                      autoCapitalize="sentences"
-                      placeholderTextColor="#999"
-                      value={'My new section title'}
-                      placeholder="Ex: An app that tracks awesome ideas"
-                      onChangeText={shortDescription =>
-                        this.setState({ shortDescription })
-                      }
-                    />
-                    <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
-                      Section To-do
-                  </Text>
-                    <View style={{ marginTop: 0, flex: 1 }}>
-                      {this.state.todo.map((l, i) => (
-                        <ListItem
-                          containerStyle={styles.todoContainer}
-                          key={i}
-                          title={l.task}
-                          rightIcon={
-                            <TouchableOpacity
-                              onPress={() => this.deleteTodo(i)}
-                              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
-                              <Icon name="delete" size={20} color="#666" solid />
-                            </TouchableOpacity>
-                          }
-                        />
-                      ))}
 
-                      <View
-                        style={{
-                          marginTop: 5,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginHorizontal: 0
-                        }}>
-                        <TextInput
-                          style={[styles.input, { flex: 10 }]}
-                          autoCorrect={false}
-                          autoCapitalize='sentences'
-                          placeholder="Add new section todo"
-                          onSubmitEditing={() => this.addTodo()}
-                          placeholderTextColor="#999"
-                          value={this.state.todoItem}
-                          onChangeText={todoItem => this.setState({ todoItem })}
-                        />
-                        <TouchableOpacity
-                          onPress={() => this.addTodo()}
-                          hitSlop={styles.hitSlop}
-                          style={styles.todoBtn}>
-                          <Icon name="chevron-right" size={35} color="#1679D9" solid />
-                        </TouchableOpacity>
-                      </View>
+              <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
+                <View style={[styles.card]}>
+                  <Text style={[styles.fieldTitle]}>
+                    Section Title
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCorrect={false}
+                    autoCapitalize="sentences"
+                    placeholderTextColor="#999"
+                    value={this.state.sectionTitle}
+                    placeholder="Ex: Version 1.0, Design, Test..."
+                    onChangeText={sectionTitle =>
+                      this.setState({ sectionTitle })
+                    }
+                  />
+                  <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
+                    Section To-do
+                  </Text>
+                  <View>
+                    {/* {this.state.todoSection.map((l, i) => (
+                      <ListItem
+                        containerStyle={styles.todoContainer}
+                        key={i}
+                        title={l.task}
+                        rightIcon={
+                          <TouchableOpacity
+                            onPress={() => this.deleteTodo(i)}
+                            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                            <Icon name="delete" size={20} color="#666" solid />
+                          </TouchableOpacity>
+                        }
+                      />
+                    ))} */}
+
+                    <View
+                      style={{
+                        marginTop: 5,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginHorizontal: 0
+                      }}>
+                      <TextInput
+                        style={[styles.input, { flex: 10 }]}
+                        autoCorrect={false}
+                        autoCapitalize='sentences'
+                        placeholder="Add new section todo"
+                        onSubmitEditing={() => this.addSectionTodo()}
+                        placeholderTextColor="#999"
+                        value={this.state.todoSectionItem}
+                        onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
+                      />
+                      <TouchableOpacity
+                        onPress={() => this.addTodo()}
+                        hitSlop={styles.hitSlop}
+                        style={styles.todoBtn}>
+                        <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                      </TouchableOpacity>
                     </View>
                   </View>
-                  <TouchableOpacity
-                    style={[styles.shareButton, { backgroundColor: '#1679D9' }]}
-                    onPress={() => this.handleSubmit()}>
-                    <Text style={[styles.shareButtonText]}>Create new section</Text>
-                  </TouchableOpacity>
-
                 </View>
-              </ScrollView>
+                <TouchableOpacity
+                  style={[styles.shareButton, { backgroundColor: '#1679D9' }]}
+                  onPress={() => this.handleSectionSubmit()}>
+                  <Text style={[styles.shareButtonText]}>Create new section</Text>
+                </TouchableOpacity>
+
+              </View>
+
             </Backdrop>
           </View>
         </SafeAreaView>
