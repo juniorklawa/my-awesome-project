@@ -65,7 +65,7 @@ export default class New extends Component {
     previews: [],
     defaultCategory: true,
     finishModal: false,
-    backdrop: true,
+    backdrop: false,
     //onFocus
     project: {},
     titleLabel: false,
@@ -488,11 +488,18 @@ export default class New extends Component {
                   : <View>
                     <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
                       Sections
-                </Text>
+                    </Text>
                     <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
                       Groups of tasks, like a version, or a step of your project/idea
                   </Text>
                   </View>
+              }
+
+              {
+                this.state.sections && this.state.sections.map((section, i) => (
+                  <View key={i}>
+                    <Text>{section.title}</Text>
+                  </View>))
               }
               <View
                 style={{
@@ -507,8 +514,10 @@ export default class New extends Component {
                 }}>
                 <Text style={{ fontFamily: 'Gilroy-Medium', color: '#999', fontSize: 16, marginLeft: 10 }}>
                   Add new section
-            </Text>
-                <TouchableOpacity style={{ height: 50, width: 50, borderRadius: 50 / 2, backgroundColor: '#1679D9', justifyContent: 'center', alignItems: 'center' }}>
+              </Text>
+                <TouchableOpacity
+                  onPress={() => { this.setState({ backdrop: true }) }}
+                  style={{ height: 50, width: 50, borderRadius: 50 / 2, backgroundColor: '#1679D9', justifyContent: 'center', alignItems: 'center' }}>
                   <Icon name="plus" size={23} color="#fff" />
                 </TouchableOpacity>
               </View>
@@ -549,15 +558,12 @@ export default class New extends Component {
 
   addTodo = async () => {
 
-    if (!this.state.todoItem) {
-      Alert.alert(
-        'Ops!',
-        'This field is obligatory',
-        [
-          { text: 'OK' },
-        ],
-        { cancelable: false },
-      );
+    if ((!this.state.todoItem)) {
+      //this.bounce()
+      showMessage({
+        message: 'This field is obligatory',
+        type: "warning",
+      });
       return
     }
 
@@ -573,15 +579,12 @@ export default class New extends Component {
 
   addSectionTodo = async () => {
 
-    if (!this.state.todoSectionItem) {
-      Alert.alert(
-        'Ops!',
-        'This field is obligatory',
-        [
-          { text: 'OK' },
-        ],
-        { cancelable: false },
-      );
+    if (this.state.todoSection === '') {
+      this.bounce()
+      showMessage({
+        message: 'Title and todo field are obligatory',
+        type: "warning",
+      });
       return
     }
 
@@ -599,13 +602,15 @@ export default class New extends Component {
   handleSectionSubmit = () => {
     this.state.sections.push({
       title: this.state.sectionTitle,
-      tasks: this.state.todoSection
+      tasks: this.state.todoSection,
+      key: await UUIDGenerator.getRandomUUID()
     })
     this.setState({
-      todoSection: {},
+      todoSection: [],
       sectionTitle: ''
     })
     console.log('sections', this.state.sections)
+    this.setState({ backdrop: false })
   }
 
   handleSelectImage = () => {
@@ -614,7 +619,7 @@ export default class New extends Component {
       title: 'Select picture',
       storageOptions: {
         skipBackup: true,
-        quality: 0.1,
+        quality: 0.5,
         path: 'myawesomeproject',
       },
     };
@@ -857,7 +862,7 @@ export default class New extends Component {
                     Section To-do
                   </Text>
                   <View>
-                    {/* {this.state.todoSection.map((l, i) => (
+                    {this.state.todoSection && this.state.todoSection.map((l, i) => (
                       <ListItem
                         containerStyle={styles.todoContainer}
                         key={i}
@@ -870,7 +875,7 @@ export default class New extends Component {
                           </TouchableOpacity>
                         }
                       />
-                    ))} */}
+                    ))}
 
                     <View
                       style={{
@@ -891,7 +896,7 @@ export default class New extends Component {
                         onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
                       />
                       <TouchableOpacity
-                        onPress={() => this.addTodo()}
+                        onPress={() => this.addSectionTodo()}
                         hitSlop={styles.hitSlop}
                         style={styles.todoBtn}>
                         <Icon name="chevron-right" size={35} color="#1679D9" solid />
