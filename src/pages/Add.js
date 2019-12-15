@@ -478,49 +478,43 @@ export default class New extends Component {
                 </View>
               </View>
             </View>
-            <View style={styles.card}>
-              {
-                todo.length > 0 ?
-                  <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
-                    Sections
-                  </Text>
-
-                  : <View>
-                    <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
-                      Sections
+            <View >
+              <View>
+                <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                  Sections
                     </Text>
-                    <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
-                      Groups of tasks, like a version, or a step of your project/idea
+                <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
+                  Groups of tasks, like a version, or a step of your project/idea
                   </Text>
-                  </View>
-              }
-
+              </View>
               {
                 this.state.sections && this.state.sections.map((section, i) => (
-                  <View key={i}>
-                    <Text>{section.title}</Text>
+                  <View style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: '15%', alignItems: 'center', justifyContent: 'space-between' }} >
+                    <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                    <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 24, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
                   </View>))
               }
-              <View
+
+              <TouchableOpacity
+                onPress={() => { this.setState({ backdrop: true }) }}
                 style={{
-                  marginTop: 30,
-                  flexDirection: 'row',
-                  borderRadius: 10,
-                  alignItems: 'center',
-                  backgroundColor: '#F7F7F7',
-                  justifyContent: 'space-between',
+                  
+                  borderRadius: 4,
                   padding: 10,
-                  marginHorizontal: 0
+                  marginHorizontal: 0,
+                  backgroundColor: '#1679D9',
+                  justifyContent: 'center',
+                  alignItems: 'center'
                 }}>
-                <Text style={{ fontFamily: 'Gilroy-Medium', color: '#999', fontSize: 16, marginLeft: 10 }}>
-                  Add new section
-              </Text>
-                <TouchableOpacity
-                  onPress={() => { this.setState({ backdrop: true }) }}
-                  style={{ height: 50, width: 50, borderRadius: 50 / 2, backgroundColor: '#1679D9', justifyContent: 'center', alignItems: 'center' }}>
-                  <Icon name="plus" size={23} color="#fff" />
-                </TouchableOpacity>
-              </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontFamily: 'Gilroy-Medium', color: '#fff', fontSize: 16 }}>
+                    Add new section
+                   </Text>
+                  <View style={{ marginLeft: 8, height: 35, width: 35, borderRadius: 35 / 2, backgroundColor: '#1565C0', justifyContent: 'center', alignItems: 'center' }}>
+                    <Icon name="plus" size={23} color="#fff" />
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -599,7 +593,7 @@ export default class New extends Component {
   };
 
 
-  handleSectionSubmit = () => {
+  handleSectionSubmit = async () => {
     this.state.sections.push({
       title: this.state.sectionTitle,
       tasks: this.state.todoSection,
@@ -611,6 +605,7 @@ export default class New extends Component {
     })
     console.log('sections', this.state.sections)
     this.setState({ backdrop: false })
+    this.save()
   }
 
   handleSelectImage = () => {
@@ -700,22 +695,20 @@ export default class New extends Component {
       });
 
     }
-
-
-
-
-
-    await AsyncStorage.setItem(
-      'keyProjects',
-      JSON.stringify(this.state.projects),
-    );
-
+    this.save()
     this.setState({ finishModal: true })
     setTimeout(() => {
       this.props.navigation.navigate('Dashboard', { isFirst: false });
     }, 800);
 
   };
+
+  async save() {
+    await AsyncStorage.setItem(
+      'keyProjects',
+      JSON.stringify(this.state.projects),
+    );
+  }
 
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard');
@@ -794,7 +787,7 @@ export default class New extends Component {
                   <Animatable.View ref={this.handleViewRef} style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-
+                    flex: 1,
                     width: '100%'
                   }}>
                     {this.switchStep(this.state.step)}
@@ -802,13 +795,14 @@ export default class New extends Component {
 
 
                   </Animatable.View>
-                  <TouchableOpacity
-                    style={styles.shareButton}
-                    onPress={() => this.handleSubmit()}>
-                    <Text style={styles.shareButtonText}>{this.state.step < this.state.stepLength ? 'Next step' : 'Create new project'}</Text>
-                  </TouchableOpacity>
+
                 </View>
               </ScrollView>
+              <TouchableOpacity
+                style={styles.shareButton}
+                onPress={() => this.handleSubmit()}>
+                <Text style={styles.shareButtonText}>{this.state.step < this.state.stepLength ? 'Next step' : 'Create new project'}</Text>
+              </TouchableOpacity>
             </View>
             <Modal
               animationType="slide"
@@ -907,7 +901,7 @@ export default class New extends Component {
                 <TouchableOpacity
                   style={[styles.shareButton, { backgroundColor: '#1679D9' }]}
                   onPress={() => this.handleSectionSubmit()}>
-                  <Text style={[styles.shareButtonText]}>Create new section</Text>
+                  <Text style={[styles.shareButtonText, { width: '100%' }]}>Create new section</Text>
                 </TouchableOpacity>
 
               </View>
@@ -1050,7 +1044,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#56B90E',
     borderRadius: 8,
     height: 42,
-    width: '100%',
     marginVertical: 10,
     margin: 15,
     justifyContent: 'center',
