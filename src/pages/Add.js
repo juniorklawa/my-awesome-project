@@ -16,8 +16,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  KeyboardAvoidingView,
-  TouchableHighlight,
   TextInput,
   Image,
   StatusBar,
@@ -75,9 +73,8 @@ export default class New extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
-    step: 3,
+    step: 0,
     stepLength: 3
-
   };
 
   static navigationOptions = {
@@ -478,43 +475,48 @@ export default class New extends Component {
                 </View>
               </View>
             </View>
-            <View >
-              <View>
-                <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
-                  Sections
-                    </Text>
-                <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
-                  Groups of tasks, like a version, or a step of your project/idea
-                  </Text>
-              </View>
-              {
-                this.state.sections && this.state.sections.map((section, i) => (
-                  <View style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: '15%', alignItems: 'center', justifyContent: 'space-between' }} >
-                    <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
-                    <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 24, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
-                  </View>))
-              }
 
-              <TouchableOpacity
-                onPress={() => { this.setState({ backdrop: true }) }}
-                style={{
-                  
-                  borderRadius: 4,
-                  padding: 10,
-                  marginHorizontal: 0,
-                  backgroundColor: '#1679D9',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{ fontFamily: 'Gilroy-Medium', color: '#fff', fontSize: 16 }}>
-                    Add new section
-                   </Text>
-                  <View style={{ marginLeft: 8, height: 35, width: 35, borderRadius: 35 / 2, backgroundColor: '#1565C0', justifyContent: 'center', alignItems: 'center' }}>
-                    <Icon name="plus" size={23} color="#fff" />
+
+            <View style={styles.card}>
+
+              <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
+                Sections
+                  </Text>
+              <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Gilroy-Regular' }}>
+                Groups of tasks, like a version, or a step of your project/idea
+                </Text>
+
+
+
+              <View style={{ flex: 1 }}>
+                {this.state.sections.map((section, i) => (
+                  <View key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
+                    <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                    <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
                   </View>
-                </View>
-              </TouchableOpacity>
+                ))}
+
+                <TouchableOpacity
+                  onPress={() => { this.setState({ backdrop: true }) }}
+                  style={{
+                    marginTop: 10,
+                    borderRadius: 4,
+                    padding: 8,
+                    marginHorizontal: 0,
+                    backgroundColor: '#1679D9',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontFamily: 'Gilroy-Medium', color: '#fff', fontSize: 16 }}>
+                      Add new section
+                   </Text>
+                    <View style={{ marginLeft: 8, height: 35, width: 35, borderRadius: 35 / 2, backgroundColor: '#56B90E', justifyContent: 'center', alignItems: 'center' }}>
+                      <Icon name="plus" size={23} color="#fff" />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
 
@@ -573,10 +575,10 @@ export default class New extends Component {
 
   addSectionTodo = async () => {
 
-    if (this.state.todoSection === '') {
+    if (this.state.todoSectionItem === '') {
       this.bounce()
       showMessage({
-        message: 'Title and todo field are obligatory',
+        message: 'Task description is obligatory',
         type: "warning",
       });
       return
@@ -594,6 +596,14 @@ export default class New extends Component {
 
 
   handleSectionSubmit = async () => {
+    if (this.state.sectionTitle === '') {
+      this.bounce()
+      showMessage({
+        message: 'Title is obligatory',
+        type: "warning",
+      });
+      return
+    }
     this.state.sections.push({
       title: this.state.sectionTitle,
       tasks: this.state.todoSection,
@@ -687,7 +697,7 @@ export default class New extends Component {
         estimatedInterval: this.state.estimatedInterval,
         images: this.state.previews,
         key: await UUIDGenerator.getRandomUUID(),
-        date: this.state.date,
+        date: moment(),
         todo: this.state.todo,
         sections: this.state.sections,
         isArchived: false,
@@ -760,7 +770,14 @@ export default class New extends Component {
               <View style={styles.chevron}>
                 <TouchableOpacity
                   style={{ marginStart: 0 }} hitSlop={styles.hitSlop}
-                  onPress={() => this.goToDashBoard()}>
+                  onPress={() => {
+                    if (this.state.step > 0) {
+                      this.setState({ step: this.state.step - 1 })
+                    } else {
+                      this.goToDashBoard()
+                    }
+
+                  }}>
                   <Icon name="chevron-left" size={45} color="#fff" solid />
                 </TouchableOpacity>
                 {
@@ -821,7 +838,7 @@ export default class New extends Component {
               visible={this.state.backdrop}
               //handleOpen={() => { }}
               //handleClose={handleClose}
-              closedHeight={32}
+              //closedHeight={32}
               onClose={() => { this.setState({ backdrop: false }) }}
               swipeConfig={{
                 velocityThreshold: 0.3,
@@ -899,9 +916,9 @@ export default class New extends Component {
                   </View>
                 </View>
                 <TouchableOpacity
-                  style={[styles.shareButton, { backgroundColor: '#1679D9' }]}
+                  style={[styles.shareButton, { backgroundColor: '#1679D9', width: '100%' }]}
                   onPress={() => this.handleSectionSubmit()}>
-                  <Text style={[styles.shareButtonText, { width: '100%' }]}>Create new section</Text>
+                  <Text style={[styles.shareButtonText]}>Create new section</Text>
                 </TouchableOpacity>
 
               </View>

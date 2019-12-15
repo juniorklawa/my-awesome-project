@@ -4,7 +4,7 @@ import { iOSUIKit } from 'react-native-typography';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import { Badge } from 'react-native-elements'
-
+import moment from 'moment';
 
 
 export default class ProjectCard extends Component {
@@ -57,7 +57,7 @@ export default class ProjectCard extends Component {
             }}>
             <Text
               style={[
-                
+
                 styles.projectTitle
               ]}>
               {project.title}
@@ -74,7 +74,7 @@ export default class ProjectCard extends Component {
                 iOSUIKit.subheadEmphasized,
                 styles.projectDate,
               ]}>
-              {`${project.date}`}
+              {`${moment(project.date).format('ddd, D[th] MMMM/YYYY')}`}
             </Text>
           </View>
           <View>

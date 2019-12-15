@@ -24,8 +24,10 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ImagePicker from 'react-native-image-picker';
 import { Badge } from 'react-native-elements'
+import { Backdrop } from "react-native-backdrop";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import moment from 'moment';
 
 export default class Details extends React.Component {
 
@@ -45,7 +47,9 @@ export default class Details extends React.Component {
     showAlert: false,
     showMeConfetti: false,
     images: [],
+    sections: [],
     visibleModal: false,
+    backdrop: false,
     imgViewerUri: ''
   };
 
@@ -352,7 +356,7 @@ export default class Details extends React.Component {
 
                           { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Gilroy-Regular' },
                         ]}>
-                        Created at {date}
+                        Created at {moment(date).format('ddd, D[th] MMMM/YYYY')}
                       </Text>
                     </View>
                   </Animatable.View>
@@ -527,6 +531,21 @@ export default class Details extends React.Component {
                     </View>
                   </Animatable.View>
                 </View> : null}
+
+                {this.state.project.sections && this.state.project.sections.length > 0 ?
+                  <View style={{ flex: 1 }}>
+                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
+                      <View style={{ margin: 20 }}>
+                        <Text style={styles.divTitle}>Sections</Text>
+                        {this.state.project.sections.map((section, i) => (
+                          <View key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
+                            <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                            <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    </Animatable.View>
+                  </View> : null}
               </View>
             </ScrollView>
 
@@ -544,7 +563,7 @@ export default class Details extends React.Component {
               </ActionButton.Item>
 
               <ActionButton.Item buttonColor='#1abc9c' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
-                isVisible: true
+                backdrop: true
               })}>
                 <Icon name="check" style={styles.actionButtonIcon} />
               </ActionButton.Item>
@@ -576,6 +595,64 @@ export default class Details extends React.Component {
             <ConfettiCannon fadeOut={true} count={50} origin={{ x: -10, y: -100 }} />
             : null
         }
+
+        <Backdrop
+          visible={this.state.backdrop}
+          //handleOpen={() => { }}
+          //handleClose={handleClose}
+          closedHeight={32}
+          onClose={() => { this.setState({ backdrop: false }) }}
+          swipeConfig={{
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80,
+          }}
+          animationConfig={{
+            speed: 14,
+            bounciness: 4,
+          }}
+          overlayColor="rgba(0,0,0,0.32)"
+          backdropStyle={{
+            backgroundColor: '#fff',
+          }}>
+
+          <View style={{ width: '100%' }}>
+
+            <Text style={[styles.divTitle]}>
+              New to-do
+              </Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+
+              }}>
+              <TextInput
+                style={[styles.input, { flex: 10 }]}
+                autoCorrect={false}
+                placeholder="Add new todo"
+                onSubmitEditing={() => {
+                  this.addTodo()
+                  this.setState({ backdrop: false })
+                }}
+                placeholderTextColor="#999"
+                value={this.state.todoItem}
+                onChangeText={todoItem => this.setState({ todoItem })}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={[styles.shareButton, { margin: 0, marginBottom: 10 }]}
+              onPress={() => {
+                this.addTodo()
+                this.setState({ backdrop: false })
+              }}>
+              <Text style={styles.shareButtonText}>Add</Text>
+            </TouchableOpacity>
+          </View>
+
+        </Backdrop>
 
       </View>
     );
