@@ -27,6 +27,7 @@ import { Badge } from 'react-native-elements'
 import { Backdrop } from "react-native-backdrop";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import * as Progress from 'react-native-progress';
 import moment from 'moment';
 
 export default class Details extends React.Component {
@@ -50,7 +51,10 @@ export default class Details extends React.Component {
     sections: [],
     visibleModal: false,
     backdrop: false,
-    imgViewerUri: ''
+    imgViewerUri: '',
+    sectionModal: false,
+    selectedSection: null,
+    todoSectionItem: ''
   };
 
   async componentDidMount() {
@@ -198,13 +202,17 @@ export default class Details extends React.Component {
     this.setState({
       todo: newTodoList
     })
-
     if (isCheck.checked) {
       this.state.project.doneTasks--
     }
-
     this.state.project.todo = this.state.todo
+    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+  }
 
+  deleteSectionTodo(i) {
+    const newTodoList = this.state.selectedSection.tasks.filter((task, index) => index !== i)
+    this.state.selectedSection.tasks = newTodoList
+    this.forceUpdate()
     AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
   }
 
@@ -221,6 +229,47 @@ export default class Details extends React.Component {
 
   goToDashBoard() {
     this.props.navigation.navigate('Dashboard', { isFirst: true });
+  }
+
+  addSectionTodo = async () => {
+
+    if (this.state.todoSectionItem === '') {
+      this.bounce()
+      showMessage({
+        message: 'Task description is obligatory',
+        type: "warning",
+      });
+      return
+    }
+
+    this.state.selectedSection.tasks.push({
+      task: this.state.todoSectionItem,
+      checked: false,
+    });
+
+    this.setState({
+      todoSectionItem: '',
+    });
+    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+  };
+
+  deleteSection(clickedSection) {
+    Alert.alert(
+      'Are you sure?',
+      `You are going to delete ${clickedSection.title}`,
+      [
+        {
+          text: 'Yes', onPress: () => {
+            const newSectionList = this.state.project.sections.filter((section) => section.key !== clickedSection.key)
+            this.state.project.sections = newSectionList
+            this.forceUpdate()
+            AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+          }
+        },
+        { text: 'No', onPress: () => { return } },
+      ],
+      { cancelable: true },
+    );
   }
 
   addTodo = async () => {
@@ -367,10 +416,6 @@ export default class Details extends React.Component {
 
 
               <View key={key} style={styles.container}>
-
-
-
-
                 {showAlert
                   ?
                   <View style={{ marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
@@ -479,73 +524,96 @@ export default class Details extends React.Component {
                     : null
                 }
 
-                {this.state.todo.length > 0 ? <View style={{ flex: 1 }}>
-                  <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
-                    <View style={{ margin: 20 }}>
-                      <Text style={styles.divTitle}>To-do</Text>
-                      {this.state.todo.map((task, i) => (
-                        <CheckBox
-                          key={i}
-                          fontFamily={'Gilroy-Medium'}
-                          style={{ width: '100%' }}
-                          title={task.task}
-                          containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
-                          checked={task.checked}
-                          onLongPress={() => this.deleteTodo(i)}
-                          onPress={async () => {
-                            task.checked = !task.checked;
-                            this.forceUpdate();
-
-                            const trueArray = this.state.project.todo.filter(
-                              doneTasks => doneTasks.checked,
-                            ).length;
-
-                            this.state.projects
-                              .filter(project => {
-                                return project.key === this.state.project.key;
-                              })
-                              .map(project => {
-                                project.todo = this.state.project.todo;
-                                project.doneTasks = trueArray;
-                              });
-
-                            AsyncStorage.setItem(
-                              'keyProjects',
-                              JSON.stringify(this.state.projects),
-                            );
-
-                            if (this.state.project.doneTasks === this.state.project.todo.length) {
-                              this.setState({ showMeConfetti: true })
-
-                              await setTimeout(() => {
-                                this.setState({
-                                  showMeConfetti: false
-                                });
-                              }, 4000);
-                            }
-
-
-                          }}
-                        />
-                      ))}
-                    </View>
-                  </Animatable.View>
-                </View> : null}
-
-                {this.state.project.sections && this.state.project.sections.length > 0 ?
+                {this.state.todo.length > 0 ?
                   <View style={{ flex: 1 }}>
                     <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                       <View style={{ margin: 20 }}>
-                        <Text style={styles.divTitle}>Sections</Text>
-                        {this.state.project.sections.map((section, i) => (
-                          <View key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
-                            <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
-                            <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
-                          </View>
+                        <Text style={styles.divTitle}>To-do</Text>
+                        {this.state.todo.map((task, i) => (
+                          <CheckBox
+                            key={i}
+                            fontFamily={'Gilroy-Medium'}
+                            style={{ width: '100%' }}
+                            title={task.task}
+                            containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
+                            checked={task.checked}
+                            onLongPress={() => this.deleteTodo(i)}
+                            onPress={async () => {
+                              task.checked = !task.checked;
+                              this.forceUpdate();
+
+                              const trueArray = this.state.project.todo.filter(
+                                doneTasks => doneTasks.checked,
+                              ).length;
+
+                              this.state.projects
+                                .filter(project => {
+                                  return project.key === this.state.project.key;
+                                })
+                                .map(project => {
+                                  project.todo = this.state.project.todo;
+                                  project.doneTasks = trueArray;
+                                });
+
+                              AsyncStorage.setItem(
+                                'keyProjects',
+                                JSON.stringify(this.state.projects),
+                              );
+
+                              if (this.state.project.doneTasks === this.state.project.todo.length) {
+                                this.setState({ showMeConfetti: true })
+
+                                await setTimeout(() => {
+                                  this.setState({
+                                    showMeConfetti: false
+                                  });
+                                }, 4000);
+                              }
+
+
+                            }}
+                          />
                         ))}
                       </View>
                     </Animatable.View>
                   </View> : null}
+
+                {this.state.project.sections && this.state.project.sections.length > 0 ?
+                  <View style={{ flex: 1 }}>
+                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 5, marginBottom: 20 }}>
+                      <View style={{ margin: 20 }}>
+                        <Text style={styles.divTitle}>Sections</Text>
+
+                        {this.state.project.sections.map((section, i) => (
+                          <TouchableOpacity
+                            onLongPress={() => this.deleteSection(section)}
+                            onPress={() => {
+                              this.setState({ selectedSection: section })
+                              this.setState({ sectionModal: true })
+                            }}
+                            key={i}
+                            style={{ marginTop: 10, backgroundColor: '#F5F5F5', borderRadius: 5, justifyContent: 'space-between', height: 50 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+                              <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                              <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.filter(({ checked }) => checked === true).length}/${section.tasks.length} tasks`}</Text>
+                            </View>
+                            <View style={{ justifyContent: 'flex-end', marginTop: 0, width: '100%' }}>
+                              <Progress.Bar
+                                progress={section.tasks.filter(({ checked }) => checked === true).length / section.tasks.length}
+                                color={'#27ae60'}
+                                animated
+                                borderWidth={0}
+                                borderRadius={5}
+                                unfilledColor={'#ecf0f1'}
+                                width={null} />
+                            </View>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </Animatable.View>
+
+                  </View> : null}
+
               </View>
             </ScrollView>
 
@@ -653,7 +721,110 @@ export default class Details extends React.Component {
           </View>
 
         </Backdrop>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.sectionModal}
+          onRequestClose={() => {
+            this.setState({ sectionModal: false })
+          }}>
+          <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+            <Animatable.View animation="fadeInLeft" style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginTop: 30 }}>
 
+              {this.state.selectedSection && <Text
+                style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', }]}>
+                {this.state.selectedSection.title}
+              </Text>}
+
+              <TouchableOpacity
+                onPress={() => this.setState({ sectionModal: false })}
+                style={{ marginRight: 20 }}>
+                <Icon name="close" color="#fff" size={32} />
+              </TouchableOpacity>
+            </Animatable.View>
+            <ScrollView>
+              <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
+                <View style={{ margin: 20 }}>
+                  <Text style={styles.divTitle}>Tasks</Text>
+
+                  {this.state.selectedSection !== null && this.state.selectedSection.tasks.map((task, i) => (
+                    <View>
+                      <CheckBox
+                        key={i}
+                        fontFamily={'Gilroy-Medium'}
+                        style={{ width: '100%' }}
+                        title={task.task}
+                        containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
+                        checked={task.checked}
+                        onLongPress={() => this.deleteSectionTodo(i)}
+                        onPress={async () => {
+                          task.checked = !task.checked;
+                          this.forceUpdate();
+
+                          const trueArray = this.state.project.todo.filter(
+                            doneTasks => doneTasks.checked,
+                          ).length;
+
+                          this.state.projects
+                            .filter(project => {
+                              return project.key === this.state.project.key;
+                            })
+                            .map(project => {
+                              project.todo = this.state.project.todo;
+                              project.doneTasks = trueArray;
+                            });
+
+                          AsyncStorage.setItem(
+                            'keyProjects',
+                            JSON.stringify(this.state.projects),
+                          );
+
+                          if (this.state.project.doneTasks === this.state.project.todo.length) {
+                            this.setState({ showMeConfetti: true })
+
+                            await setTimeout(() => {
+                              this.setState({
+                                showMeConfetti: false
+                              });
+                            }, 4000);
+                          }
+
+
+                        }}
+                      />
+
+                    </View>))}
+                </View>
+              </Animatable.View>
+            </ScrollView>
+            <View style={{ backgroundColor: '#eee', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <TextInput
+                  style={[styles.input, { flex: 10, marginTop: 0 }]}
+                  autoCorrect={false}
+                  autoCapitalize='sentences'
+                  placeholder="Add new task"
+                  onSubmitEditing={() => this.addSectionTodo()}
+                  placeholderTextColor="#999"
+                  value={this.state.todoSectionItem}
+                  onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
+                />
+                <TouchableOpacity
+                  onPress={() => this.addSectionTodo()}
+                  hitSlop={styles.hitSlop}
+                  style={styles.todoBtn}>
+                  <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </LinearGradient>
+
+        </Modal>
       </View>
     );
   }

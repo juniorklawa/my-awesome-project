@@ -73,7 +73,7 @@ export default class New extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
-    step: 0,
+    step: 3,
     stepLength: 3
   };
 
@@ -490,10 +490,12 @@ export default class New extends Component {
 
               <View style={{ flex: 1 }}>
                 {this.state.sections.map((section, i) => (
-                  <View key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
+                  <TouchableOpacity 
+                  onLongPress={() => this.deleteSection(section)}
+                  key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
                     <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
                     <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
-                  </View>
+                  </TouchableOpacity>
                 ))}
 
                 <TouchableOpacity
@@ -538,18 +540,36 @@ export default class New extends Component {
     })
   }
 
-  // deleteSectionTodo(i) {
-  //   const newSectionTodoList = this.state.todo.filter((task, index) => index !== i)
-  //   this.setState({
-  //     todo: newSectionTodoList
-  //   })
-  // }
+  deleteSectionTodo(i) {
+    const newTodoList = this.state.todoSection.filter((task, index) => index !== i)
+    this.state.todoSection = newTodoList
+    this.forceUpdate()
+    //AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+  }
 
   deleteImage(i) {
     const newImages = this.state.previews.filter((imagePath, index) => index !== i)
     this.setState({
       previews: newImages
     })
+  }
+
+  deleteSection(clickedSection) {
+    Alert.alert(
+      'Are you sure?',
+      `You are going to delete ${clickedSection.title}`,
+      [
+        {
+          text: 'Yes', onPress: () => {
+            const newSectionList = this.state.sections.filter((section) => section.key !== clickedSection.key)
+            this.state.sections = newSectionList
+            this.forceUpdate()
+          }
+        },
+        { text: 'No', onPress: () => { return } },
+      ],
+      { cancelable: true },
+    );
   }
 
   addTodo = async () => {
@@ -880,7 +900,7 @@ export default class New extends Component {
                         title={l.task}
                         rightIcon={
                           <TouchableOpacity
-                            onPress={() => this.deleteTodo(i)}
+                            onPress={() => this.deleteSectionTodo(i)}
                             hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
                             <Icon name="delete" size={20} color="#666" solid />
                           </TouchableOpacity>
