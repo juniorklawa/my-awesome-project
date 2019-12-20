@@ -73,7 +73,7 @@ export default class New extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
-    step: 3,
+    step: 0,
     stepLength: 3
   };
 

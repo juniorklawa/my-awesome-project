@@ -592,7 +592,7 @@ export default class Details extends React.Component {
                               this.setState({ sectionModal: true })
                             }}
                             key={i}
-                            style={{ marginTop: 10, backgroundColor: '#F5F5F5', borderRadius: 5, justifyContent: 'space-between', height: 50 }}>
+                            style={{ marginTop: 10, backgroundColor: '#F5F5F5', borderRadius: 5, justifyContent: 'space-between', height: 60 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
                               <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
                               <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.filter(({ checked }) => checked === true).length}/${section.tasks.length} tasks`}</Text>
