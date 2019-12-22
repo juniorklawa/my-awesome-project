@@ -68,7 +68,7 @@ export default class ProjectCard extends Component {
 
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon name="calendar" size={15} color={"#1679D9"} style={{ marginRight: 5 }} />
+            <Icon name="calendar" size={15} color={"#8c7ae6"} style={{ marginRight: 5 }} />
             <Text
               style={[
                 iOSUIKit.subheadEmphasized,
@@ -91,13 +91,13 @@ export default class ProjectCard extends Component {
                   percent={(project.doneTasks / project.todo.length * 100)}
                   radius={40}
                   borderWidth={6}
-                  color={project.doneTasks === project.todo.length ? "#059B79" : "#1679D9"}
+                  color={project.doneTasks === project.todo.length ? "#059B79" : "#8c7ae6"}
                   shadowColor="#f0f0f0"
                   bgColor="#fff">
                   {project.doneTasks === project.todo.length ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[{ fontSize: 22, color: '#1679D9', fontFamily: 'Gilroy-Bold' }]}>
+                    <Text style={[{ fontSize: 22, color: '#8c7ae6', fontFamily: 'Gilroy-Bold' }]}>
                       {
                         project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
                       }
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Gilroy-Regular',
   },
   projectTags: {
-    color: '#1679D9',
+    color: '#8c7ae6',
     fontFamily: 'Gilroy-Bold',
     width: '60%',
     marginTop: 10

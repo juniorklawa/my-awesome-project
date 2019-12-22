@@ -258,7 +258,7 @@ export default class Edit extends Component {
     } = this.state
     return (
 
-      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#8c7ae6']}>
         <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <Overlay
@@ -295,7 +295,7 @@ export default class Edit extends Component {
 
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
-              <LinearGradient colors={['#0D4DB0', '#1679D9']}>
+              <LinearGradient colors={['#0D4DB0', '#8c7ae6']}>
                 <View style={styles.chevron}>
                   <TouchableOpacity
                     style={{ marginStart: 0 }} hitSlop={styles.hitSlop}
@@ -332,7 +332,7 @@ export default class Edit extends Component {
                         Required information
                                   </Text>
 
-                      <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
                         Project Name
                                   </Text>
                       <TextInput
@@ -347,7 +347,7 @@ export default class Edit extends Component {
                         onChangeText={title => this.setState({ title })}
                       />
 
-                      <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
                         Description
                   </Text>
                       <TextInput
@@ -371,7 +371,7 @@ export default class Edit extends Component {
                         Additional information
                    </Text>
 
-                      <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
                         Keywords
                   </Text>
 
@@ -387,7 +387,7 @@ export default class Edit extends Component {
                         onChangeText={tags => this.setState({ tags })}
                       />
 
-                      <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
                         Estimated time
                   </Text>
 
@@ -409,7 +409,7 @@ export default class Edit extends Component {
                         <View style={[styles.selectInput, styles.intervalInput]}>
                           <Picker
                             mode="dropdown"
-                            iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                            iosIcon={<Icon color='#8c7ae6' name="chevron-down" />}
                             style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
                             value={estimatedInterval}
                             onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
@@ -428,14 +428,14 @@ export default class Edit extends Component {
                         </View>
                       </View>
 
-                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
                         Category
                   </Text>
                       {
                         defaultCategory ? <View style={styles.selectInput}>
                           <Picker
                             mode="dropdown"
-                            iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                            iosIcon={<Icon color='#8c7ae6' name="chevron-down" />}
                             style={{ width: '100%' }}
                             value={category}
                             onChangeText={category => this.setState({ category })}
@@ -474,13 +474,13 @@ export default class Edit extends Component {
                           </View>
                       }
 
-                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
                         Priority
                   </Text>
                       <View style={styles.selectInput}>
                         <Picker
                           mode="dropdown"
-                          iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                          iosIcon={<Icon color='#8c7ae6' name="chevron-down" />}
                           style={{ width: '100%' }}
                           value={this.state.priority}
                           onChangeText={priority => this.setState({ priority })}
@@ -519,8 +519,8 @@ export default class Edit extends Component {
                             <TouchableOpacity
                               style={styles.newPicture}
                               onPress={() => this.handleSelectImage()}>
-                              <Icon name="image" size={35} color={"#1679D9"} style={styles.actionButtonIcon} />
-                              <Text style={{ color: '#1679D9', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                              <Icon name="image" size={35} color={"#8c7ae6"} style={styles.actionButtonIcon} />
+                              <Text style={{ color: '#8c7ae6', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                             </TouchableOpacity>
                           </View>
                         </ScrollView> :
@@ -601,7 +601,7 @@ export default class Edit extends Component {
                     onPress={() => this.addTodo()}
                     hitSlop={styles.hitSlop}
                     style={styles.todoBtn}>
-                    <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                    <Icon name="chevron-right" size={35} color="#8c7ae6" solid />
                   </TouchableOpacity>
                 </View>
                   : null
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   labelTitle: {
-    color: '#1679D9',
+    color: '#8c7ae6',
     fontSize: 16,
     fontFamily: 'Gilroy-Bold',
     marginTop: 16
@@ -758,7 +758,7 @@ const styles = StyleSheet.create({
   },
 
   shareButton: {
-    backgroundColor: '#1679D9',
+    backgroundColor: '#8c7ae6',
     borderRadius: 4,
     height: 42,
     marginVertical: 10,

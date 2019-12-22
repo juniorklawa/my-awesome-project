@@ -138,7 +138,7 @@ export default class Dashboard extends React.Component {
     const { showAlert, displayProjects, shouldReload,filterProjects } = this.state;
 
     return (
-      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+      <LinearGradient style={{ flex: 1 }} colors={['#2c3e50', '#2c3e50', '#2c3e50']}>
         <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents

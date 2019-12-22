@@ -18,7 +18,8 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import LinearGradient from 'react-native-linear-gradient';
-import { Overlay } from 'react-native-elements';
+import { Overlay, ListItem } from 'react-native-elements';
+import UUIDGenerator from 'react-native-uuid-generator';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -51,10 +52,13 @@ export default class Details extends React.Component {
     sections: [],
     visibleModal: false,
     backdrop: false,
+    newSection: false,
     imgViewerUri: '',
     sectionModal: false,
     selectedSection: null,
-    todoSectionItem: ''
+    todoSection: [],
+    todoSectionItem: '',
+    sectionTitle: ''
   };
 
   async componentDidMount() {
@@ -106,7 +110,7 @@ export default class Details extends React.Component {
             });
 
             this.state.project.isArchived = !this.state.project.isArchived
-            AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+            this.save()
             this.props.navigation.navigate('Dashboard', { isFirst: true });
           }
         },
@@ -140,10 +144,40 @@ export default class Details extends React.Component {
             type: "default",
           });
         }
-        AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+        this.save()
         this.forceUpdate()
       }
     });
+  }
+
+  async save() {
+    await AsyncStorage.setItem(
+      'keyProjects',
+      JSON.stringify(this.state.projects),
+    );
+  }
+
+  handleSectionSubmit = async () => {
+    if (this.state.sectionTitle === '') {
+      this.bounce()
+      showMessage({
+        message: 'Title is obligatory',
+        type: "warning",
+      });
+      return
+    }
+    this.state.project.sections.push({
+      title: this.state.sectionTitle,
+      tasks: this.state.todoSection,
+      key: await UUIDGenerator.getRandomUUID()
+    })
+    this.setState({
+      todoSection: [],
+      sectionTitle: ''
+    })
+    console.log('sections', this.state.sections)
+    this.setState({ newSection: false })
+    this.save()
   }
 
 
@@ -206,21 +240,27 @@ export default class Details extends React.Component {
       this.state.project.doneTasks--
     }
     this.state.project.todo = this.state.todo
-    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+    this.save()
   }
 
   deleteSectionTodo(i) {
     const newTodoList = this.state.selectedSection.tasks.filter((task, index) => index !== i)
     this.state.selectedSection.tasks = newTodoList
     this.forceUpdate()
-    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+    this.save()
+  }
+
+  deleteNewSectionTodo(i) {
+    const newTodoList = this.state.todoSection.filter((task, index) => index !== i)
+    this.state.todoSection = newTodoList
+    this.forceUpdate()
   }
 
   deleteImage(i) {
     try {
       this.state.project.images = this.state.project.images.filter((imagePath, index) => index !== i)
       this.forceUpdate()
-      AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+      this.save()
 
     } catch (e) {
       console.log(e)
@@ -253,6 +293,28 @@ export default class Details extends React.Component {
     AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
   };
 
+  addNewSectionTodo = async () => {
+
+    if (this.state.todoSectionItem === '') {
+      this.bounce()
+      showMessage({
+        message: 'Task description is obligatory',
+        type: "warning",
+      });
+      return
+    }
+
+    this.state.todoSection.push({
+      task: this.state.todoSectionItem,
+      checked: false,
+    });
+
+    this.setState({
+      todoSectionItem: '',
+    });
+    this.save()
+  };
+
   deleteSection(clickedSection) {
     Alert.alert(
       'Are you sure?',
@@ -263,7 +325,7 @@ export default class Details extends React.Component {
             const newSectionList = this.state.project.sections.filter((section) => section.key !== clickedSection.key)
             this.state.project.sections = newSectionList
             this.forceUpdate()
-            AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+            this.save()
           }
         },
         { text: 'No', onPress: () => { return } },
@@ -307,7 +369,7 @@ export default class Details extends React.Component {
     this.setState({
       isVisible: false
     })
-    AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
+    this.save()
   };
 
 
@@ -331,7 +393,7 @@ export default class Details extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
-        <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+        <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#8c7ae6']}>
           <SafeAreaView style={{ flex: 1 }}>
 
             <Overlay
@@ -418,7 +480,7 @@ export default class Details extends React.Component {
               <View key={key} style={styles.container}>
                 {showAlert
                   ?
-                  <View style={{ marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                  <View style={{ marginHorizontal: 20, borderRadius: 5, marginTop: 20 }}>
                     <ShimmerPlaceHolder style={[styles.placeHolder, { height: 300 }]} autoRun={true} />
                     <ShimmerPlaceHolder style={[styles.placeHolder, { height: 200 }]} autoRun={true} />
                     <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
@@ -487,7 +549,7 @@ export default class Details extends React.Component {
                 {
 
                   images ?
-                    <Animatable.View animation="fadeInRight" duration={500} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20 }}>
+                    <Animatable.View animation="fadeInRight" duration={500} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20 }}>
                       <View style={{ margin: 20 }}>
                         <Text
                           style={styles.divTitle}>
@@ -512,8 +574,8 @@ export default class Details extends React.Component {
                             <TouchableOpacity
                               style={styles.newPicture}
                               onPress={() => this.handleSelectImage()}>
-                              <Icon name="image" size={35} color={"#1679D9"} />
-                              <Text style={{ color: '#1679D9', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                              <Icon name="image" size={35} color={"#8c7ae6"} />
+                              <Text style={{ color: '#8c7ae6', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                             </TouchableOpacity>
 
 
@@ -526,7 +588,8 @@ export default class Details extends React.Component {
 
                 {this.state.todo.length > 0 ?
                   <View style={{ flex: 1 }}>
-                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
+                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
+
                       <View style={{ margin: 20 }}>
                         <Text style={styles.divTitle}>To-do</Text>
                         {this.state.todo.map((task, i) => (
@@ -575,12 +638,23 @@ export default class Details extends React.Component {
                           />
                         ))}
                       </View>
+                      <View style={{marginBottom:0}}>
+                        <Progress.Bar
+                          progress={this.state.project.todo.length > 0 ? this.state.project.todo.filter(({ checked }) => checked === true).length / this.state.project.todo.length : 0}
+                          color={'#27ae60'}
+                          animated
+                          borderWidth={0}
+                          borderRadius={5}
+                          unfilledColor={'#ecf0f1'}
+                          width={null} />
+                      </View>
                     </Animatable.View>
+
                   </View> : null}
 
                 {this.state.project.sections && this.state.project.sections.length > 0 ?
                   <View style={{ flex: 1 }}>
-                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 5, marginBottom: 20 }}>
+                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 5, marginBottom: 20 }}>
                       <View style={{ margin: 20 }}>
                         <Text style={styles.divTitle}>Sections</Text>
 
@@ -599,7 +673,7 @@ export default class Details extends React.Component {
                             </View>
                             <View style={{ justifyContent: 'flex-end', marginTop: 0, width: '100%' }}>
                               <Progress.Bar
-                                progress={section.tasks.filter(({ checked }) => checked === true).length / section.tasks.length}
+                                progress={section.tasks.length > 0 ? section.tasks.filter(({ checked }) => checked === true).length / section.tasks.length : 0}
                                 color={'#27ae60'}
                                 animated
                                 borderWidth={0}
@@ -630,13 +704,108 @@ export default class Details extends React.Component {
                 <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
               </ActionButton.Item>
 
-              <ActionButton.Item buttonColor='#1abc9c' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
+              <ActionButton.Item buttonColor='#8c7ae6' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
                 backdrop: true
               })}>
                 <Icon name="check" style={styles.actionButtonIcon} />
               </ActionButton.Item>
 
+              <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New Section" onPress={() => this.setState({ newSection: true })}>
+                <Icon name="ballot" style={styles.actionButtonIcon} />
+              </ActionButton.Item>
+
             </ActionButton>
+
+            <Backdrop
+              visible={this.state.newSection}
+              //handleOpen={() => { }}
+              //handleClose={handleClose}
+              //closedHeight={32}
+              onClose={() => { this.setState({ newSection: false }) }}
+              swipeConfig={{
+                velocityThreshold: 0.3,
+                directionalOffsetThreshold: 80,
+              }}
+              animationConfig={{
+                speed: 14,
+                bounciness: 4,
+              }}
+              overlayColor="rgba(0,0,0,0.32)"
+              backdropStyle={{
+                backgroundColor: '#fff',
+              }}>
+
+              <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
+                <View style={[styles.card]}>
+                  <Text style={[styles.fieldTitle]}>
+                    Section Title
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCorrect={false}
+                    autoCapitalize="sentences"
+                    placeholderTextColor="#999"
+                    value={this.state.sectionTitle}
+                    placeholder="Ex: Version 1.0, Design, Test..."
+                    onChangeText={sectionTitle =>
+                      this.setState({ sectionTitle })
+                    }
+                  />
+                  <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
+                    Section To-do
+                  </Text>
+                  <View>
+                    {this.state.todoSection && this.state.todoSection.map((l, i) => (
+                      <ListItem
+                        containerStyle={styles.todoContainer}
+                        key={i}
+                        title={l.task}
+                        rightIcon={
+                          <TouchableOpacity
+                            onPress={() => this.deleteNewSectionTodo(i)}
+                            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                            <Icon name="delete" size={20} color="#666" solid />
+                          </TouchableOpacity>
+                        }
+                      />
+                    ))}
+
+                    <View
+                      style={{
+                        marginTop: 5,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginHorizontal: 0
+                      }}>
+                      <TextInput
+                        style={[styles.input, { flex: 10 }]}
+                        autoCorrect={false}
+                        autoCapitalize='sentences'
+                        placeholder="Add new section todo"
+                        onSubmitEditing={() => this.addNewSectionTodo()}
+                        placeholderTextColor="#999"
+                        value={this.state.todoSectionItem}
+                        onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
+                      />
+                      <TouchableOpacity
+                        onPress={() => this.addNewSectionTodo()}
+                        hitSlop={styles.hitSlop}
+                        style={styles.todoBtn}>
+                        <Icon name="chevron-right" size={35} color="#8c7ae6" solid />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={[styles.shareButton, { backgroundColor: '#8c7ae6', width: '100%' }]}
+                  onPress={() => this.handleSectionSubmit()}>
+                  <Text style={[styles.shareButtonText]}>Create new section</Text>
+                </TouchableOpacity>
+
+              </View>
+
+            </Backdrop>
 
           </SafeAreaView>
         </LinearGradient>
@@ -728,7 +897,7 @@ export default class Details extends React.Component {
           onRequestClose={() => {
             this.setState({ sectionModal: false })
           }}>
-          <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
+          <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#8c7ae6']}>
             <Animatable.View animation="fadeInLeft" style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginTop: 30 }}>
 
               {this.state.selectedSection && <Text
@@ -818,7 +987,7 @@ export default class Details extends React.Component {
                   onPress={() => this.addSectionTodo()}
                   hitSlop={styles.hitSlop}
                   style={styles.todoBtn}>
-                  <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                  <Icon name="chevron-right" size={35} color="#8c7ae6" solid />
                 </TouchableOpacity>
               </View>
             </View>
@@ -836,7 +1005,7 @@ const styles = StyleSheet.create({
   },
   category: {
     fontFamily: 'Gilroy-Bold',
-    color: '#1679D9',
+    color: '#8c7ae6',
   },
   projectContainer: {
     padding: 20,
@@ -846,8 +1015,20 @@ const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: '#fff',
     marginHorizontal: 20,
-    borderRadius: 15,
+    borderRadius: 5,
     marginTop: 20
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    margin: 10,
+    width: '100%'
+  },
+  fieldTitle: {
+    color: '#4b4b4b',
+    fontSize: 24,
+    fontFamily: 'Gilroy-Bold'
   },
   newPicture: {
     borderColor: '#eee',
@@ -865,6 +1046,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFF',
   },
+  todoContainer: {
+    //marginRight: 50,
+    backgroundColor: '#ECEFF1',
+    borderRadius: 4, marginTop: 2,
+    marginBottom: 2
+  },
   preview: {
     width: 100,
     height: 100,
@@ -879,7 +1066,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Gilroy-Bold'
   },
   shareButton: {
-    backgroundColor: '#1679D9',
+    backgroundColor: '#8c7ae6',
     borderRadius: 4,
     height: 42,
     marginTop: 15,
@@ -904,7 +1091,7 @@ const styles = StyleSheet.create({
     height: 150
   },
   tags: {
-    color: '#1679D9',
+    color: '#8c7ae6',
     fontFamily: 'Gilroy-Bold'
   },
 
