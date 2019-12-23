@@ -10,6 +10,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import LottieView from 'lottie-react-native';
 import * as Animatable from 'react-native-animatable'
 import { Backdrop } from "react-native-backdrop";
+import { themes, theme } from '../components/themesProvider'
 import moment from 'moment';
 import {
   View,
@@ -74,6 +75,7 @@ export default class New extends Component {
     priorityLabel: false,
     projectId: null,
     step: 0,
+    themeKey: null,
     stepLength: 3
   };
 
@@ -82,6 +84,8 @@ export default class New extends Component {
   };
 
   componentDidMount = async () => {
+    const key = this.props.navigation.getParam('themeKey', 'NO-THEME-KEY')
+    this.setState({ themeKey: key })
     const projectId = this.props.navigation.getParam('projectId', null);
     if (projectId !== null) {
 
@@ -171,7 +175,8 @@ export default class New extends Component {
       isArchived,
       doneTasks,
       previews,
-      defaultCategory
+      defaultCategory,
+      themeKey
     } = this.state
 
     //this.switchText(step)
@@ -188,7 +193,7 @@ export default class New extends Component {
                 Required information
             </Text>
 
-              <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+              <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                 Project Name
             </Text>
               <TextInput
@@ -203,7 +208,7 @@ export default class New extends Component {
                 onChangeText={title => this.setState({ title })}
               />
 
-              <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+              <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                 Description
             </Text>
               <TextInput
@@ -233,7 +238,7 @@ export default class New extends Component {
               Additional information
             </Text>
 
-            <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+            <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
               Keywords
             </Text>
 
@@ -249,7 +254,7 @@ export default class New extends Component {
               onChangeText={tags => this.setState({ tags })}
             />
 
-            <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+            <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
               Estimated time
             </Text>
 
@@ -271,7 +276,7 @@ export default class New extends Component {
               <View style={[styles.selectInput, styles.intervalInput]}>
                 <Picker
                   mode="dropdown"
-                  iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                  iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
                   style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
                   value={estimatedInterval}
                   onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
@@ -279,7 +284,7 @@ export default class New extends Component {
                   selectedValue={estimatedInterval}
                   onValueChange={estimatedInterval => this.setState({ estimatedInterval })}
                   placeholderStyle={{ color: "#bfc6ea" }}
-                  placeholderIconColor="#007aff">
+                  placeholderIconColor={themes[themeKey].accentColor}>
 
                   <Picker.Item label="day(s)" value="day(s)" />
                   <Picker.Item label="week(s)" value="week(s)" />
@@ -290,14 +295,14 @@ export default class New extends Component {
               </View>
             </View>
 
-            <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+            <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
               Category
             </Text>
             {
               defaultCategory ? <View style={styles.selectInput}>
                 <Picker
                   mode="dropdown"
-                  iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                  iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
                   style={{ width: '100%' }}
                   value={category}
                   onChangeText={category => this.setState({ category })}
@@ -312,7 +317,7 @@ export default class New extends Component {
                     }
                   }}
                   placeholderStyle={{ color: "#bfc6ea" }}
-                  placeholderIconColor="#007aff"
+                  placeholderIconColor={themes[themeKey].accentColor}
                 >
                   <Picker.Item label="Application" value="Application" />
                   <Picker.Item label="Website" value="Website" />
@@ -336,13 +341,13 @@ export default class New extends Component {
                 </View>
             }
 
-            <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#1679D9' }]}>
+            <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
               Priority
             </Text>
             <View style={styles.selectInput}>
               <Picker
                 mode="dropdown"
-                iosIcon={<Icon color='#1679D9' name="chevron-down" />}
+                iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
                 style={{ width: '100%' }}
                 value={this.state.priority}
                 onChangeText={priority => this.setState({ priority })}
@@ -350,7 +355,7 @@ export default class New extends Component {
                 selectedValue={this.state.priority}
                 onValueChange={priority => this.setState({ priority })}
                 placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
+                placeholderIconColor={themes[themeKey].accentColor}
               >
                 <Picker.Item label="None" value="None" />
                 <Picker.Item label="High" value="High" />
@@ -389,8 +394,8 @@ export default class New extends Component {
                   <TouchableOpacity
                     style={styles.newPicture}
                     onPress={() => this.handleSelectImage()}>
-                    <Icon name="image" size={35} color={"#1679D9"} style={styles.actionButtonIcon} />
-                    <Text style={{ color: '#1679D9', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                    <Icon name="image" size={35} color={themes[themeKey].accentColor} style={styles.actionButtonIcon} />
+                    <Text style={{ color:themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                   </TouchableOpacity>
                 </View>
               </ScrollView> :
@@ -470,7 +475,7 @@ export default class New extends Component {
                     onPress={() => this.addTodo()}
                     hitSlop={styles.hitSlop}
                     style={styles.todoBtn}>
-                    <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                    <Icon name="chevron-right" size={35} color={themes[themeKey].accentColor} solid />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -490,9 +495,9 @@ export default class New extends Component {
 
               <View style={{ flex: 1 }}>
                 {this.state.sections.map((section, i) => (
-                  <TouchableOpacity 
-                  onLongPress={() => this.deleteSection(section)}
-                  key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
+                  <TouchableOpacity
+                    onLongPress={() => this.deleteSection(section)}
+                    key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
                     <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
                     <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
                   </TouchableOpacity>
@@ -505,7 +510,7 @@ export default class New extends Component {
                     borderRadius: 4,
                     padding: 8,
                     marginHorizontal: 0,
-                    backgroundColor: '#1679D9',
+                    backgroundColor: themes[themeKey].accentColor,
                     justifyContent: 'center',
                     alignItems: 'center'
                   }}>
@@ -745,12 +750,14 @@ export default class New extends Component {
   }
 
   render() {
+    const { themeKey } = this.state
     StatusBar.setBarStyle('light-content', true);
 
     return (
-
-      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#1679D9']}>
-        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
+      themeKey &&
+      < LinearGradient style={{ flex: 1 }
+      } colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]} >
+        <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <Overlay
             height={200}
@@ -836,7 +843,7 @@ export default class New extends Component {
                 </View>
               </ScrollView>
               <TouchableOpacity
-                style={styles.shareButton}
+                style={[styles.shareButton,{backgroundColor:themes[themeKey].secondaryColor}]}
                 onPress={() => this.handleSubmit()}>
                 <Text style={styles.shareButtonText}>{this.state.step < this.state.stepLength ? 'Next step' : 'Create new project'}</Text>
               </TouchableOpacity>
@@ -845,7 +852,7 @@ export default class New extends Component {
               animationType="slide"
               transparent={false}
               visible={this.state.finishModal}>
-              <View style={{ flex: 1, backgroundColor: '#0D4DB0', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ flex: 1, backgroundColor: themes[themeKey].backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
                 <LottieView style={{ height: 150, width: '50%' }} source={require('../icons/animation.json')} autoPlay />
                 <Animatable.View duration={800} animation='fadeInUpBig'>
                   <Text style={{ fontFamily: 'Gilroy-Bold', color: '#fff', fontSize: 25 }} animation='fadeIn'>Project created!</Text>
@@ -930,13 +937,13 @@ export default class New extends Component {
                         onPress={() => this.addSectionTodo()}
                         hitSlop={styles.hitSlop}
                         style={styles.todoBtn}>
-                        <Icon name="chevron-right" size={35} color="#1679D9" solid />
+                        <Icon name="chevron-right" size={35} color={themes[themeKey].accentColor} solid />
                       </TouchableOpacity>
                     </View>
                   </View>
                 </View>
                 <TouchableOpacity
-                  style={[styles.shareButton, { backgroundColor: '#1679D9', width: '100%' }]}
+                  style={[styles.shareButton, { backgroundColor: themes[themeKey].accentColor, width: '100%' }]}
                   onPress={() => this.handleSectionSubmit()}>
                   <Text style={[styles.shareButtonText]}>Create new section</Text>
                 </TouchableOpacity>

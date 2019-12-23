@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import { Badge } from 'react-native-elements'
 import moment from 'moment';
-
+import { themes } from '../components/themesProvider'
 
 export default class ProjectCard extends Component {
 
@@ -36,7 +36,7 @@ export default class ProjectCard extends Component {
 
 
   async goToProjectDetails(id) {
-    this.props.navigation.navigate('Details', { projectId: id, otherParam: id });
+    this.props.navigation.navigate('Details', { projectId: id, themeKey: this.props.themeKey });
   }
 
   async goToEdit(id) {
@@ -44,7 +44,7 @@ export default class ProjectCard extends Component {
   }
 
   render() {
-    const { project } = this.props
+    const { project, themeKey } = this.props
     return (
       <TouchableWithoutFeedback
         onPress={() => this.goToProjectDetails(project.key)}>
@@ -68,7 +68,7 @@ export default class ProjectCard extends Component {
 
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon name="calendar" size={15} color={"#8c7ae6"} style={{ marginRight: 5 }} />
+            <Icon name="calendar" size={15} color={themes[themeKey].accentColor} style={{ marginRight: 5 }} />
             <Text
               style={[
                 iOSUIKit.subheadEmphasized,
@@ -81,7 +81,7 @@ export default class ProjectCard extends Component {
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
           {
-            project.tags ? <Text style={styles.projectTags}>{project.tags}</Text> : null
+            project.tags ? <Text style={[styles.projectTags, { color: themes[themeKey].accentColor }]}>{project.tags}</Text> : null
           }
 
           {
@@ -91,13 +91,13 @@ export default class ProjectCard extends Component {
                   percent={(project.doneTasks / project.todo.length * 100)}
                   radius={40}
                   borderWidth={6}
-                  color={project.doneTasks === project.todo.length ? "#059B79" : "#8c7ae6"}
+                  color={project.doneTasks === project.todo.length ? "#059B79" : themes[themeKey].accentColor}
                   shadowColor="#f0f0f0"
                   bgColor="#fff">
                   {project.doneTasks === project.todo.length ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[{ fontSize: 22, color: '#8c7ae6', fontFamily: 'Gilroy-Bold' }]}>
+                    <Text style={[{ fontSize: 22, color: themes[themeKey].accentColor, fontFamily: 'Gilroy-Bold' }]}>
                       {
                         project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
                       }
@@ -111,6 +111,7 @@ export default class ProjectCard extends Component {
     );
   }
 }
+
 
 
 const styles = StyleSheet.create({

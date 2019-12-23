@@ -8,6 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import UUIDGenerator from 'react-native-uuid-generator';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import { themes, theme } from '../components/themesProvider'
 import moment from 'moment';
 import {
   View,
@@ -56,6 +57,7 @@ export default class Edit extends Component {
     categoryLabel: false,
     priorityLabel: false,
     projectId: null,
+    themeKey: null,
 
   };
 
@@ -64,6 +66,8 @@ export default class Edit extends Component {
   };
 
   componentDidMount = async () => {
+    const key = this.props.navigation.getParam('themeKey', 'NO-THEME-KEY')
+    this.setState({ themeKey: key })
     this.setState({ showAlert: true })
     const projectId = this.props.navigation.getParam('projectId', null);
     if (projectId !== null) {
@@ -254,12 +258,13 @@ export default class Edit extends Component {
       isArchived,
       doneTasks,
       previews,
-      defaultCategory
+      defaultCategory,
+      themeKey
     } = this.state
     return (
-
-      <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#8c7ae6']}>
-        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
+      themeKey &&
+      <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
+        <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <Overlay
             height={200}
@@ -295,7 +300,7 @@ export default class Edit extends Component {
 
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
-              <LinearGradient colors={['#0D4DB0', '#8c7ae6']}>
+              <LinearGradient colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
                 <View style={styles.chevron}>
                   <TouchableOpacity
                     style={{ marginStart: 0 }} hitSlop={styles.hitSlop}
@@ -332,7 +337,7 @@ export default class Edit extends Component {
                         Required information
                                   </Text>
 
-                      <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                         Project Name
                                   </Text>
                       <TextInput
@@ -347,7 +352,7 @@ export default class Edit extends Component {
                         onChangeText={title => this.setState({ title })}
                       />
 
-                      <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                         Description
                   </Text>
                       <TextInput
@@ -371,7 +376,7 @@ export default class Edit extends Component {
                         Additional information
                    </Text>
 
-                      <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                         Keywords
                   </Text>
 
@@ -387,7 +392,7 @@ export default class Edit extends Component {
                         onChangeText={tags => this.setState({ tags })}
                       />
 
-                      <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                         Estimated time
                   </Text>
 
@@ -409,7 +414,7 @@ export default class Edit extends Component {
                         <View style={[styles.selectInput, styles.intervalInput]}>
                           <Picker
                             mode="dropdown"
-                            iosIcon={<Icon color='#8c7ae6' name="chevron-down" />}
+                            iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
                             style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
                             value={estimatedInterval}
                             onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
@@ -417,7 +422,7 @@ export default class Edit extends Component {
                             selectedValue={estimatedInterval}
                             onValueChange={estimatedInterval => this.setState({ estimatedInterval })}
                             placeholderStyle={{ color: "#bfc6ea" }}
-                            placeholderIconColor="#007aff">
+                            placeholderIconColor={themes[themeKey].accentColor}>
 
                             <Picker.Item label="day(s)" value="day(s)" />
                             <Picker.Item label="week(s)" value="week(s)" />
@@ -428,14 +433,14 @@ export default class Edit extends Component {
                         </View>
                       </View>
 
-                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                         Category
                   </Text>
                       {
                         defaultCategory ? <View style={styles.selectInput}>
                           <Picker
                             mode="dropdown"
-                            iosIcon={<Icon color='#8c7ae6' name="chevron-down" />}
+                            iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
                             style={{ width: '100%' }}
                             value={category}
                             onChangeText={category => this.setState({ category })}
@@ -474,13 +479,13 @@ export default class Edit extends Component {
                           </View>
                       }
 
-                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : '#8c7ae6' }]}>
+                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
                         Priority
                   </Text>
                       <View style={styles.selectInput}>
                         <Picker
                           mode="dropdown"
-                          iosIcon={<Icon color='#8c7ae6' name="chevron-down" />}
+                          iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
                           style={{ width: '100%' }}
                           value={this.state.priority}
                           onChangeText={priority => this.setState({ priority })}
@@ -488,7 +493,7 @@ export default class Edit extends Component {
                           selectedValue={this.state.priority}
                           onValueChange={priority => this.setState({ priority })}
                           placeholderStyle={{ color: "#bfc6ea" }}
-                          placeholderIconColor="#007aff"
+                          placeholderIconColor={themes[themeKey].accentColor}
                         >
                           <Picker.Item label="None" value="None" />
                           <Picker.Item label="High" value="High" />
@@ -496,7 +501,7 @@ export default class Edit extends Component {
                           <Picker.Item label="Low" value="Low" />
                         </Picker>
                       </View>
-                      <Text style={styles.labelTitle}>
+                      <Text style={[styles.labelTitle,{color:themes[themeKey].accentColor}]}>
                         Pictures
                   </Text>
 
@@ -517,10 +522,10 @@ export default class Edit extends Component {
                               </TouchableOpacity>
                             ))}
                             <TouchableOpacity
-                              style={styles.newPicture}
+                              style={[styles.newPicture,{color:themes[themeKey].accentColor}]}
                               onPress={() => this.handleSelectImage()}>
-                              <Icon name="image" size={35} color={"#8c7ae6"} style={styles.actionButtonIcon} />
-                              <Text style={{ color: '#8c7ae6', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                              <Icon name="image" size={35} color={themes[themeKey].accentColor} style={styles.actionButtonIcon} />
+                              <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                             </TouchableOpacity>
                           </View>
                         </ScrollView> :
@@ -608,9 +613,9 @@ export default class Edit extends Component {
               }
 
               <TouchableOpacity
-                style={styles.shareButton}
+                style={[styles.shareButton,{backgroundColor:themes[themeKey].backgroundColor}]}
                 onPress={() => this.handleSubmit()}>
-                <Text style={styles.shareButtonText}>{'Update project'}</Text>
+                <Text style={[styles.shareButtonText]}>{'Update project'}</Text>
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>

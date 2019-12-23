@@ -29,6 +29,7 @@ import { Backdrop } from "react-native-backdrop";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import * as Progress from 'react-native-progress';
+import { themes, theme } from '../components/themesProvider'
 import moment from 'moment';
 
 export default class Details extends React.Component {
@@ -58,14 +59,20 @@ export default class Details extends React.Component {
     selectedSection: null,
     todoSection: [],
     todoSectionItem: '',
-    sectionTitle: ''
+    sectionTitle: '',
+    themeKey: null,
   };
 
   async componentDidMount() {
+    const key = this.props.navigation.getParam('themeKey', 'NO-THEME-KEY')
+    this.setState({ themeKey: key })
+
     this.showAlert()
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('keyProjects');
     const projects = (await JSON.parse(data)) || [];
+    console.log('key:', key)
+
     await this.setState({
       projects: projects,
     });
@@ -376,7 +383,7 @@ export default class Details extends React.Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-    const { showAlert } = this.state;
+    const { showAlert, themeKey } = this.state;
     const {
       key,
       title,
@@ -386,14 +393,15 @@ export default class Details extends React.Component {
       category,
       worktime,
       date,
-      images
+      images,
     } = this.state.project;
 
 
     return (
+      themeKey &&
       <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
-        <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#8c7ae6']}>
+        <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
+        <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
           <SafeAreaView style={{ flex: 1 }}>
 
             <Overlay
@@ -503,7 +511,7 @@ export default class Details extends React.Component {
                           style={styles.divTitle}>
                           Tags
                     </Text>
-                        <Text style={styles.tags}>{tags}</Text>
+                        <Text style={[styles.tags, { color: themes[themeKey].accentColor }]}>{tags}</Text>
                       </View> : null}
                       <Text
                         style={styles.divTitle}>
@@ -574,8 +582,8 @@ export default class Details extends React.Component {
                             <TouchableOpacity
                               style={styles.newPicture}
                               onPress={() => this.handleSelectImage()}>
-                              <Icon name="image" size={35} color={"#8c7ae6"} />
-                              <Text style={{ color: '#8c7ae6', fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                              <Icon name="image" size={35} color={themes[themeKey].accentColor} />
+                              <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                             </TouchableOpacity>
 
 
@@ -638,7 +646,7 @@ export default class Details extends React.Component {
                           />
                         ))}
                       </View>
-                      <View style={{marginBottom:0}}>
+                      <View style={{ marginBottom: 0 }}>
                         <Progress.Bar
                           progress={this.state.project.todo.length > 0 ? this.state.project.todo.filter(({ checked }) => checked === true).length / this.state.project.todo.length : 0}
                           color={'#27ae60'}
@@ -693,14 +701,14 @@ export default class Details extends React.Component {
 
             <ActionButton
               style={{ marginBottom: 15 }}
-              buttonColor="#4DB00D"
+              buttonColor={themes[themeKey].actionButtonColor}
             >
 
               <ActionButton.Item buttonColor='#00897B' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
                 <Icon name="archive" style={styles.actionButtonIcon} />
               </ActionButton.Item>
 
-              <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key })}>
+              <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
                 <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
               </ActionButton.Item>
 
@@ -897,7 +905,7 @@ export default class Details extends React.Component {
           onRequestClose={() => {
             this.setState({ sectionModal: false })
           }}>
-          <LinearGradient style={{ flex: 1 }} colors={['#0D4DB0', '#0E56B9', '#8c7ae6']}>
+          <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
             <Animatable.View animation="fadeInLeft" style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginTop: 30 }}>
 
               {this.state.selectedSection && <Text
@@ -966,7 +974,7 @@ export default class Details extends React.Component {
                 </View>
               </Animatable.View>
             </ScrollView>
-            <View style={{ backgroundColor: '#eee', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+            <View style={{ backgroundColor: themes[themeKey].backgroundColor, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -987,7 +995,7 @@ export default class Details extends React.Component {
                   onPress={() => this.addSectionTodo()}
                   hitSlop={styles.hitSlop}
                   style={styles.todoBtn}>
-                  <Icon name="chevron-right" size={35} color="#8c7ae6" solid />
+                  <Icon name="chevron-right" size={35} color={themes[themeKey].accentColor} solid />
                 </TouchableOpacity>
               </View>
             </View>

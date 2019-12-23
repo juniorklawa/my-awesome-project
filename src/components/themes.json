@@ -1,0 +1,43 @@
+
+[
+  {
+    "key": "DEFAULT",
+    "backgroundColor": "#0D4DB0",
+    "actionButtonColor":"#0DB070"
+  },
+  {
+    "key": "DEFAULT",
+    "backgroundColor": "#0D4DB0",
+    "actionButtonColor":"#0DB070",
+    "accentColor" : "#1679D9",
+    "secondaryColor" : "#0DB070"
+  },
+  {
+    "key": "MIDNIGHT",
+    "backgroundColor": "#011627",
+    "actionButtonColor":"#0DB070",
+    "accentColor" : "#40739e",
+    "secondaryColor" : "#0DB070"
+  },
+  {
+    "key": "DRACULA",
+    "backgroundColor": "#5f27cd",
+    "actionButtonColor":"#341f97",
+    "accentColor" : "#8c7ae6",
+    "secondaryColor" : "#341f97"
+  },
+  {
+    "key": "GREEN",
+    "backgroundColor": "#6ab04c",
+    "actionButtonColor":"#218c74",
+    "accentColor" : "#16a085",
+    "secondaryColor" : "#218c74"
+  },
+  {
+    "key": "BLACK",
+    "backgroundColor": "#000",
+    "actionButtonColor":"#546E7A",
+    "accentColor" : "#546E7A",
+    "secondaryColor" : "#546E7A"
+  }
+]

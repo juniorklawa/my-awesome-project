@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  Modal
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import ActionButton from 'react-native-action-button';
@@ -21,6 +22,7 @@ import { NavigationEvents } from 'react-navigation';
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
 import Placeholder from '../components/Placeholder'
+import { themes, theme } from '../components/themesProvider'
 
 
 export default class Dashboard extends React.Component {
@@ -30,7 +32,9 @@ export default class Dashboard extends React.Component {
     showAlert: false,
     hideIcon: 'eye',
     filterProjects: false,
-    shouldReload: false
+    shouldReload: false,
+    themeKey: 1,
+    modal: false
   };
 
   handleViewRef = ref => this.view = ref;
@@ -41,7 +45,23 @@ export default class Dashboard extends React.Component {
     header: null,
   };
 
+
+  async themeChange(key){
+    await AsyncStorage.setItem(
+      'themeKey',
+      JSON.stringify(key),
+    );
+    this.setState({themeKey:key})
+  }
+
+
+
   async componentDidMount() {
+
+    const themeKeyData = await AsyncStorage.getItem('themeKey');
+    const key = (await JSON.parse(themeKeyData)) || null
+    this.setState({ themeKey: key })
+
     this.showAlert()
     try {
       await this._retrieveData();
@@ -104,12 +124,17 @@ export default class Dashboard extends React.Component {
   async _retrieveData() {
     try {
       const data = await AsyncStorage.getItem('keyProjects');
+      const themeKeyData = await AsyncStorage.getItem('themeKey');
+      const key = (await JSON.parse(themeKeyData)) || null
       const projects = (await JSON.parse(data)) || [];
       const filteredProjects = projects.filter((project) => !project.isArchived)
       await this.setState({
         projects: projects,
-        displayProjects: filteredProjects
+        displayProjects: filteredProjects,
       });
+
+
+      console.log('KEY: ', this.state.themeKey)
 
     } catch (e) {
       console.error(e)
@@ -135,11 +160,11 @@ export default class Dashboard extends React.Component {
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-    const { showAlert, displayProjects, shouldReload,filterProjects } = this.state;
+    const { showAlert, displayProjects, shouldReload, filterProjects, themeKey } = this.state;
 
     return (
-      <LinearGradient style={{ flex: 1 }} colors={['#2c3e50', '#2c3e50', '#2c3e50']}>
-        <StatusBar backgroundColor="#0D4DB0" barStyle="light-content" />
+      <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
+        <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationEvents
             onWillFocus={() => {
@@ -147,8 +172,8 @@ export default class Dashboard extends React.Component {
               this.setState({ shouldReload: param })
               this._retrieveData()
               if (param) {
-                this.setState({hideIcon:'eye'})
-                this.setState({filterProjects:false})
+                this.setState({ hideIcon: 'eye' })
+                this.setState({ filterProjects: false })
                 this.showAlert()
                 this.hideAlert()
                 this.fadeInUp()
@@ -162,7 +187,10 @@ export default class Dashboard extends React.Component {
             </Text>
             {
               <TouchableOpacity style={styles.filter} hitSlop={styles.filterHitSlop}
-                onPress={() => this.filterProjects()}>
+                onPress={async () => {
+                  this.filterProjects()
+                  this.forceUpdate()
+                }}>
                 <Icon name={this.state.hideIcon} size={28} color="#fff" solid />
               </TouchableOpacity>
             }
@@ -180,7 +208,7 @@ export default class Dashboard extends React.Component {
                       displayProjects.length > 0 && showAlert === false ?
                       displayProjects.map((project, i) =>
                         (
-                          <ProjectCard navigation={this.props.navigation} key={i} project={project} />
+                          <ProjectCard navigation={this.props.navigation} themeKey={themeKey} key={i} project={project} />
                         )
                       ) :
                       <View
@@ -222,17 +250,91 @@ export default class Dashboard extends React.Component {
             </View>
           </ScrollView>
           <ActionButton
-            buttonColor="#0DB070"
+            buttonColor={themes[themeKey].actionButtonColor}
           >
+
+            <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#455A64' title='Settings' onPress={() => this.setState({ modal: true })}>
+              <Icon size={25} name="settings" color={'#fff'} />
+            </ActionButton.Item>
+
             <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#B00D17' title='Delete all data' onPress={() => this.deleteAll()}>
               <Icon size={25} name="delete" color={'#fff'} />
             </ActionButton.Item>
 
-            <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#4DB00D' title="New Project" onPress={() => this.props.navigation.navigate('Add')}>
+            <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#4DB00D' title="New Project" onPress={() => this.props.navigation.navigate('Add', { themeKey: themeKey })}>
               <Icon name="file-document" size={25} color={'#fff'} />
             </ActionButton.Item>
           </ActionButton>
         </SafeAreaView>
+
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modal}
+          onRequestClose={() => {
+            this.setState({ modal: false })
+          }}>
+          <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
+            <Animatable.View animation="fadeInLeft" style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', margin: 20 }}>
+              <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 32, color: '#fff' }}>
+                Settings
+              </Text>
+              <TouchableOpacity
+                onPress={() => this.setState({ modal: false })}
+                style={{ marginRight: 20 }}>
+                <Icon name="close" color="#fff" size={32} />
+              </TouchableOpacity>
+            </Animatable.View>
+            <ScrollView>
+              <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
+                <View style={{ margin: 20 }}>
+                  <Text style={{ fontFamily: 'Gilroy-Semibold', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
+                </View>
+
+                <TouchableOpacity 
+                onPress={() => this.themeChange(1)}
+                style={{ backgroundColor: '#0D4DB0', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
+                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                    Default
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() => this.themeChange(2)}
+                style={{ backgroundColor: '#011627', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
+                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                    Midnight
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() => this.themeChange(3)}
+                style={{ backgroundColor: '#5f27cd', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
+                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                    Purple
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() => this.themeChange(4)}
+                style={{ backgroundColor: '#6ab04c', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
+                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                    Green
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() => this.themeChange(5)}
+                style={{ backgroundColor: '#000', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
+                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                    Black
+                  </Text>
+                </TouchableOpacity>
+              </Animatable.View>
+            </ScrollView>
+            <View style={{ backgroundColor: themes[themeKey].backgroundColor, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+
+            </View>
+          </LinearGradient>
+
+
+        </Modal>
       </LinearGradient >
 
     );
