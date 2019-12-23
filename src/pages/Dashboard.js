@@ -22,7 +22,7 @@ import { NavigationEvents } from 'react-navigation';
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
 import Placeholder from '../components/Placeholder'
-import { themes, theme } from '../components/themesProvider'
+import { themes } from '../components/themesProvider'
 
 
 export default class Dashboard extends React.Component {
@@ -46,12 +46,12 @@ export default class Dashboard extends React.Component {
   };
 
 
-  async themeChange(key){
+  async themeChange(key) {
     await AsyncStorage.setItem(
       'themeKey',
       JSON.stringify(key),
     );
-    this.setState({themeKey:key})
+    this.setState({ themeKey: key })
   }
 
 
@@ -60,7 +60,12 @@ export default class Dashboard extends React.Component {
 
     const themeKeyData = await AsyncStorage.getItem('themeKey');
     const key = (await JSON.parse(themeKeyData)) || null
-    this.setState({ themeKey: key })
+    if (key) {
+      this.setState({ themeKey: key })
+    } else {
+      this.setState({ themeKey: 1 })
+    }
+
 
     this.showAlert()
     try {
@@ -163,6 +168,7 @@ export default class Dashboard extends React.Component {
     const { showAlert, displayProjects, shouldReload, filterProjects, themeKey } = this.state;
 
     return (
+      themeKey &&
       <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
         <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
@@ -291,38 +297,38 @@ export default class Dashboard extends React.Component {
                   <Text style={{ fontFamily: 'Gilroy-Semibold', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
                 </View>
 
-                <TouchableOpacity 
-                onPress={() => this.themeChange(1)}
-                style={{ backgroundColor: '#0D4DB0', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
-                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                <TouchableOpacity
+                  onPress={() => this.themeChange(1)}
+                  style={{ backgroundColor: '#0D4DB0', marginHorizontal: 20, marginBottom: 20, height: 45, borderRadius: 5, justifyContent: 'center' }}>
+                  <Text style={{ marginLeft: 16, color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 16 }}>
                     Default
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => this.themeChange(2)}
-                style={{ backgroundColor: '#011627', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
-                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                <TouchableOpacity
+                  onPress={() => this.themeChange(2)}
+                  style={{ backgroundColor: '#011627', marginHorizontal: 20, marginBottom: 20, height: 45, borderRadius: 5, justifyContent: 'center' }}>
+                  <Text style={{ marginLeft: 16, color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 16 }}>
                     Midnight
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => this.themeChange(3)}
-                style={{ backgroundColor: '#5f27cd', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
-                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                <TouchableOpacity
+                  onPress={() => this.themeChange(3)}
+                  style={{ backgroundColor: '#5f27cd', marginHorizontal: 20, marginBottom: 20, height: 45, borderRadius: 5, justifyContent: 'center' }}>
+                  <Text style={{ marginLeft: 16, color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 16 }}>
                     Purple
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => this.themeChange(4)}
-                style={{ backgroundColor: '#6ab04c', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
-                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                <TouchableOpacity
+                  onPress={() => this.themeChange(4)}
+                  style={{ backgroundColor: '#6ab04c', marginHorizontal: 20, marginBottom: 20, height: 45, borderRadius: 5, justifyContent: 'center' }}>
+                  <Text style={{ marginLeft: 16, color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 16 }}>
                     Green
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => this.themeChange(5)}
-                style={{ backgroundColor: '#000', marginHorizontal: 20, marginBottom:20, height:45, borderRadius:5, justifyContent:'center' }}>
-                  <Text style={{marginLeft:16, color:'#fff', fontFamily:'Gilroy-Bold', fontSize:16}}>
+                <TouchableOpacity
+                  onPress={() => this.themeChange(5)}
+                  style={{ backgroundColor: '#000', marginHorizontal: 20, marginBottom: 20, height: 45, borderRadius: 5, justifyContent: 'center' }}>
+                  <Text style={{ marginLeft: 16, color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 16 }}>
                     Black
                   </Text>
                 </TouchableOpacity>
