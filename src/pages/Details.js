@@ -31,6 +31,7 @@ import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import * as Progress from 'react-native-progress';
 import { themes, theme } from '../components/themesProvider'
 import moment from 'moment';
+import Banner from '../components/Banner';
 
 export default class Details extends React.Component {
 
@@ -61,6 +62,7 @@ export default class Details extends React.Component {
     todoSectionItem: '',
     sectionTitle: '',
     themeKey: null,
+    proVersion: null
   };
 
   async componentDidMount() {
@@ -92,6 +94,7 @@ export default class Details extends React.Component {
       showAlert: true
     });
   };
+
 
   hideAlert = () => {
     this.setState({
@@ -403,420 +406,425 @@ export default class Details extends React.Component {
         <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
           <SafeAreaView style={{ flex: 1 }}>
-
-            <Overlay
-              height={200}
-              overlayStyle={{ borderRadius: 10 }}
-              onBackdropPress={() => {
-                this.setState({
-                  isVisible: false
-                })
-              }}
-              isVisible={this.state.isVisible}>
-              <Text
-                style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Gilroy-Extrabold' }]}>
-                New Todo
+            <View style={{ flex: 1 }}>
+              <Overlay
+                height={200}
+                overlayStyle={{ borderRadius: 10 }}
+                onBackdropPress={() => {
+                  this.setState({
+                    isVisible: false
+                  })
+                }}
+                isVisible={this.state.isVisible}>
+                <Text
+                  style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Gilroy-Extrabold' }]}>
+                  New Todo
               </Text>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginHorizontal: 10
-                }}>
-                <TextInput
-                  style={[styles.input, { flex: 10 }]}
-                  autoCorrect={false}
-                  placeholder="Add new todo"
-                  onSubmitEditing={() => this.addTodo()}
-                  placeholderTextColor="#999"
-                  value={this.state.todoItem}
-                  onChangeText={todoItem => this.setState({ todoItem })}
-                />
-              </View>
-              <TouchableOpacity
-                style={styles.shareButton}
-                onPress={() => this.addTodo()}>
-                <Text style={styles.shareButtonText}>Add</Text>
-              </TouchableOpacity>
-
-            </Overlay>
-            <View >
-              <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
-                  <Icon name="chevron-left" size={45} color="#fff" solid />
-                </TouchableOpacity>
-              </View>
-
-              {
-                showAlert ?
-                  <View style={{ justifyContent: 'space-between' }}>
-                    <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 25, width: 250, borderRadius: 5 }} autoRun={true} />
-                    <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
-                  </View>
-                  :
-                  <Animatable.View animation="fadeIn" duration={700}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Text
-                        style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
-                        {this.state.project.title}
-                      </Text>
-                      <TouchableOpacity
-                        style={{ justifyContent: 'center' }}
-                        onPress={() => this.deleteProject(key)}>
-                        <Icon style={{ marginRight: 25 }} name="delete" size={28} color="#fff" solid />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: 18, }}>
-                      <Icon name="calendar" size={15} color={"#fff"} style={{ marginRight: 5 }} />
-                      <Text
-                        style={[
-
-                          { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Gilroy-Regular' },
-                        ]}>
-                        Created at {moment(date).format('ddd, D[th] MMMM/YYYY')}
-                      </Text>
-                    </View>
-                  </Animatable.View>
-              }
-            </View>
-            <ScrollView >
-
-
-
-              <View key={key} style={styles.container}>
-                {showAlert
-                  ?
-                  <View style={{ marginHorizontal: 20, borderRadius: 5, marginTop: 20 }}>
-                    <ShimmerPlaceHolder style={[styles.placeHolder, { height: 300 }]} autoRun={true} />
-                    <ShimmerPlaceHolder style={[styles.placeHolder, { height: 200 }]} autoRun={true} />
-                    <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
-                  </View>
-                  :
-                  <Animatable.View animation="fadeInLeft" duration={350} style={styles.cardContainer}>
-                    <View style={{ margin: 20 }}>
-                      <Text
-                        style={styles.divTitle}>
-                        Description
-                  </Text>
-                      <Text
-                        style={[
-                          { color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
-                        ]}>
-                        {shortDescription}
-                      </Text>
-                      {tags != '' ? <View>
-                        <Text
-                          style={styles.divTitle}>
-                          Tags
-                    </Text>
-                        <Text style={[styles.tags, { color: themes[themeKey].accentColor }]}>{tags}</Text>
-                      </View> : null}
-                      <Text
-                        style={styles.divTitle}>
-                        Category
-                  </Text>
-                      <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Medium' },]}>{category}</Text>
-                      {this.state.project.estimatedTime != '' ?
-                        <View>
-                          <Text
-                            style={styles.divTitle}>
-                            Estimate
-                     </Text>
-
-                          <Text
-                            style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },]}>
-                            {worktime}
-                          </Text>
-                        </View> : null}
-
-
-                      {this.state.project.priority != 'None' ?
-                        <View>
-                          <Text
-                            style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Gilroy-Bold' }]}>
-                            Priority
-                     </Text>
-                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            {
-                              this.switchLabel(priority)
-                            }
-                            <Text
-                              style={[styles.category, { marginLeft: 5, fontFamily: 'Gilroy-Medium' }]}>
-                              {priority}
-                            </Text>
-                          </View>
-                        </View> : null}
-
-                    </View>
-
-
-                  </Animatable.View>}
-
-                {
-
-                  images ?
-                    <Animatable.View animation="fadeInRight" duration={500} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20 }}>
-                      <View style={{ margin: 20 }}>
-                        <Text
-                          style={styles.divTitle}>
-                          Pictures
-                    </Text>
-                        <ScrollView horizontal={true}>
-                          <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
-                            {images.map((path, i) => (
-                              <TouchableOpacity
-                                key={i}
-                                onPress={() => {
-                                  this.setState({
-                                    imgViewerUri: path,
-                                    visibleModal: true
-                                  })
-                                }}
-                                onLongPress={() => this.deleteImage(i)}>
-                                <Image style={styles.preview} source={{ uri: `file://${path}` }} />
-                              </TouchableOpacity>
-                            ))}
-
-                            <TouchableOpacity
-                              style={styles.newPicture}
-                              onPress={() => this.handleSelectImage()}>
-                              <Icon name="image" size={35} color={themes[themeKey].accentColor} />
-                              <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
-                            </TouchableOpacity>
-
-
-                          </View>
-                        </ScrollView>
-                      </View>
-                    </Animatable.View>
-                    : null
-                }
-
-                {this.state.todo.length > 0 ?
-                  <View style={{ flex: 1 }}>
-                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
-
-                      <View style={{ margin: 20 }}>
-                        <Text style={styles.divTitle}>To-do</Text>
-                        {this.state.todo.map((task, i) => (
-                          <CheckBox
-                            key={i}
-                            fontFamily={'Gilroy-Medium'}
-                            style={{ width: '100%' }}
-                            title={task.task}
-                            containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
-                            checked={task.checked}
-                            onLongPress={() => this.deleteTodo(i)}
-                            onPress={async () => {
-                              task.checked = !task.checked;
-                              this.forceUpdate();
-
-                              const trueArray = this.state.project.todo.filter(
-                                doneTasks => doneTasks.checked,
-                              ).length;
-
-                              this.state.projects
-                                .filter(project => {
-                                  return project.key === this.state.project.key;
-                                })
-                                .map(project => {
-                                  project.todo = this.state.project.todo;
-                                  project.doneTasks = trueArray;
-                                });
-
-                              AsyncStorage.setItem(
-                                'keyProjects',
-                                JSON.stringify(this.state.projects),
-                              );
-
-                              if (this.state.project.doneTasks === this.state.project.todo.length) {
-                                this.setState({ showMeConfetti: true })
-
-                                await setTimeout(() => {
-                                  this.setState({
-                                    showMeConfetti: false
-                                  });
-                                }, 4000);
-                              }
-
-
-                            }}
-                          />
-                        ))}
-                      </View>
-                      <View style={{ marginBottom: 0 }}>
-                        <Progress.Bar
-                          progress={this.state.project.todo.length > 0 ? this.state.project.todo.filter(({ checked }) => checked === true).length / this.state.project.todo.length : 0}
-                          color={'#27ae60'}
-                          animated
-                          borderWidth={0}
-                          borderRadius={5}
-                          unfilledColor={'#ecf0f1'}
-                          width={null} />
-                      </View>
-                    </Animatable.View>
-
-                  </View> : null}
-
-                {this.state.project.sections && this.state.project.sections.length > 0 ?
-                  <View style={{ flex: 1 }}>
-                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 5, marginBottom: 20 }}>
-                      <View style={{ margin: 20 }}>
-                        <Text style={styles.divTitle}>Sections</Text>
-
-                        {this.state.project.sections.map((section, i) => (
-                          <TouchableOpacity
-                            onLongPress={() => this.deleteSection(section)}
-                            onPress={() => {
-                              this.setState({ selectedSection: section })
-                              this.setState({ sectionModal: true })
-                            }}
-                            key={i}
-                            style={{ marginTop: 10, backgroundColor: '#F5F5F5', borderRadius: 5, justifyContent: 'space-between', height: 60 }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-                              <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
-                              <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.filter(({ checked }) => checked === true).length}/${section.tasks.length} tasks`}</Text>
-                            </View>
-                            <View style={{ justifyContent: 'flex-end', marginTop: 0, width: '100%' }}>
-                              <Progress.Bar
-                                progress={section.tasks.length > 0 ? section.tasks.filter(({ checked }) => checked === true).length / section.tasks.length : 0}
-                                color={'#27ae60'}
-                                animated
-                                borderWidth={0}
-                                borderRadius={5}
-                                unfilledColor={'#ecf0f1'}
-                                width={null} />
-                            </View>
-                          </TouchableOpacity>
-                        ))}
-                      </View>
-                    </Animatable.View>
-
-                  </View> : null}
-
-              </View>
-            </ScrollView>
-
-            <ActionButton
-              style={{ marginBottom: 15 }}
-              buttonColor={themes[themeKey].actionButtonColor}
-            >
-
-              <ActionButton.Item buttonColor='#00897B' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
-                <Icon name="archive" style={styles.actionButtonIcon} />
-              </ActionButton.Item>
-
-              <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
-                <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
-              </ActionButton.Item>
-
-              <ActionButton.Item buttonColor='#8c7ae6' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
-                backdrop: true
-              })}>
-                <Icon name="check" style={styles.actionButtonIcon} />
-              </ActionButton.Item>
-
-              <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New Section" onPress={() => this.setState({ newSection: true })}>
-                <Icon name="ballot" style={styles.actionButtonIcon} />
-              </ActionButton.Item>
-
-            </ActionButton>
-
-            <Backdrop
-              visible={this.state.newSection}
-              //handleOpen={() => { }}
-              //handleClose={handleClose}
-              //closedHeight={32}
-              onClose={() => { this.setState({ newSection: false }) }}
-              swipeConfig={{
-                velocityThreshold: 0.3,
-                directionalOffsetThreshold: 80,
-              }}
-              animationConfig={{
-                speed: 14,
-                bounciness: 4,
-              }}
-              overlayColor="rgba(0,0,0,0.32)"
-              backdropStyle={{
-                backgroundColor: '#fff',
-              }}>
-
-              <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                <View style={[styles.card]}>
-                  <Text style={[styles.fieldTitle]}>
-                    Section Title
-                  </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginHorizontal: 10
+                  }}>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { flex: 10 }]}
                     autoCorrect={false}
-                    autoCapitalize="sentences"
+                    placeholder="Add new todo"
+                    onSubmitEditing={() => this.addTodo()}
                     placeholderTextColor="#999"
-                    value={this.state.sectionTitle}
-                    placeholder="Ex: Version 1.0, Design, Test..."
-                    onChangeText={sectionTitle =>
-                      this.setState({ sectionTitle })
-                    }
+                    value={this.state.todoItem}
+                    onChangeText={todoItem => this.setState({ todoItem })}
                   />
-                  <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
-                    Section To-do
-                  </Text>
-                  <View>
-                    {this.state.todoSection && this.state.todoSection.map((l, i) => (
-                      <ListItem
-                        containerStyle={styles.todoContainer}
-                        key={i}
-                        title={l.task}
-                        rightIcon={
-                          <TouchableOpacity
-                            onPress={() => this.deleteNewSectionTodo(i)}
-                            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
-                            <Icon name="delete" size={20} color="#666" solid />
-                          </TouchableOpacity>
-                        }
-                      />
-                    ))}
-
-                    <View
-                      style={{
-                        marginTop: 5,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginHorizontal: 0
-                      }}>
-                      <TextInput
-                        style={[styles.input, { flex: 10 }]}
-                        autoCorrect={false}
-                        autoCapitalize='sentences'
-                        placeholder="Add new section todo"
-                        onSubmitEditing={() => this.addNewSectionTodo()}
-                        placeholderTextColor="#999"
-                        value={this.state.todoSectionItem}
-                        onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
-                      />
-                      <TouchableOpacity
-                        onPress={() => this.addNewSectionTodo()}
-                        hitSlop={styles.hitSlop}
-                        style={styles.todoBtn}>
-                        <Icon name="chevron-right" size={35} color="#8c7ae6" solid />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
                 </View>
                 <TouchableOpacity
-                  style={[styles.shareButton, { backgroundColor: '#8c7ae6', width: '100%' }]}
-                  onPress={() => this.handleSectionSubmit()}>
-                  <Text style={[styles.shareButtonText]}>Create new section</Text>
+                  style={[styles.shareButton, { backgroundColor: themes[themeKey].backgroundColor }]}
+                  onPress={() => this.addTodo()}>
+                  <Text style={styles.shareButtonText}>Add</Text>
                 </TouchableOpacity>
 
-              </View>
+              </Overlay>
+              <View >
+                <View style={{ height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                  <TouchableOpacity style={{ marginStart: 0 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10, }} onPress={() => this.goToDashBoard()}>
+                    <Icon name="chevron-left" size={45} color="#fff" solid />
+                  </TouchableOpacity>
+                </View>
 
-            </Backdrop>
+                {
+                  showAlert ?
+                    <View style={{ justifyContent: 'space-between' }}>
+                      <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 25, width: 250, borderRadius: 5 }} autoRun={true} />
+                      <ShimmerPlaceHolder style={{ marginHorizontal: 18, height: 15, width: 230, borderRadius: 5, marginTop: 5, marginBottom: 20 }} autoRun={true} />
+                    </View>
+                    :
+                    <Animatable.View animation="fadeIn" duration={700}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text
+                          style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Gilroy-Extrabold', flex: 3 }]}>
+                          {this.state.project.title}
+                        </Text>
+                        <TouchableOpacity
+                          style={{ justifyContent: 'center' }}
+                          onPress={() => this.deleteProject(key)}>
+                          <Icon style={{ marginRight: 25 }} name="delete" size={28} color="#fff" solid />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={{ flexDirection: 'row', paddingHorizontal: 18, }}>
+                        <Icon name="calendar" size={15} color={"#fff"} style={{ marginRight: 5 }} />
+                        <Text
+                          style={[
+
+                            { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Gilroy-Regular' },
+                          ]}>
+                          Created at {moment(date).format('ddd, D[th] MMMM/YYYY')}
+                        </Text>
+                      </View>
+                    </Animatable.View>
+                }
+              </View>
+              <ScrollView>
+
+
+
+                <View key={key} style={styles.container}>
+                  {showAlert
+                    ?
+                    <View style={{ marginHorizontal: 20, borderRadius: 5, marginTop: 20 }}>
+                      <ShimmerPlaceHolder style={[styles.placeHolder, { height: 300 }]} autoRun={true} />
+                      <ShimmerPlaceHolder style={[styles.placeHolder, { height: 200 }]} autoRun={true} />
+                      <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
+                    </View>
+                    :
+                    <Animatable.View animation="fadeInLeft" duration={350} style={styles.cardContainer}>
+                      <View style={{ margin: 20 }}>
+                        <Text
+                          style={styles.divTitle}>
+                          Description
+                  </Text>
+                        <Text
+                          style={[
+                            { color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
+                          ]}>
+                          {shortDescription}
+                        </Text>
+                        {tags != '' ? <View>
+                          <Text
+                            style={styles.divTitle}>
+                            Tags
+                    </Text>
+                          <Text style={[styles.tags, { color: themes[themeKey].accentColor }]}>{tags}</Text>
+                        </View> : null}
+                        <Text
+                          style={styles.divTitle}>
+                          Category
+                  </Text>
+                        <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Medium' },]}>{category}</Text>
+                        {this.state.project.estimatedTime != '' ?
+                          <View>
+                            <Text
+                              style={styles.divTitle}>
+                              Estimate
+                     </Text>
+
+                            <Text
+                              style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },]}>
+                              {worktime}
+                            </Text>
+                          </View> : null}
+
+
+                        {this.state.project.priority != 'None' ?
+                          <View>
+                            <Text
+                              style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Gilroy-Bold' }]}>
+                              Priority
+                     </Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                              {
+                                this.switchLabel(priority)
+                              }
+                              <Text
+                                style={[styles.category, { marginLeft: 5, fontFamily: 'Gilroy-Medium', color: themes[themeKey].accentColor }]}>
+                                {priority}
+                              </Text>
+                            </View>
+                          </View> : null}
+
+                      </View>
+
+
+                    </Animatable.View>}
+
+                  {
+
+                    images ?
+                      <Animatable.View animation="fadeInRight" duration={500} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20 }}>
+                        <View style={{ margin: 20 }}>
+                          <Text
+                            style={styles.divTitle}>
+                            Pictures
+                    </Text>
+                          <ScrollView horizontal={true}>
+                            <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
+                              {images.map((path, i) => (
+                                <TouchableOpacity
+                                  key={i}
+                                  onPress={() => {
+                                    this.setState({
+                                      imgViewerUri: path,
+                                      visibleModal: true
+                                    })
+                                  }}
+                                  onLongPress={() => this.deleteImage(i)}>
+                                  <Image style={styles.preview} source={{ uri: `file://${path}` }} />
+                                </TouchableOpacity>
+                              ))}
+
+                              <TouchableOpacity
+                                style={styles.newPicture}
+                                onPress={() => this.handleSelectImage()}>
+                                <Icon name="image" size={35} color={themes[themeKey].accentColor} />
+                                <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                              </TouchableOpacity>
+
+
+                            </View>
+                          </ScrollView>
+                        </View>
+                      </Animatable.View>
+                      : null
+                  }
+
+                  {this.state.todo.length > 0 ?
+                    <View style={{ flex: 1 }}>
+                      <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
+
+                        <View style={{ margin: 20 }}>
+                          <Text style={styles.divTitle}>To-do</Text>
+                          {this.state.todo.map((task, i) => (
+                            <CheckBox
+                              key={i}
+                              fontFamily={'Gilroy-Medium'}
+                              style={{ width: '100%' }}
+                              title={task.task}
+                              containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
+                              checked={task.checked}
+                              onLongPress={() => this.deleteTodo(i)}
+                              onPress={async () => {
+                                task.checked = !task.checked;
+                                this.forceUpdate();
+
+                                const trueArray = this.state.project.todo.filter(
+                                  doneTasks => doneTasks.checked,
+                                ).length;
+
+                                this.state.projects
+                                  .filter(project => {
+                                    return project.key === this.state.project.key;
+                                  })
+                                  .map(project => {
+                                    project.todo = this.state.project.todo;
+                                    project.doneTasks = trueArray;
+                                  });
+
+                                AsyncStorage.setItem(
+                                  'keyProjects',
+                                  JSON.stringify(this.state.projects),
+                                );
+
+                                if (this.state.project.doneTasks === this.state.project.todo.length) {
+                                  this.setState({ showMeConfetti: true })
+
+                                  await setTimeout(() => {
+                                    this.setState({
+                                      showMeConfetti: false
+                                    });
+                                  }, 4000);
+                                }
+
+
+                              }}
+                            />
+                          ))}
+                        </View>
+                        <View style={{ marginBottom: 0 }}>
+                          <Progress.Bar
+                            progress={this.state.project.todo.length > 0 ? this.state.project.todo.filter(({ checked }) => checked === true).length / this.state.project.todo.length : 0}
+                            color={'#27ae60'}
+                            animated
+                            borderWidth={0}
+                            borderRadius={5}
+                            unfilledColor={'#ecf0f1'}
+                            width={null} />
+                        </View>
+                      </Animatable.View>
+
+                    </View> : null}
+
+                  {this.state.project.sections && this.state.project.sections.length > 0 ?
+                    <View style={{ flex: 1, marginTop: 10 }}>
+                      <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 5, marginBottom: 20 }}>
+                        <View style={{ margin: 20 }}>
+                          <Text style={styles.divTitle}>Sections</Text>
+
+                          {this.state.project.sections.map((section, i) => (
+                            <TouchableOpacity
+                              onLongPress={() => this.deleteSection(section)}
+                              onPress={() => {
+                                this.setState({ selectedSection: section })
+                                this.setState({ sectionModal: true })
+                              }}
+                              key={i}
+                              style={{ marginTop: 10, backgroundColor: '#F5F5F5', borderRadius: 5, justifyContent: 'space-between', height: 60 }}>
+                              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+                                <Text style={{ marginLeft: 15, fontFamily: 'Gilroy-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                                <Text style={{ marginRight: 15, fontFamily: 'Gilroy-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.filter(({ checked }) => checked === true).length}/${section.tasks.length} tasks`}</Text>
+                              </View>
+                              <View style={{ justifyContent: 'flex-end', marginTop: 0, width: '100%' }}>
+                                <Progress.Bar
+                                  progress={section.tasks.length > 0 ? section.tasks.filter(({ checked }) => checked === true).length / section.tasks.length : 0}
+                                  color={'#27ae60'}
+                                  animated
+                                  borderWidth={0}
+                                  borderRadius={5}
+                                  unfilledColor={'#ecf0f1'}
+                                  width={null} />
+                              </View>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                      </Animatable.View>
+
+                    </View> : null}
+
+
+
+                  <View style={{ height: 80 }} />
+                </View>
+              </ScrollView>
+
+              <ActionButton
+                buttonColor={themes[themeKey].actionButtonColor}
+              >
+
+                <ActionButton.Item buttonColor='#fbc531' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
+                  <Icon name="archive" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+
+                <ActionButton.Item buttonColor='#7f8fa6' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
+                  <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+
+                <ActionButton.Item buttonColor='#2ed573' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
+                  backdrop: true
+                })}>
+                  <Icon name="check" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+
+                <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New Section" onPress={() => this.setState({ newSection: true })}>
+                  <Icon name="ballot" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+
+              </ActionButton>
+
+              <Backdrop
+                visible={this.state.newSection}
+                onClose={() => { this.setState({ newSection: false }) }}
+                swipeConfig={{
+                  velocityThreshold: 0.3,
+                  directionalOffsetThreshold: 80,
+                }}
+                animationConfig={{
+                  speed: 14,
+                  bounciness: 4,
+                }}
+                overlayColor="rgba(0,0,0,0.32)"
+                backdropStyle={{
+                  backgroundColor: '#fff',
+                }}>
+
+                <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
+                  <View style={[styles.card]}>
+                    <Text style={[styles.fieldTitle]}>
+                      Section Title
+                  </Text>
+                    <TextInput
+                      style={styles.input}
+                      autoCorrect={false}
+                      autoCapitalize="sentences"
+                      placeholderTextColor="#999"
+                      value={this.state.sectionTitle}
+                      placeholder="Ex: Version 1.0, Design, Test..."
+                      onChangeText={sectionTitle =>
+                        this.setState({ sectionTitle })
+                      }
+                    />
+                    <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
+                      Section To-do
+                  </Text>
+                    <View>
+                      {this.state.todoSection && this.state.todoSection.map((l, i) => (
+                        <ListItem
+                          containerStyle={styles.todoContainer}
+                          key={i}
+                          title={l.task}
+                          rightIcon={
+                            <TouchableOpacity
+                              onPress={() => this.deleteNewSectionTodo(i)}
+                              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                              <Icon name="delete" size={20} color="#666" solid />
+                            </TouchableOpacity>
+                          }
+                        />
+                      ))}
+
+                      <View
+                        style={{
+                          marginTop: 5,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginHorizontal: 0
+                        }}>
+                        <TextInput
+                          style={[styles.input, { flex: 10 }]}
+                          autoCorrect={false}
+                          autoCapitalize='sentences'
+                          placeholder="Add new section todo"
+                          onSubmitEditing={() => this.addNewSectionTodo()}
+                          placeholderTextColor="#999"
+                          value={this.state.todoSectionItem}
+                          onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
+                        />
+                        <TouchableOpacity
+                          onPress={() => this.addNewSectionTodo()}
+                          hitSlop={styles.hitSlop}
+                          style={styles.todoBtn}>
+                          <Icon name="chevron-right" size={35} color={themes[themeKey].accentColor} solid />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={[styles.shareButton, { backgroundColor: themes[themeKey].backgroundColor, width: '100%' }]}
+                    onPress={() => this.handleSectionSubmit()}>
+                    <Text style={[styles.shareButtonText]}>Create new section</Text>
+                  </TouchableOpacity>
+
+                </View>
+              </Backdrop>
+            </View>
+            <View>
+              <Banner isPro={this.state.proVersion} />
+            </View>
 
           </SafeAreaView>
+
         </LinearGradient>
+
+
         <AwesomeAlert
           showProgress={true}
           progressSize={50}
@@ -843,9 +851,6 @@ export default class Details extends React.Component {
 
         <Backdrop
           visible={this.state.backdrop}
-          //handleOpen={() => { }}
-          //handleClose={handleClose}
-          closedHeight={32}
           onClose={() => { this.setState({ backdrop: false }) }}
           swipeConfig={{
             velocityThreshold: 0.3,
@@ -888,7 +893,7 @@ export default class Details extends React.Component {
             </View>
 
             <TouchableOpacity
-              style={[styles.shareButton, { margin: 0, marginBottom: 10 }]}
+              style={[styles.shareButton, { margin: 0, marginBottom: 10, backgroundColor: themes[themeKey].backgroundColor }]}
               onPress={() => {
                 this.addTodo()
                 this.setState({ backdrop: false })
@@ -1000,9 +1005,10 @@ export default class Details extends React.Component {
               </View>
             </View>
           </LinearGradient>
-
         </Modal>
       </View>
+
+
     );
   }
 }
@@ -1074,7 +1080,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Gilroy-Bold'
   },
   shareButton: {
-    backgroundColor: '#8c7ae6',
     borderRadius: 4,
     height: 42,
     marginTop: 15,

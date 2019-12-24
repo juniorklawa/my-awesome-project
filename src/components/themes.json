@@ -39,5 +39,19 @@
     "actionButtonColor":"#546E7A",
     "accentColor" : "#546E7A",
     "secondaryColor" : "#546E7A"
+  },
+  {
+    "key": "PINK",
+    "backgroundColor": "#ff7979",
+    "actionButtonColor":"#eb4d4b",
+    "accentColor" : "#eb4d4b",
+    "secondaryColor" : "#eb4d4b"
+  },
+  {
+    "key": "TURBO",
+    "backgroundColor": "#f9ca24",
+    "actionButtonColor":"#f0932b",
+    "accentColor" : "#f0932b",
+    "secondaryColor" : "#f0932b"
   }
 ]
