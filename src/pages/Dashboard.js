@@ -41,9 +41,10 @@ export default class Dashboard extends React.Component {
     filterProjects: false,
     shouldReload: false,
     themeKey: 1,
-    modal: false,
+    modal: true,
     proVersion: false,
-    proStartedTime: null
+    proStartedTime: null,
+    proEndTime: null
   };
 
   handleViewRef = ref => this.view = ref;
@@ -109,9 +110,12 @@ export default class Dashboard extends React.Component {
     if (!lastTime || diff <= 0) {
       this.setState({ proVersion: false })
     } else {
-      this.setState({ proVersion: true })
+      this.setState({
+        proVersion: true,
+        proEndTime: lastTime
+      })
     }
-    alert('difference :' + diff)
+    //alert('difference :' + diff)
 
     if (key) {
       this.setState({ themeKey: key })
@@ -359,6 +363,34 @@ export default class Dashboard extends React.Component {
             </Animatable.View>
             <ScrollView>
               <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
+                {!this.state.proVersion ?
+                  <View>
+                    <View style={{ margin: 20 }}>
+                      <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#4b4b4b' }}>Unlock PRO Version</Text>
+                      <Text style={{ fontFamily: 'Gilroy-Medium' }}>Watch a video to Unlock new themes, and disable Advertisements for 1 day! </Text>
+                    </View>
+
+                    {!this.state.showLoadingAlert ?
+                      <TouchableOpacity style={{ backgroundColor: '#eb2f06', marginHorizontal: 20, marginBottom: 20, height: 50, borderRadius: 5, alignItems: 'center', flexDirection: 'row' }} onPress={() => this.rewarded()}>
+
+                        <Icon style={{ marginLeft: 10 }} name='play' color='#fff' size={32} />
+                        <Text style={{ color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 14 }}>
+                          Watch a video
+                        </Text>
+
+                      </TouchableOpacity> :
+                      <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
+                        <ActivityIndicator size="large" color="#eb2f06" />
+                      </View>}
+                  </View> :
+                  <View style={{ margin: 20 }}>
+                    <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#f6b93b' }}>PRO Version Unlocked</Text>
+                    <Text style={{ fontFamily: 'Gilroy-Medium' }}>PRO themes unlocked and Advertisements disabled until {moment(this.state.proEndTime).format('DD/MM/YYYY hh:mm A')} </Text>
+                  </View>
+                }
+              </Animatable.View>
+
+              <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
                 <View style={{ margin: 20 }}>
                   <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
                 </View>
@@ -393,28 +425,6 @@ export default class Dashboard extends React.Component {
                   onPress={() => this.themeChange(7, true)}>
                   <ThemeButton color={'#f9ca24'} title={'Turbo'} isPro={true} />
                 </TouchableOpacity>
-              </Animatable.View>
-
-              <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
-                {!this.state.proVersion ? <View>
-                  <View style={{ margin: 20 }}>
-                    <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#4b4b4b' }}>Unlock PRO Version</Text>
-                    {!this.state.lastTime && <Text style={{ fontFamily: 'Gilroy-Medium' }}> Unlock new themes, and disable Advertisements </Text>}
-                  </View>
-
-                  {!this.state.showLoadingAlert ? <TouchableOpacity onPress={() => this.rewarded()}>
-                    <View
-                      style={{ backgroundColor: '#eb2f06', marginHorizontal: 10, marginBottom: 20, height: 50, borderRadius: 5, alignItems: 'center', flexDirection: 'row' }}>
-                      <Icon style={{ marginLeft: 10 }} name='play' color='#fff' size={32} />
-                      <Text style={{ color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 14 }}>
-                        Watch a video to unlock PRO Version (1 day)
-                    </Text>
-                    </View>
-                  </TouchableOpacity> :
-                    <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-                      <ActivityIndicator size="large" color="#eb2f06" />
-                    </View>}
-                </View> : null}
               </Animatable.View>
             </ScrollView>
 

@@ -69,6 +69,14 @@ export default class Details extends React.Component {
     const key = this.props.navigation.getParam('themeKey', 'NO-THEME-KEY')
     this.setState({ themeKey: key })
 
+    const isPro = await AsyncStorage.getItem('proStartedTime')
+
+    if (isPro) {
+      this.setState({ proVersion: true })
+    } else {
+      this.setState({ proVersion: false })
+    }
+
     this.showAlert()
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('keyProjects');
@@ -505,7 +513,7 @@ export default class Details extends React.Component {
                   </Text>
                         <Text
                           style={[
-                            { color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
+                            { color: '#959595', fontSize: 16, marginTop: 5, fontFamily: 'Gilroy-Regular' },
                           ]}>
                           {shortDescription}
                         </Text>
@@ -984,6 +992,8 @@ export default class Details extends React.Component {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
+                  backgroundColor: "#eee",
+                  borderRadius: 4,
                   justifyContent: 'space-between',
                 }}>
                 <TextInput

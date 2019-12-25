@@ -843,9 +843,10 @@ export default class New extends Component {
                 </View>
               </ScrollView>
               <TouchableOpacity
-                style={[styles.shareButton,{backgroundColor:themes[themeKey].secondaryColor}]}
+                style={[styles.shareButton,{backgroundColor:themes[themeKey].secondaryColor, flexDirection:'row'}]}
                 onPress={() => this.handleSubmit()}>
                 <Text style={styles.shareButtonText}>{this.state.step < this.state.stepLength ? 'Next step' : 'Create new project'}</Text>
+                { this.state.step < this.state.stepLength ? <Icon name='chevron-right' size={24} color={"#fff"}/> : <Icon style={{marginLeft:10}} name='check' size={24} color={"#fff"}/>}
               </TouchableOpacity>
             </View>
             <Modal
