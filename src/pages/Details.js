@@ -79,7 +79,6 @@ export default class Details extends React.Component {
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('keyProjects');
     const projects = (await JSON.parse(data)) || [];
-    console.log('key:', key)
 
     await this.setState({
       projects: projects,
@@ -208,7 +207,6 @@ export default class Details extends React.Component {
       todoSection: [],
       sectionTitle: ''
     })
-    console.log('sections', this.state.sections)
     this.setState({ newSection: false })
     this.save()
   }
@@ -295,9 +293,7 @@ export default class Details extends React.Component {
       this.forceUpdate()
       this.save()
 
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   goToDashBoard() {

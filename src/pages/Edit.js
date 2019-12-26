@@ -193,8 +193,6 @@ export default class Edit extends Component {
     if (projectId !== null) {
       this.state.projects
         .filter(project => {
-          console.log('project key', project.key)
-          console.log('projectId', this.state.projectId)
           return project.key === this.state.projectId
         })
         .map(project => {
@@ -203,7 +201,6 @@ export default class Edit extends Component {
             project.category = this.state.category,
             project.tags = this.state.tags,
             project.worktime = this.state.estimatedTime + ' ' + this.state.estimatedInterval
-          console.log('updated project', project)
         });
 
     } else {

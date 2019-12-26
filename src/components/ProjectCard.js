@@ -98,7 +98,7 @@ export default class ProjectCard extends Component {
           }
 
           {
-            project.todo.length > 0 ?
+            project.todo.length > 0 || project.sections ?
               <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                 <ProgressCircle
                   percent={this.calculateProgress(project)}
