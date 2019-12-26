@@ -41,7 +41,7 @@ export default class Dashboard extends React.Component {
     filterProjects: false,
     shouldReload: false,
     themeKey: 1,
-    modal: true,
+    modal: false,
     proVersion: false,
     proStartedTime: null,
     proEndTime: null

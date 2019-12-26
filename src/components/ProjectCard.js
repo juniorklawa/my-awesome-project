@@ -33,6 +33,19 @@ export default class ProjectCard extends Component {
     }
 
   }
+  calculateProgress(project) {
+
+    const sectionTasks = project.sections.map((section) => section.tasks)
+    const todoTasks = project.todo
+    let tasksSpread = []
+    sectionTasks.forEach(section => {
+      tasksSpread.push(...section)
+    });
+    const sectionChecked = tasksSpread.filter((task) => task.checked)
+    const todoChecked = project.todo.filter((task) => task.checked)
+    const percentage = (sectionChecked.length + todoChecked.length) / (tasksSpread.length + todoTasks.length)
+    return (percentage * 100) || 0
+  }
 
 
   async goToProjectDetails(id) {
@@ -88,18 +101,18 @@ export default class ProjectCard extends Component {
             project.todo.length > 0 ?
               <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                 <ProgressCircle
-                  percent={(project.doneTasks / project.todo.length * 100)}
+                  percent={this.calculateProgress(project)}
                   radius={40}
                   borderWidth={6}
-                  color={project.doneTasks === project.todo.length ? "#059B79" : themes[themeKey].accentColor}
+                  color={this.calculateProgress(project) === 100 ? "#059B79" : themes[themeKey].accentColor}
                   shadowColor="#f0f0f0"
                   bgColor="#fff">
-                  {project.doneTasks === project.todo.length ?
+                  {this.calculateProgress(project) === 100 ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
                     <Text style={[{ fontSize: 22, color: themes[themeKey].accentColor, fontFamily: 'Gilroy-Bold' }]}>
                       {
-                        project.doneTasks > 0 ? `${(project.doneTasks / project.todo.length * 100).toFixed(0)}%` : `${0}%`
+                        `${this.calculateProgress(project).toFixed(0)}%`
                       }
                     </Text>
                   }

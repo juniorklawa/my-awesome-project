@@ -49,7 +49,6 @@ export default class Details extends React.Component {
     doneTasks: 0,
     isVisible: false,
     showAlert: false,
-    showMeConfetti: false,
     images: [],
     sections: [],
     visibleModal: false,
@@ -109,6 +108,23 @@ export default class Details extends React.Component {
       showAlert: false
     });
   };
+
+
+  calculateProgress() {
+
+    const project = this.state.project
+
+    const sectionTasks = project.sections.map((section) => section.tasks)
+    const todoTasks = project.todo
+    let tasksSpread = []
+    sectionTasks.forEach(section => {
+      tasksSpread.push(...section)
+    });
+    const sectionChecked = tasksSpread.filter((task) => task.checked)
+    const todoChecked = project.todo.filter((task) => task.checked)
+    const percentage = (sectionChecked.length + todoChecked.length) / (tasksSpread.length + todoTasks.length)
+    return (percentage * 100) || 0
+  }
 
   archiveProject() {
     const message = this.state.project.isArchived ?
@@ -619,7 +635,9 @@ export default class Details extends React.Component {
                               title={task.task}
                               containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
                               checked={task.checked}
-                              onLongPress={() => this.deleteTodo(i)}
+                              onLongPress={() => {
+                                this.deleteTodo(i)
+                              }}
                               onPress={async () => {
                                 task.checked = !task.checked;
                                 this.forceUpdate();
@@ -641,18 +659,6 @@ export default class Details extends React.Component {
                                   'keyProjects',
                                   JSON.stringify(this.state.projects),
                                 );
-
-                                if (this.state.project.doneTasks === this.state.project.todo.length) {
-                                  this.setState({ showMeConfetti: true })
-
-                                  await setTimeout(() => {
-                                    this.setState({
-                                      showMeConfetti: false
-                                    });
-                                  }, 4000);
-                                }
-
-
                               }}
                             />
                           ))}
@@ -851,11 +857,6 @@ export default class Details extends React.Component {
             menus={() => () => null}
             imageUrls={[{ url: `file://${this.state.imgViewerUri}` }]} />
         </Modal>
-        {
-          this.state.showMeConfetti ?
-            <ConfettiCannon fadeOut={true} count={50} origin={{ x: -10, y: -100 }} />
-            : null
-        }
 
         <Backdrop
           visible={this.state.backdrop}
@@ -968,18 +969,6 @@ export default class Details extends React.Component {
                             'keyProjects',
                             JSON.stringify(this.state.projects),
                           );
-
-                          if (this.state.project.doneTasks === this.state.project.todo.length) {
-                            this.setState({ showMeConfetti: true })
-
-                            await setTimeout(() => {
-                              this.setState({
-                                showMeConfetti: false
-                              });
-                            }, 4000);
-                          }
-
-
                         }}
                       />
 
@@ -1029,7 +1018,6 @@ const styles = StyleSheet.create({
   },
   category: {
     fontFamily: 'Gilroy-Bold',
-    color: '#8c7ae6',
   },
   projectContainer: {
     padding: 20,
@@ -1114,7 +1102,6 @@ const styles = StyleSheet.create({
     height: 150
   },
   tags: {
-    color: '#8c7ae6',
     fontFamily: 'Gilroy-Bold'
   },
 

@@ -755,7 +755,7 @@ export default class New extends Component {
 
     return (
       themeKey &&
-      < LinearGradient style={{ flex: 1 }
+      <LinearGradient style={{ flex: 1, backgroundColor:'#000' }
       } colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]} >
         <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
