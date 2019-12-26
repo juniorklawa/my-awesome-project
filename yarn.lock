@@ -5412,16 +5412,6 @@ react-native-backdrop@^1.0.16:
   resolved "https://registry.yarnpkg.com/react-native-backdrop/-/react-native-backdrop-1.0.16.tgz#043336f7a954e4decee6e6223592306621e321c2"
   integrity sha512-YkZCV0YG8zRF70V0fXFKzH2COnfVhr+8/2IlFyZaKXlmVWC+bHUqaxPbsXG+oqU4u3krnmWfo3kuIkQZ3AbmoA==
 
-react-native-confetti-cannon@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-confetti-cannon/-/react-native-confetti-cannon-1.1.3.tgz#fbc419d949dfbfa623a5f5222f8ab73a3d579ea8"
-  integrity sha512-4lCytJNtOV8mKofHc0UnZ9f5b+jnmzCHYXlKRBEn3BZxq/xpT1LH7ccy/dEkXH0lyqeLKTV0c5QaMc03kACzkQ==
-
-react-native-draggable-flatlist@^1.1.9:
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-1.1.9.tgz#b8f58122f639841c83aa1d913b2e3e9f9507bfe5"
-  integrity sha512-Hga/kEFc+Undx2Y1FzkozWHRWvRz7dJobl5Kg1+xmd9JABS8YIYZWKboSAPmiTHD3FrlVJGIw/mlK5JZP0rJfw==
-
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"
@@ -5459,11 +5449,6 @@ react-native-flash-message@^0.1.15:
     prop-types "^15.7.2"
     react-native-iphone-x-helper "^1.2.1"
 
-react-native-floating-action@^1.19.1:
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/react-native-floating-action/-/react-native-floating-action-1.19.1.tgz#fc3dcd0441ecbaf2d870b71f6db27f2db0f811b3"
-  integrity sha512-6zgiCJyV63TOxpDKK+OxzhghMcBSn1Qhjb8p8TrfrUGAkzh7gQcmNN4ahq1CVbrN0ZpKhWET68WeifisYnQWyg==
-
 react-native-gesture-handler@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.4.1.tgz#c38d9e57637b95e221722a79f2bafac62e3aeb21"
@@ -5474,7 +5459,7 @@ react-native-gesture-handler@^1.4.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-image-pan-zoom@^2.1.11, react-native-image-pan-zoom@^2.1.9:
+react-native-image-pan-zoom@^2.1.9:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/react-native-image-pan-zoom/-/react-native-image-pan-zoom-2.1.11.tgz#61bcb69219d95e76a9797d23e4a2e8e0bd654ae9"
   integrity sha512-ZCisGUFpPchHXsjT7ZI0anlSLPgcTmjRKXqpVnPu3RDWFXfKjuL4zpY57DX4Y8YgGZCpbf9fApN7KjVYody2Mw==

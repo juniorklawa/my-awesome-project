@@ -21,7 +21,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Overlay, ListItem } from 'react-native-elements';
 import UUIDGenerator from 'react-native-uuid-generator';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ConfettiCannon from 'react-native-confetti-cannon';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ImagePicker from 'react-native-image-picker';
 import { Badge } from 'react-native-elements'
@@ -939,7 +938,7 @@ export default class Details extends React.Component {
                   <Text style={styles.divTitle}>Tasks</Text>
 
                   {this.state.selectedSection !== null && this.state.selectedSection.tasks.map((task, i) => (
-                    <View>
+                    <View key={i}>
                       <CheckBox
                         key={i}
                         fontFamily={'Gilroy-Medium'}
