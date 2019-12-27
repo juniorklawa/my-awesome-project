@@ -8,10 +8,10 @@ export default class Banner extends Component {
   render() {
     const { isPro } = this.props
 
-    //dev
-    //const adUnitId = "ca-app-pub-3940256099942544/6300978111"
-    //prod
-    const adUnitId = "ca-app-pub-1120115677806043/6558099870"
+    dev
+    const adUnitId = "ca-app-pub-3940256099942544/6300978111"
+    // //prod
+    // const adUnitId = "ca-app-pub-1120115677806043/6558099870"
 
     return (
       isPro === false &&
