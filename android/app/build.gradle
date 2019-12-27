@@ -131,8 +131,8 @@ android {
         applicationId "com.myawesomeproject60"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "0.9"
+        versionCode 18
+        versionName "0.91"
         multiDexEnabled true
     }
     splits {
