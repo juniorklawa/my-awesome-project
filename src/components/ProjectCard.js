@@ -100,7 +100,8 @@ export default class ProjectCard extends Component {
 
           {project.tags &&
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginRight: 100 }}>
-              {this.generateTags(project).map((label) => (<Badge
+              {this.generateTags(project).map((label, i) => (<Badge
+                key={i}
                 containerStyle={{ margin: 1 }}
                 value={label}
                 badgeStyle={{

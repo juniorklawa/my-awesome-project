@@ -541,7 +541,8 @@ export default class Details extends React.Component {
                     </Text>
 
                           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginRight: 10 }}>
-                            {tags && this.generateTags(tags).map((label) => (<Badge
+                            {tags && this.generateTags(tags).map((label,i) => (<Badge
+                              key={i}
                               containerStyle={{ margin: 1 }}
                               value={label}
                               badgeStyle={{
