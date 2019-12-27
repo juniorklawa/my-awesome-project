@@ -201,6 +201,7 @@ export default class Edit extends Component {
             project.category = this.state.category,
             project.tags = this.state.tags,
             project.worktime = this.state.estimatedTime + ' ' + this.state.estimatedInterval
+            project.priority = this.state.priority
         });
 
     } else {
@@ -307,7 +308,7 @@ export default class Edit extends Component {
                 </View>
                 <Text
                   style={styles.headerTitle}>
-                  {'Edit your idea'}
+                  {'Edit your info'}
                 </Text>
               </LinearGradient>
               <ScrollView
@@ -458,7 +459,7 @@ export default class Edit extends Component {
                             <Picker.Item label="Website" value="Website" />
                             <Picker.Item label="Software" value="Software" />
                             <Picker.Item label="Bot" value="Bot" />
-                            <Picker.Item label="Game" value="Bot" />
+                            <Picker.Item label="Game" value="Game" />
                             <Picker.Item label="Other" value="Other" />
                             <Picker.Item label="Create new..." value="new" />
                           </Picker>
@@ -498,119 +499,13 @@ export default class Edit extends Component {
                           <Picker.Item label="Low" value="Low" />
                         </Picker>
                       </View>
-                      <Text style={[styles.labelTitle,{color:themes[themeKey].accentColor}]}>
-                        Pictures
-                  </Text>
-
-                      {previews ?
-                        <ScrollView horizontal={true}>
-                          <View style={styles.imgSlider}>
-                            {previews.map((path, i) => (
-                              <TouchableOpacity
-                                key={i}
-                                onPress={() => {
-                                  this.setState({
-                                    imgViewerUri: path,
-                                    visibleModal: true
-                                  })
-                                }}
-                                onLongPress={() => this.deleteImage(i)}>
-                                <Image style={styles.preview} source={{ uri: `file://${path}` }} />
-                              </TouchableOpacity>
-                            ))}
-                            <TouchableOpacity
-                              style={[styles.newPicture,{color:themes[themeKey].accentColor}]}
-                              onPress={() => this.handleSelectImage()}>
-                              <Icon name="image" size={35} color={themes[themeKey].accentColor} style={styles.actionButtonIcon} />
-                              <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Gilroy-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
-                            </TouchableOpacity>
-                          </View>
-                        </ScrollView> :
-                        null
-                      }
-
-                      <Modal
-                        onRequestClose={() => this.setState({ visibleModal: false })}
-                        visible={this.state.visibleModal}
-                        transparent={true}>
-                        <ImageViewer
-                          renderIndicator={() => null}
-                          menus={() => () => null}
-                          imageUrls={[{ url: `file://${this.state.imgViewerUri}` }]} />
-                      </Modal>
-
-
-
-                      {
-                        todo.length > 0 ?
-                          <Text style={styles.fieldTitle}>
-                            To-do
-                  </Text>
-                          : null
-                      }
-
-
-                      <View style={{ marginTop: 10, flex: 1 }}>
-                        {this.state.todo.map((l, i) => (
-                          <ListItem
-                            containerStyle={styles.todoContainer}
-                            key={i}
-                            title={l.task}
-                            rightIcon={
-                              <TouchableOpacity
-                                onPress={() => this.deleteTodo(i)}
-                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                                <Icon name="delete" size={23} color="#666" solid />
-                              </TouchableOpacity>
-                            }
-                          />
-                        ))}
-                      </View>
                     </View>
                   }
-
-
-
-
-
-
-
                 </View>
-
-
               </ScrollView>
 
-
-              {
-                this.state.showAlert === false ? <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginHorizontal: 10
-                  }}>
-                  <TextInput
-                    style={[styles.input, { flex: 10 }]}
-                    autoCorrect={false}
-                    autoCapitalize='sentences'
-                    placeholder="Add new todo"
-                    onSubmitEditing={() => this.addTodo()}
-                    placeholderTextColor="#999"
-                    value={this.state.todoItem}
-                    onChangeText={todoItem => this.setState({ todoItem })}
-                  />
-                  <TouchableOpacity
-                    onPress={() => this.addTodo()}
-                    hitSlop={styles.hitSlop}
-                    style={styles.todoBtn}>
-                    <Icon name="chevron-right" size={35} color="#8c7ae6" solid />
-                  </TouchableOpacity>
-                </View>
-                  : null
-              }
-
               <TouchableOpacity
-                style={[styles.shareButton,{backgroundColor:themes[themeKey].backgroundColor}]}
+                style={[styles.shareButton, { backgroundColor: themes[themeKey].backgroundColor }]}
                 onPress={() => this.handleSubmit()}>
                 <Text style={[styles.shareButtonText]}>{'Update project'}</Text>
               </TouchableOpacity>

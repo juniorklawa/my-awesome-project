@@ -293,7 +293,7 @@ export default class Details extends React.Component {
       this.forceUpdate()
       this.save()
 
-    } catch (e) {}
+    } catch (e) { }
   }
 
   goToDashBoard() {
@@ -616,48 +616,74 @@ export default class Details extends React.Component {
                       : null
                   }
 
-                  {this.state.todo.length > 0 ?
-                    <View style={{ flex: 1 }}>
-                      <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
 
-                        <View style={{ margin: 20 }}>
-                          <Text style={styles.divTitle}>To-do</Text>
-                          {this.state.todo.map((task, i) => (
-                            <CheckBox
-                              key={i}
-                              fontFamily={'Gilroy-Medium'}
-                              style={{ width: '100%' }}
-                              title={task.task}
-                              containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
-                              checked={task.checked}
-                              onLongPress={() => {
-                                this.deleteTodo(i)
-                              }}
-                              onPress={async () => {
-                                task.checked = !task.checked;
-                                this.forceUpdate();
+                  <View style={{ flex: 1 }}>
+                    <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
 
-                                const trueArray = this.state.project.todo.filter(
-                                  doneTasks => doneTasks.checked,
-                                ).length;
+                      <View style={{ margin: 20 }}>
+                        <Text style={styles.divTitle}>To-do</Text>
+                        {this.state.todo.length === 0 && <Text style={{ fontFamily: 'Gilroy-Regular', color: '#9e9e9e' }}>Your todo list is empty...</Text>}
 
-                                this.state.projects
-                                  .filter(project => {
-                                    return project.key === this.state.project.key;
-                                  })
-                                  .map(project => {
-                                    project.todo = this.state.project.todo;
-                                    project.doneTasks = trueArray;
-                                  });
+                        {this.state.todo && this.state.todo.map((task, i) => (
+                          <CheckBox
+                            key={i}
+                            fontFamily={'Gilroy-Medium'}
+                            style={{ width: '100%' }}
+                            title={task.task}
+                            containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
+                            checked={task.checked}
+                            onLongPress={() => {
+                              this.deleteTodo(i)
+                            }}
+                            onPress={async () => {
+                              task.checked = !task.checked;
+                              this.forceUpdate();
 
-                                AsyncStorage.setItem(
-                                  'keyProjects',
-                                  JSON.stringify(this.state.projects),
-                                );
-                              }}
-                            />
-                          ))}
-                        </View>
+                              const trueArray = this.state.project.todo.filter(
+                                doneTasks => doneTasks.checked,
+                              ).length;
+
+                              this.state.projects
+                                .filter(project => {
+                                  return project.key === this.state.project.key;
+                                })
+                                .map(project => {
+                                  project.todo = this.state.project.todo;
+                                  project.doneTasks = trueArray;
+                                });
+
+                              AsyncStorage.setItem(
+                                'keyProjects',
+                                JSON.stringify(this.state.projects),
+                              );
+                            }}
+                          />
+                        ))}
+
+
+                        <TouchableOpacity
+                          onPress={() => { this.setState({ backdrop: true }) }}
+                          style={{
+                            marginTop: 10,
+                            borderRadius: 4,
+                            padding: 8,
+                            marginHorizontal: 0,
+                            backgroundColor: themes[themeKey].accentColor,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                          }}>
+                          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{ fontFamily: 'Gilroy-Medium', color: '#fff', fontSize: 16 }}>
+                              Add new to-do
+                              </Text>
+                            <View style={{ marginLeft: 8, height: 35, width: 35, justifyContent: 'center', alignItems: 'center' }}>
+                              <Icon name="check-bold" size={23} color="#fff" />
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+
+                      </View>
+                      {this.state.todo && this.state.todo.length > 0 &&
                         <View style={{ marginBottom: 0 }}>
                           <Progress.Bar
                             progress={this.state.project.todo.length > 0 ? this.state.project.todo.filter(({ checked }) => checked === true).length / this.state.project.todo.length : 0}
@@ -667,16 +693,18 @@ export default class Details extends React.Component {
                             borderRadius={5}
                             unfilledColor={'#ecf0f1'}
                             width={null} />
-                        </View>
-                      </Animatable.View>
+                        </View>}
+                    </Animatable.View>
 
-                    </View> : null}
+                  </View>
 
-                  {this.state.project.sections && this.state.project.sections.length > 0 ?
+                  {this.state.project.sections ?
                     <View style={{ flex: 1, marginTop: 10 }}>
                       <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 5, marginBottom: 20 }}>
                         <View style={{ margin: 20 }}>
                           <Text style={styles.divTitle}>Sections</Text>
+
+                          {this.state.project.sections.length === 0 && <Text style={{ fontFamily: 'Gilroy-Regular', color: '#9e9e9e' }}>Your section list is empty...</Text>}
 
                           {this.state.project.sections.map((section, i) => (
                             <TouchableOpacity
@@ -703,6 +731,29 @@ export default class Details extends React.Component {
                               </View>
                             </TouchableOpacity>
                           ))}
+
+
+                          <TouchableOpacity
+                            onPress={() => { this.setState({ newSection: true }) }}
+                            style={{
+                              marginTop: 10,
+                              borderRadius: 4,
+                              padding: 8,
+                              marginHorizontal: 0,
+                              backgroundColor: themes[themeKey].accentColor,
+                              justifyContent: 'center',
+                              alignItems: 'center'
+                            }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                              <Text style={{ fontFamily: 'Gilroy-Medium', color: '#fff', fontSize: 16 }}>
+                                Add new section
+                              </Text>
+                              <View style={{ marginLeft: 8, height: 35, width: 35, justifyContent: 'center', alignItems: 'center' }}>
+                                <Icon name="ballot" size={23} color="#fff" />
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+
                         </View>
                       </Animatable.View>
 
@@ -722,108 +773,10 @@ export default class Details extends React.Component {
                   <Icon name="archive" style={styles.actionButtonIcon} />
                 </ActionButton.Item>
 
-                <ActionButton.Item buttonColor='#7f8fa6' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit project" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
+                <ActionButton.Item buttonColor='#7f8fa6' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="Edit info" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
                   <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
                 </ActionButton.Item>
-
-                <ActionButton.Item buttonColor='#2ed573' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New to-do" onPress={() => this.setState({
-                  backdrop: true
-                })}>
-                  <Icon name="check" style={styles.actionButtonIcon} />
-                </ActionButton.Item>
-
-                <ActionButton.Item buttonColor='#3498db' textStyle={{ fontFamily: 'Gilroy-Semibold' }} title="New Section" onPress={() => this.setState({ newSection: true })}>
-                  <Icon name="ballot" style={styles.actionButtonIcon} />
-                </ActionButton.Item>
-
               </ActionButton>
-
-              <Backdrop
-                visible={this.state.newSection}
-                onClose={() => { this.setState({ newSection: false }) }}
-                swipeConfig={{
-                  velocityThreshold: 0.3,
-                  directionalOffsetThreshold: 80,
-                }}
-                animationConfig={{
-                  speed: 14,
-                  bounciness: 4,
-                }}
-                overlayColor="rgba(0,0,0,0.32)"
-                backdropStyle={{
-                  backgroundColor: '#fff',
-                }}>
-
-                <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <View style={[styles.card]}>
-                    <Text style={[styles.fieldTitle]}>
-                      Section Title
-                  </Text>
-                    <TextInput
-                      style={styles.input}
-                      autoCorrect={false}
-                      autoCapitalize="sentences"
-                      placeholderTextColor="#999"
-                      value={this.state.sectionTitle}
-                      placeholder="Ex: Version 1.0, Design, Test..."
-                      onChangeText={sectionTitle =>
-                        this.setState({ sectionTitle })
-                      }
-                    />
-                    <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
-                      Section To-do
-                  </Text>
-                    <View>
-                      {this.state.todoSection && this.state.todoSection.map((l, i) => (
-                        <ListItem
-                          containerStyle={styles.todoContainer}
-                          key={i}
-                          title={l.task}
-                          rightIcon={
-                            <TouchableOpacity
-                              onPress={() => this.deleteNewSectionTodo(i)}
-                              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
-                              <Icon name="delete" size={20} color="#666" solid />
-                            </TouchableOpacity>
-                          }
-                        />
-                      ))}
-
-                      <View
-                        style={{
-                          marginTop: 5,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginHorizontal: 0
-                        }}>
-                        <TextInput
-                          style={[styles.input, { flex: 10 }]}
-                          autoCorrect={false}
-                          autoCapitalize='sentences'
-                          placeholder="Add new section todo"
-                          onSubmitEditing={() => this.addNewSectionTodo()}
-                          placeholderTextColor="#999"
-                          value={this.state.todoSectionItem}
-                          onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
-                        />
-                        <TouchableOpacity
-                          onPress={() => this.addNewSectionTodo()}
-                          hitSlop={styles.hitSlop}
-                          style={styles.todoBtn}>
-                          <Icon name="chevron-right" size={35} color={themes[themeKey].accentColor} solid />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    style={[styles.shareButton, { backgroundColor: themes[themeKey].backgroundColor, width: '100%' }]}
-                    onPress={() => this.handleSectionSubmit()}>
-                    <Text style={[styles.shareButtonText]}>Create new section</Text>
-                  </TouchableOpacity>
-
-                </View>
-              </Backdrop>
             </View>
             <View>
               <Banner isPro={this.state.proVersion} />
@@ -852,6 +805,93 @@ export default class Details extends React.Component {
             menus={() => () => null}
             imageUrls={[{ url: `file://${this.state.imgViewerUri}` }]} />
         </Modal>
+
+        <Backdrop
+          visible={this.state.newSection}
+          onClose={() => { this.setState({ newSection: false }) }}
+          swipeConfig={{
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80,
+          }}
+          animationConfig={{
+            speed: 14,
+            bounciness: 4,
+          }}
+          overlayColor="rgba(0,0,0,0.32)"
+          backdropStyle={{
+            backgroundColor: '#fff',
+          }}>
+
+          <View style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
+            <View style={[styles.card]}>
+              <Text style={[styles.fieldTitle]}>
+                Section Title
+                  </Text>
+              <TextInput
+                style={styles.input}
+                autoCorrect={false}
+                autoCapitalize="sentences"
+                placeholderTextColor="#999"
+                value={this.state.sectionTitle}
+                placeholder="Ex: Version 1.0, Design, Test..."
+                onChangeText={sectionTitle =>
+                  this.setState({ sectionTitle })
+                }
+              />
+              <Text style={[styles.fieldTitle, { marginTop: 16 }]}>
+                Section To-do
+                  </Text>
+              <View>
+                {this.state.todoSection && this.state.todoSection.map((l, i) => (
+                  <ListItem
+                    containerStyle={styles.todoContainer}
+                    key={i}
+                    title={l.task}
+                    rightIcon={
+                      <TouchableOpacity
+                        onPress={() => this.deleteNewSectionTodo(i)}
+                        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                        <Icon name="delete" size={20} color="#666" solid />
+                      </TouchableOpacity>
+                    }
+                  />
+                ))}
+
+                <View
+                  style={{
+                    marginTop: 5,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginHorizontal: 0
+                  }}>
+                  <TextInput
+                    style={[styles.input, { flex: 10 }]}
+                    autoCorrect={false}
+                    autoCapitalize='sentences'
+                    placeholder="Add new section todo"
+                    onSubmitEditing={() => this.addNewSectionTodo()}
+                    placeholderTextColor="#999"
+                    value={this.state.todoSectionItem}
+                    onChangeText={todoSectionItem => this.setState({ todoSectionItem })}
+                  />
+                  <TouchableOpacity
+                    onPress={() => this.addNewSectionTodo()}
+                    hitSlop={styles.hitSlop}
+                    style={styles.todoBtn}>
+                    <Icon name="chevron-right" size={35} color={themes[themeKey].accentColor} solid />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={[styles.shareButton, { backgroundColor: themes[themeKey].backgroundColor, width: '100%' }]}
+              onPress={() => this.handleSectionSubmit()}>
+              <Text style={[styles.shareButtonText]}>Create new section</Text>
+            </TouchableOpacity>
+
+          </View>
+        </Backdrop>
 
         <Backdrop
           visible={this.state.backdrop}
@@ -932,7 +972,7 @@ export default class Details extends React.Component {
               <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                 <View style={{ margin: 20 }}>
                   <Text style={styles.divTitle}>Tasks</Text>
-
+                  {this.state.selectedSection && this.state.selectedSection.tasks.length === 0 && <Text style={{ fontFamily: 'Gilroy-Regular', color: '#9e9e9e' }}>Your task list is empty...</Text>}
                   {this.state.selectedSection !== null && this.state.selectedSection.tasks.map((task, i) => (
                     <View key={i}>
                       <CheckBox
