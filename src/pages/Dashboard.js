@@ -59,9 +59,9 @@ export default class Dashboard extends React.Component {
     this.setState({ showLoadingAlert: true })
 
     //dev
-    const adUnitId = "ca-app-pub-3940256099942544/5224354917"
+    // const adUnitId = "ca-app-pub-3940256099942544/5224354917"
     // prod
-    // const adUnitId = "ca-app-pub-1120115677806043/5077497247"
+    const adUnitId = "ca-app-pub-1120115677806043/5077497247"
 
     try {
       await AdMobRewarded.setAdUnitID(adUnitId);
