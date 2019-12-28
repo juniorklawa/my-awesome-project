@@ -98,7 +98,7 @@ export default class ProjectCard extends Component {
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
 
-          {project.tags &&
+          {project.tags !== "" &&
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginRight: 100 }}>
               {this.generateTags(project).map((label, i) => (<Badge
                 key={i}
