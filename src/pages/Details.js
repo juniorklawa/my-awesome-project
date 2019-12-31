@@ -67,7 +67,7 @@ export default class Details extends React.Component {
     const key = this.props.navigation.getParam('themeKey', 'NO-THEME-KEY')
     this.setState({ themeKey: key })
 
-    const isPro = await AsyncStorage.getItem('proStartedTime')
+    const isPro = await AsyncStorage.getItem('proTimeLimit')
 
     if (isPro) {
       this.setState({ proVersion: true })
@@ -584,7 +584,7 @@ export default class Details extends React.Component {
                           <Text
                             style={styles.divTitle}>
                             Pictures
-                    </Text>
+                          </Text>
                           <ScrollView horizontal={true}>
                             <View style={{ marginTop: 10, flex: 1, flexDirection: 'row' }}>
                               {images.map((path, i) => (

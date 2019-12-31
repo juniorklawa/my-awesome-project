@@ -20,7 +20,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 import { AdMobRewarded } from 'react-native-admob'
 import { NavigationEvents } from 'react-navigation';
-import AwesomeAlert from 'react-native-awesome-alerts';
 
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
@@ -43,7 +42,7 @@ export default class Dashboard extends React.Component {
     themeKey: 1,
     modal: false,
     proVersion: false,
-    proStartedTime: null,
+    proTimeLimit: null,
     proEndTime: null
   };
 
@@ -57,28 +56,21 @@ export default class Dashboard extends React.Component {
 
   async rewarded() {
     this.setState({ showLoadingAlert: true })
-
     //dev
     const adUnitId = "ca-app-pub-3940256099942544/5224354917"
     //prod
     //const adUnitId ="ca-app-pub-1120115677806043/5077497247"
-
     try {
       await AdMobRewarded.setAdUnitID(adUnitId);
       await AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
       this.setState({ showLoadingAlert: false })
     } catch (e) { this.setState({ showLoadingAlert: false }) }
-
-
-
   }
 
 
   async themeChange(key, isPro) {
-
-
-
-    if (isPro && !this.state.proVersion) {
+    const { proVersion } = this.state
+    if (isPro && !proVersion) {
 
       Alert.alert(
         'Ops!',
@@ -91,11 +83,17 @@ export default class Dashboard extends React.Component {
       return
     }
 
-    await AsyncStorage.setItem(
-      'themeKey',
-      JSON.stringify(key),
-    );
-    this.setState({ themeKey: key })
+    try {
+      await AsyncStorage.setItem(
+        'themeKey',
+        JSON.stringify(key),
+      );
+      this.setState({ themeKey: key })
+
+    } catch (e) {
+      console.error(e)
+    }
+
   }
 
 
@@ -104,25 +102,20 @@ export default class Dashboard extends React.Component {
 
     const themeKeyData = await AsyncStorage.getItem('themeKey');
     const key = (await JSON.parse(themeKeyData)) || null
-    const proStartedTimeData = await AsyncStorage.getItem('proStartedTime');
-    const lastTime = (await JSON.parse(proStartedTimeData)) || null
-
+    const proTimeLimit = await AsyncStorage.getItem('proTimeLimit');
+    const timeLimit = (await JSON.parse(proTimeLimit)) || null
     const d1 = moment();
-    const d2 = lastTime
+    const d2 = timeLimit
     const diff = moment(d2).diff(d1, 'seconds')
 
-
-
-    if (!lastTime || diff <= 0) {
+    if (!timeLimit || diff <= 0) {
       this.setState({ proVersion: false })
     } else {
       this.setState({
         proVersion: true,
-        proEndTime: lastTime
+        proEndTime: timeLimit
       })
     }
-    //alert('difference :' + diff)
-
     if (key) {
       this.setState({ themeKey: key })
     } else {
@@ -137,26 +130,27 @@ export default class Dashboard extends React.Component {
     } catch (e) {
       console.error(e)
     }
+
     this.hideAlert()
     this.fadeInUp()
 
     AdMobRewarded.addEventListener('videoCompleted', async () => {
       this.setState({ proVersion: true })
-      this.setState({ proStartedTime: moment().add({ day: 1 }) })
+      this.setState({ proTimeLimit: moment().add({ day: 1 }) })
 
-      this.state.proEndTime = this.state.proStartedTime
+      this.state.proEndTime = this.state.proTimeLimit
       this.forceUpdate()
-      await AsyncStorage.setItem(
-        'proStartedTime',
-        JSON.stringify(this.state.proStartedTime),
-      );
-      const data = await AsyncStorage.getItem('proStartedTime');
+      try {
+        await AsyncStorage.setItem(
+          'proTimeLimit',
+          JSON.stringify(this.state.proTimeLimit),
+        );
+      } catch (e) {
+        console.error(e)
+      }
+
     }
-
-
     );
-
-
   }
 
   filterProjects() {
@@ -292,20 +286,20 @@ export default class Dashboard extends React.Component {
                         <View
                           style={styles.imgContainer}>
                           {this.state.filterProjects ?
-                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.emptyContainer}>
 
                               <Text
                                 style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
                                 ¯\_(ツ)_/¯
-                        </Text>
+                             </Text>
 
                               <Text
                                 style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
                                 Your archived list is empty...
-                        </Text>
+                              </Text>
 
                             </View> :
-                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.emptyContainer}>
                               <Image
                                 style={styles.imgOnboarding}
                                 source={require('../icons/therocket.png')}
@@ -315,7 +309,7 @@ export default class Dashboard extends React.Component {
                                   styles.onboardingText,
                                 ]}>
                                 Press the + button to launch your new awesome idea!
-                      </Text>
+                              </Text>
                             </View>
                           }
 
@@ -333,15 +327,27 @@ export default class Dashboard extends React.Component {
               buttonColor={themes[themeKey].actionButtonColor}
             >
 
-              <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#455A64' title='Settings' onPress={() => this.setState({ modal: true })}>
+              <ActionButton.Item
+                textStyle={{ fontFamily: 'Gilroy-Semibold' }}
+                buttonColor='#455A64' t
+                itle='Settings'
+                onPress={() => this.setState({ modal: true })}>
                 <Icon size={25} name="settings" color={'#fff'} />
               </ActionButton.Item>
 
-              <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#B00D17' title='Delete all data' onPress={() => this.deleteAll()}>
+              <ActionButton.Item
+                textStyle={{ fontFamily: 'Gilroy-Semibold' }}
+                buttonColor='#B00D17'
+                title='Delete all data'
+                onPress={() => this.deleteAll()}>
                 <Icon size={25} name="delete" color={'#fff'} />
               </ActionButton.Item>
 
-              <ActionButton.Item textStyle={{ fontFamily: 'Gilroy-Semibold' }} buttonColor='#4DB00D' title="New Project" onPress={() => this.props.navigation.navigate('Add', { themeKey: themeKey })}>
+              <ActionButton.Item
+                textStyle={{ fontFamily: 'Gilroy-Semibold' }}
+                buttonColor='#4DB00D'
+                title="New Project"
+                onPress={() => this.props.navigation.navigate('Add', { themeKey: themeKey })}>
                 <Icon name="file-document" size={25} color={'#fff'} />
               </ActionButton.Item>
             </ActionButton>
@@ -358,8 +364,11 @@ export default class Dashboard extends React.Component {
           onRequestClose={() => {
             this.setState({ modal: false })
           }}>
-          <LinearGradient style={{ flex: 1 }} colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
-            <Animatable.View animation="fadeInLeft" style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', margin: 20 }}>
+          <LinearGradient style={{ flex: 1 }}
+            colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
+            <Animatable.View
+              animation="fadeInLeft"
+              style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', margin: 20 }}>
               <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 32, color: '#fff' }}>
                 Settings
               </Text>
@@ -370,7 +379,9 @@ export default class Dashboard extends React.Component {
               </TouchableOpacity>
             </Animatable.View>
             <ScrollView>
-              <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
+              <Animatable.View animation="fadeInUp"
+                duration={800}
+                style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
                 {!this.state.proVersion ?
                   <View>
                     <View style={{ margin: 20 }}>
@@ -471,6 +482,10 @@ const styles = StyleSheet.create({
     bottom: 10,
     left: 10,
     right: 10,
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   alertStyle: {
     height: 100,
