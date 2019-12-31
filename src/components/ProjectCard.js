@@ -47,6 +47,10 @@ export default class ProjectCard extends Component {
     return (percentage * 100) || 0
   }
 
+  generateTags(project) {
+    return project.tags.split(/,| /).filter((word) => word !== "")
+  }
+
 
   async goToProjectDetails(id) {
     this.props.navigation.navigate('Details', { projectId: id, themeKey: this.props.themeKey });
@@ -93,9 +97,27 @@ export default class ProjectCard extends Component {
           <View>
             <Text style={styles.projectCategory}>{project.category}</Text>
           </View>
-          {
-            project.tags ? <Text style={[styles.projectTags, { color: themes[themeKey].accentColor }]}>{project.tags}</Text> : null
+
+          {project.tags !== "" &&
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginRight: 100 }}>
+              {this.generateTags(project).map((label, i) => (<Badge
+                key={i}
+                containerStyle={{ margin: 1 }}
+                value={label}
+                badgeStyle={{
+                  padding: 5,
+                  backgroundColor: themes[themeKey].accentColor,
+                  borderWidth: 0,
+                }}
+                textStyle={{ fontFamily: 'Gilroy-Medium' }}
+              />))}
+            </View>
           }
+
+
+
+
+
 
           {
             project.todo.length > 0 || project.sections ?

@@ -300,6 +300,12 @@ export default class Details extends React.Component {
     this.props.navigation.navigate('Dashboard', { isFirst: true });
   }
 
+  generateTags(tags) {
+    console.log(tags)
+    //return ["Teste", "Android"]
+    return tags.split(/,| /).filter((word) => word !== "")
+  }
+
   addSectionTodo = async () => {
 
     if (this.state.todoSectionItem === '') {
@@ -533,7 +539,21 @@ export default class Details extends React.Component {
                             style={styles.divTitle}>
                             Tags
                     </Text>
-                          <Text style={[styles.tags, { color: themes[themeKey].accentColor }]}>{tags}</Text>
+
+                          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginRight: 10 }}>
+                            {tags && this.generateTags(tags).map((label,i) => (<Badge
+                              key={i}
+                              containerStyle={{ margin: 1 }}
+                              value={label}
+                              badgeStyle={{
+                                padding: 5,
+                                backgroundColor: themes[themeKey].accentColor,
+                                borderWidth: 0,
+                              }}
+                              textStyle={{ fontFamily: 'Gilroy-Medium' }}
+                            />))}
+                          </View>
+
                         </View> : null}
                         <Text
                           style={styles.divTitle}>

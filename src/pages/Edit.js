@@ -201,7 +201,7 @@ export default class Edit extends Component {
             project.category = this.state.category,
             project.tags = this.state.tags,
             project.worktime = this.state.estimatedTime + ' ' + this.state.estimatedInterval
-            project.priority = this.state.priority
+          project.priority = this.state.priority
         });
 
     } else {
@@ -297,7 +297,7 @@ export default class Edit extends Component {
           </Overlay>
 
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
-            <View style={{ backgroundColor: '#fff', flex: 1 }}>
+            <View style={{ backgroundColor: themes[themeKey].backgroundColor, flex: 1 }}>
               <LinearGradient colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]}>
                 <View style={styles.chevron}>
                   <TouchableOpacity
@@ -317,7 +317,7 @@ export default class Edit extends Component {
                 }}
               >
 
-                <View style={styles.container}>
+                <View style={[styles.container, { backgroundColor: themes[themeKey].backgroundColor }]}>
                   {this.state.showAlert ?
                     <View style={{ borderRadius: 10, marginTop: 20 }}>
                       <ShimmerPlaceHolder style={[styles.placeHolder, { height: 100 }]} autoRun={true} />
@@ -327,177 +327,176 @@ export default class Edit extends Component {
                       <ShimmerPlaceHolder style={styles.placeHolder} autoRun={true} />
                     </View> :
                     <View>
-                      <Image
-                        style={styles.heroImg}
-                        source={require('../icons/newidea.png')}></Image>
-                      <Text
-                        style={styles.fieldTitle}>
-                        Required information
+                      <View style={{ padding: 20, borderRadius: 10, backgroundColor: '#fff' }}>
+                        <Text
+                          style={styles.fieldTitle}>
+                          Required information
                                   </Text>
 
-                      <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
-                        Project Name
+                        <Text style={[styles.labelTitle, { color: this.state.titleLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
+                          Project Name
                                   </Text>
-                      <TextInput
-                        style={styles.input}
-                        autoCorrect={false}
-                        onFocus={() => this.setState({ titleLabel: !this.props.titleLabel })}
-                        onBlur={() => this.setState({ titleLabel: !this.state.titleLabel })}
-                        autoCapitalize='words'
-                        placeholder="Ex: My Awesome Idea"
-                        placeholderTextColor="#999"
-                        value={title}
-                        onChangeText={title => this.setState({ title })}
-                      />
+                        <TextInput
+                          style={styles.input}
+                          autoCorrect={false}
+                          onFocus={() => this.setState({ titleLabel: !this.props.titleLabel })}
+                          onBlur={() => this.setState({ titleLabel: !this.state.titleLabel })}
+                          autoCapitalize='words'
+                          placeholder="Ex: My Awesome Idea"
+                          placeholderTextColor="#999"
+                          value={title}
+                          onChangeText={title => this.setState({ title })}
+                        />
 
-                      <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
-                        Description
+                        <Text style={[styles.labelTitle, { color: this.state.descriptionLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
+                          Description
                   </Text>
-                      <TextInput
-                        style={styles.input}
-                        editable
-                        multiline
-                        onFocus={() => this.setState({ descriptionLabel: !this.props.descriptionLabel })}
-                        onBlur={() => this.setState({ descriptionLabel: !this.state.descriptionLabel })}
-                        autoCorrect={false}
-                        autoCapitalize="sentences"
-                        placeholderTextColor="#999"
-                        value={shortDescription}
-                        placeholder="Ex: An app that tracks awesome ideas"
-                        onChangeText={shortDescription =>
-                          this.setState({ shortDescription })
-                        }
-                      />
+                        <TextInput
+                          style={styles.input}
+                          editable
+                          multiline
+                          onFocus={() => this.setState({ descriptionLabel: !this.props.descriptionLabel })}
+                          onBlur={() => this.setState({ descriptionLabel: !this.state.descriptionLabel })}
+                          autoCorrect={false}
+                          autoCapitalize="sentences"
+                          placeholderTextColor="#999"
+                          value={shortDescription}
+                          placeholder="Ex: An app that tracks awesome ideas"
+                          onChangeText={shortDescription =>
+                            this.setState({ shortDescription })
+                          }
+                        />
 
-                      <Text
-                        style={[styles.fieldTitle, { marginTop: 16 }]}>
-                        Additional information
+                        <Text
+                          style={[styles.fieldTitle, { marginTop: 16 }]}>
+                          Additional information
                    </Text>
 
-                      <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
-                        Keywords
+                        <Text style={[styles.labelTitle, { color: this.state.tagsLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
+                          Keywords
                   </Text>
 
-                      <TextInput
-                        style={styles.input}
-                        autoCorrect={false}
-                        autoCapitalize="words"
-                        onFocus={() => this.setState({ tagsLabel: !this.props.tagsLabel })}
-                        onBlur={() => this.setState({ tagsLabel: !this.state.tagsLabel })}
-                        placeholder="Ex: #Random #Pictures #Dogs"
-                        placeholderTextColor="#999"
-                        value={tags}
-                        onChangeText={tags => this.setState({ tags })}
-                      />
+                        <TextInput
+                          style={styles.input}
+                          autoCorrect={false}
+                          autoCapitalize="words"
+                          onFocus={() => this.setState({ tagsLabel: !this.props.tagsLabel })}
+                          onBlur={() => this.setState({ tagsLabel: !this.state.tagsLabel })}
+                          placeholder="Ex: #Random #Pictures #Dogs"
+                          placeholderTextColor="#999"
+                          value={tags}
+                          onChangeText={tags => this.setState({ tags })}
+                        />
 
-                      <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
-                        Estimated time
+                        <Text style={[styles.labelTitle, { color: this.state.estimatedTimeLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
+                          Estimated time
                   </Text>
 
-                      <View style={styles.timeContainer}>
-                        <View>
-                          <TextInput
-                            style={styles.input}
-                            autoCorrect={false}
-                            onFocus={() => this.setState({ estimatedTimeLabel: !this.props.estimatedTimeLabel })}
-                            onBlur={() => this.setState({ estimatedTimeLabel: !this.state.estimatedTimeLabel })}
-                            autoCapitalize="none"
-                            placeholder="0"
-                            keyboardType='numeric'
-                            placeholderTextColor="#999"
-                            value={estimatedTime}
-                            onChangeText={estimatedTime => this.setState({ estimatedTime })}
-                          />
-                        </View>
-                        <View style={[styles.selectInput, styles.intervalInput]}>
-                          <Picker
-                            mode="dropdown"
-                            iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
-                            style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
-                            value={estimatedInterval}
-                            onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
-                            placeholder="Select one option"
-                            selectedValue={estimatedInterval}
-                            onValueChange={estimatedInterval => this.setState({ estimatedInterval })}
-                            placeholderStyle={{ color: "#bfc6ea" }}
-                            placeholderIconColor={themes[themeKey].accentColor}>
-
-                            <Picker.Item label="day(s)" value="day(s)" />
-                            <Picker.Item label="week(s)" value="week(s)" />
-                            <Picker.Item label="month(s)" value="month(s)" />
-                            <Picker.Item label="year(s)" value="year(s)" />
-
-                          </Picker>
-                        </View>
-                      </View>
-
-                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
-                        Category
-                  </Text>
-                      {
-                        defaultCategory ? <View style={styles.selectInput}>
-                          <Picker
-                            mode="dropdown"
-                            iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
-                            style={{ width: '100%' }}
-                            value={category}
-                            onChangeText={category => this.setState({ category })}
-                            placeholder="Select one option"
-                            onBlur={() => this.setState({ categoryLabel: !this.state.categoryLabel })}
-                            selectedValue={category}
-                            onValueChange={category => {
-                              if (category === 'new') {
-                                this.setState({ defaultCategory: false })
-                              } else {
-                                this.setState({ category })
-                              }
-                            }}
-                            placeholderStyle={{ color: "#bfc6ea" }}
-                            placeholderIconColor="#007aff"
-                          >
-                            <Picker.Item label="Application" value="Application" />
-                            <Picker.Item label="Website" value="Website" />
-                            <Picker.Item label="Software" value="Software" />
-                            <Picker.Item label="Bot" value="Bot" />
-                            <Picker.Item label="Game" value="Game" />
-                            <Picker.Item label="Other" value="Other" />
-                            <Picker.Item label="Create new..." value="new" />
-                          </Picker>
-
-                        </View> :
+                        <View style={styles.timeContainer}>
                           <View>
                             <TextInput
                               style={styles.input}
                               autoCorrect={false}
-                              autoFocus={true}
-                              autoCapitalize="words"
+                              onFocus={() => this.setState({ estimatedTimeLabel: !this.props.estimatedTimeLabel })}
+                              onBlur={() => this.setState({ estimatedTimeLabel: !this.state.estimatedTimeLabel })}
+                              autoCapitalize="none"
+                              placeholder="0"
+                              keyboardType='numeric'
                               placeholderTextColor="#999"
-                              onChangeText={category => this.setState({ category })}
+                              value={estimatedTime}
+                              onChangeText={estimatedTime => this.setState({ estimatedTime })}
                             />
                           </View>
-                      }
+                          <View style={[styles.selectInput, styles.intervalInput]}>
+                            <Picker
+                              mode="dropdown"
+                              iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
+                              style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
+                              value={estimatedInterval}
+                              onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
+                              placeholder="Select one option"
+                              selectedValue={estimatedInterval}
+                              onValueChange={estimatedInterval => this.setState({ estimatedInterval })}
+                              placeholderStyle={{ color: "#bfc6ea" }}
+                              placeholderIconColor={themes[themeKey].accentColor}>
 
-                      <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
-                        Priority
+                              <Picker.Item label="day(s)" value="day(s)" />
+                              <Picker.Item label="week(s)" value="week(s)" />
+                              <Picker.Item label="month(s)" value="month(s)" />
+                              <Picker.Item label="year(s)" value="year(s)" />
+
+                            </Picker>
+                          </View>
+                        </View>
+
+                        <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
+                          Category
                   </Text>
-                      <View style={styles.selectInput}>
-                        <Picker
-                          mode="dropdown"
-                          iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
-                          style={{ width: '100%' }}
-                          value={this.state.priority}
-                          onChangeText={priority => this.setState({ priority })}
-                          placeholder="Select one option"
-                          selectedValue={this.state.priority}
-                          onValueChange={priority => this.setState({ priority })}
-                          placeholderStyle={{ color: "#bfc6ea" }}
-                          placeholderIconColor={themes[themeKey].accentColor}
-                        >
-                          <Picker.Item label="None" value="None" />
-                          <Picker.Item label="High" value="High" />
-                          <Picker.Item label="Medium" value="Medium" />
-                          <Picker.Item label="Low" value="Low" />
-                        </Picker>
+                        {
+                          defaultCategory ? <View style={styles.selectInput}>
+                            <Picker
+                              mode="dropdown"
+                              iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
+                              style={{ width: '100%' }}
+                              value={category}
+                              onChangeText={category => this.setState({ category })}
+                              placeholder="Select one option"
+                              onBlur={() => this.setState({ categoryLabel: !this.state.categoryLabel })}
+                              selectedValue={category}
+                              onValueChange={category => {
+                                if (category === 'new') {
+                                  this.setState({ defaultCategory: false })
+                                } else {
+                                  this.setState({ category })
+                                }
+                              }}
+                              placeholderStyle={{ color: "#bfc6ea" }}
+                              placeholderIconColor="#007aff"
+                            >
+                              <Picker.Item label="Application" value="Application" />
+                              <Picker.Item label="Website" value="Website" />
+                              <Picker.Item label="Software" value="Software" />
+                              <Picker.Item label="Bot" value="Bot" />
+                              <Picker.Item label="Game" value="Game" />
+                              <Picker.Item label="Other" value="Other" />
+                              <Picker.Item label="Create new..." value="new" />
+                            </Picker>
+
+                          </View> :
+                            <View>
+                              <TextInput
+                                style={styles.input}
+                                autoCorrect={false}
+                                autoFocus={true}
+                                autoCapitalize="words"
+                                placeholderTextColor="#999"
+                                onChangeText={category => this.setState({ category })}
+                              />
+                            </View>
+                        }
+
+                        <Text style={[styles.labelTitle, { color: this.state.categoryLabel === false ? '#4b4b4b' : themes[themeKey].accentColor }]}>
+                          Priority
+                  </Text>
+                        <View style={styles.selectInput}>
+                          <Picker
+                            mode="dropdown"
+                            iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
+                            style={{ width: '100%' }}
+                            value={this.state.priority}
+                            onChangeText={priority => this.setState({ priority })}
+                            placeholder="Select one option"
+                            selectedValue={this.state.priority}
+                            onValueChange={priority => this.setState({ priority })}
+                            placeholderStyle={{ color: "#bfc6ea" }}
+                            placeholderIconColor={themes[themeKey].accentColor}
+                          >
+                            <Picker.Item label="None" value="None" />
+                            <Picker.Item label="High" value="High" />
+                            <Picker.Item label="Medium" value="Medium" />
+                            <Picker.Item label="Low" value="Low" />
+                          </Picker>
+                        </View>
                       </View>
                     </View>
                   }
@@ -505,15 +504,12 @@ export default class Edit extends Component {
               </ScrollView>
 
               <TouchableOpacity
-                style={[styles.shareButton, { backgroundColor: themes[themeKey].backgroundColor }]}
+                style={[styles.shareButton, { backgroundColor: themes[themeKey].accentColor }]}
                 onPress={() => this.handleSubmit()}>
                 <Text style={[styles.shareButtonText]}>{'Update project'}</Text>
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
-
-
-
         </SafeAreaView>
       </LinearGradient>
     );
@@ -523,7 +519,6 @@ export default class Edit extends Component {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
-    backgroundColor: '#fff',
     flex: 1,
     minHeight: '100%',
   },

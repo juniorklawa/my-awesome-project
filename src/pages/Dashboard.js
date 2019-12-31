@@ -57,9 +57,10 @@ export default class Dashboard extends React.Component {
   async rewarded() {
     this.setState({ showLoadingAlert: true })
     //dev
-    const adUnitId = "ca-app-pub-3940256099942544/5224354917"
-    //prod
-    //const adUnitId ="ca-app-pub-1120115677806043/5077497247"
+     const adUnitId = "ca-app-pub-3940256099942544/5224354917"
+    // prod
+    //const adUnitId = "ca-app-pub-1120115677806043/5077497247"
+
     try {
       await AdMobRewarded.setAdUnitID(adUnitId);
       await AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
