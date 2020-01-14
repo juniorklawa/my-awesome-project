@@ -411,7 +411,7 @@ export default class Edit extends Component {
                             <Picker
                               mode="dropdown"
                               iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
-                              style={{ width: '100%', fontFamily: 'Gilroy-Medium' }}
+                              style={{ width: '100%', fontFamily: 'Roboto-Medium' }}
                               value={estimatedInterval}
                               onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
                               placeholder="Select one option"
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
   labelTitle: {
     color: '#8c7ae6',
     fontSize: 16,
-    fontFamily: 'Gilroy-Bold',
+    fontFamily: 'Roboto-Bold',
     marginTop: 16
   },
   imgSlider: {
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     paddingHorizontal: 18,
     marginBottom: 10,
-    fontFamily: 'Gilroy-Black'
+    fontFamily: 'Roboto-Black'
   },
   selectInput: {
     borderRadius: 4,
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
   fieldTitle: {
     color: '#4b4b4b',
     fontSize: 24,
-    fontFamily: 'Gilroy-Bold'
+    fontFamily: 'Roboto-Bold'
   },
   heroImg: {
     width: '100%',
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "#F7F7F7",
     padding: 15,
-    fontFamily: 'Gilroy-Medium',
+    fontFamily: 'Roboto-Medium',
     marginTop: 10,
     fontSize: 16,
   },
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
   },
 
   shareButtonText: {
-    fontFamily: 'Gilroy-Black',
+    fontFamily: 'Roboto-Black',
     fontSize: 16,
     color: '#FFF',
   },
