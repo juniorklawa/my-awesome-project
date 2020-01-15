@@ -57,10 +57,8 @@ export default class Dashboard extends React.Component {
   async rewarded() {
     this.setState({ showLoadingAlert: true })
     //dev
-     const adUnitId = "ca-app-pub-3940256099942544/5224354917"
-    // prod
-    //const adUnitId = "ca-app-pub-1120115677806043/5077497247"
-
+    const adUnitId = "ca-app-pub-3940256099942544/5224354917"
+   
     try {
       await AdMobRewarded.setAdUnitID(adUnitId);
       await AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
@@ -295,7 +293,7 @@ export default class Dashboard extends React.Component {
                              </Text>
 
                               <Text
-                                style={{ fontFamily: 'Gilroy-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
+                                style={{ fontFamily: 'Roboto-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
                                 Your archived list is empty...
                               </Text>
 
@@ -329,15 +327,15 @@ export default class Dashboard extends React.Component {
             >
 
               <ActionButton.Item
-                textStyle={{ fontFamily: 'Gilroy-Semibold' }}
-                buttonColor='#455A64' t
-                itle='Settings'
+                textStyle={{ fontFamily: 'Roboto-Medium' }}
+                buttonColor='#455A64'
+                title='Settings'
                 onPress={() => this.setState({ modal: true })}>
                 <Icon size={25} name="settings" color={'#fff'} />
               </ActionButton.Item>
 
               <ActionButton.Item
-                textStyle={{ fontFamily: 'Gilroy-Semibold' }}
+                textStyle={{ fontFamily: 'Roboto-Medium' }}
                 buttonColor='#B00D17'
                 title='Delete all data'
                 onPress={() => this.deleteAll()}>
@@ -345,7 +343,7 @@ export default class Dashboard extends React.Component {
               </ActionButton.Item>
 
               <ActionButton.Item
-                textStyle={{ fontFamily: 'Gilroy-Semibold' }}
+                textStyle={{ fontFamily: 'Roboto-Medium' }}
                 buttonColor='#4DB00D'
                 title="New Project"
                 onPress={() => this.props.navigation.navigate('Add', { themeKey: themeKey })}>
@@ -370,7 +368,7 @@ export default class Dashboard extends React.Component {
             <Animatable.View
               animation="fadeInLeft"
               style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', margin: 20 }}>
-              <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 32, color: '#fff' }}>
+              <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 32, color: '#fff' }}>
                 Settings
               </Text>
               <TouchableOpacity
@@ -386,15 +384,15 @@ export default class Dashboard extends React.Component {
                 {!this.state.proVersion ?
                   <View>
                     <View style={{ margin: 20 }}>
-                      <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#4b4b4b' }}>Unlock PRO Version</Text>
-                      <Text style={{ fontFamily: 'Gilroy-Medium' }}>Watch a video to Unlock new themes, and disable Advertisements for 1 day! </Text>
+                      <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 24, color: '#4b4b4b' }}>Unlock PRO Version</Text>
+                      <Text style={{ fontFamily: 'Roboto-Medium' }}>Watch a video to Unlock new themes, and disable Advertisements for 1 day! </Text>
                     </View>
 
                     {!this.state.showLoadingAlert ?
                       <TouchableOpacity style={{ backgroundColor: '#eb2f06', marginHorizontal: 20, marginBottom: 20, height: 50, borderRadius: 5, alignItems: 'center', flexDirection: 'row' }} onPress={() => this.rewarded()}>
 
                         <Icon style={{ marginLeft: 10 }} name='play' color='#fff' size={32} />
-                        <Text style={{ color: '#fff', fontFamily: 'Gilroy-Bold', fontSize: 14 }}>
+                        <Text style={{ color: '#fff', fontFamily: 'Roboto-Bold', fontSize: 14 }}>
                           Watch a video
                         </Text>
 
@@ -404,15 +402,15 @@ export default class Dashboard extends React.Component {
                       </View>}
                   </View> :
                   <View style={{ margin: 20 }}>
-                    <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#f6b93b' }}>PRO Version Unlocked</Text>
-                    <Text style={{ fontFamily: 'Gilroy-Medium' }}>PRO themes unlocked and Advertisements disabled until {moment(this.state.proEndTime).format('DD/MM/YYYY hh:mm A')} </Text>
+                    <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 24, color: '#f6b93b' }}>PRO Version Unlocked</Text>
+                    <Text style={{ fontFamily: 'Roboto-Medium' }}>PRO themes unlocked and Advertisements disabled until {moment(this.state.proEndTime).format('DD/MM/YYYY hh:mm A')} </Text>
                   </View>
                 }
               </Animatable.View>
 
               <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
                 <View style={{ margin: 20 }}>
-                  <Text style={{ fontFamily: 'Gilroy-Bold', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
+                  <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
                 </View>
 
                 <TouchableOpacity onPress={() => this.themeChange(1, false)}>
@@ -469,7 +467,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#FFF',
-    fontFamily: 'Gilroy-Extrabold',
+    fontFamily: 'Roboto-Black',
     fontSize: 32,
     marginLeft: 18,
     marginTop: 32

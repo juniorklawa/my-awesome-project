@@ -109,7 +109,7 @@ export default class ProjectCard extends Component {
                   backgroundColor: themes[themeKey].accentColor,
                   borderWidth: 0,
                 }}
-                textStyle={{ fontFamily: 'Gilroy-Medium' }}
+                textStyle={{ fontFamily: 'Roboto-Medium' }}
               />))}
             </View>
           }
@@ -120,7 +120,7 @@ export default class ProjectCard extends Component {
 
 
           {
-            project.todo.length > 0 || project.sections ?
+            project.todo.length > 0 || project.sections.length > 0 ?
               <View style={{ position: 'absolute', left: '75%', top: '35%' }}>
                 <ProgressCircle
                   percent={this.calculateProgress(project)}
@@ -132,7 +132,7 @@ export default class ProjectCard extends Component {
                   {this.calculateProgress(project) === 100 ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[{ fontSize: 22, color: themes[themeKey].accentColor, fontFamily: 'Gilroy-Bold' }]}>
+                    <Text style={[{ fontSize: 22, color: themes[themeKey].accentColor, fontFamily: 'Roboto-Bold' }]}>
                       {
                         `${this.calculateProgress(project).toFixed(0)}%`
                       }
@@ -151,7 +151,7 @@ export default class ProjectCard extends Component {
 
 const styles = StyleSheet.create({
   projectCategory: {
-    fontFamily: 'Gilroy-Semibold',
+    fontFamily: 'Roboto-Medium',
     color: '#949494'
   },
   projectContainer: {
@@ -172,18 +172,18 @@ const styles = StyleSheet.create({
     fontSize: 23,
     marginTop: 10,
     padding: 0,
-    fontFamily: 'Gilroy-Extrabold',
+    fontFamily: 'Roboto-Black',
     width: '65%',
     lineHeight: 24
   },
   projectDate: {
     color: '#929699',
     fontSize: 14,
-    fontFamily: 'Gilroy-Regular',
+    fontFamily: 'Roboto-Regular',
   },
   projectTags: {
     color: '#8c7ae6',
-    fontFamily: 'Gilroy-Bold',
+    fontFamily: 'Roboto-Bold',
     width: '60%',
     marginTop: 10
   },
