@@ -58,9 +58,7 @@ export default class Dashboard extends React.Component {
     this.setState({ showLoadingAlert: true })
     //dev
     const adUnitId = "ca-app-pub-3940256099942544/5224354917"
-    // prod
-    //const adUnitId = "ca-app-pub-1120115677806043/5077497247"
-
+   
     try {
       await AdMobRewarded.setAdUnitID(adUnitId);
       await AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
@@ -134,12 +132,6 @@ export default class Dashboard extends React.Component {
 
     this.hideAlert()
     this.fadeInUp()
-
-    this.setState({ proVersion: true })
-    this.setState({ proTimeLimit: moment().add({ day: 1 }) })
-
-    this.state.proEndTime = this.state.proTimeLimit
-    this.forceUpdate()
 
     AdMobRewarded.addEventListener('videoCompleted', async () => {
       this.setState({ proVersion: true })
