@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import { Badge } from 'react-native-elements'
 import moment from 'moment';
-import { themes } from '../components/themesProvider'
+import { themes } from '../providers/themesProvider'
 
 export default class ProjectCard extends Component {
 
@@ -109,7 +109,7 @@ export default class ProjectCard extends Component {
                   backgroundColor: themes[themeKey].accentColor,
                   borderWidth: 0,
                 }}
-                textStyle={{ fontFamily: 'Roboto-Medium' }}
+                textStyle={{ fontFamily: 'Lato-Bold' }}
               />))}
             </View>
           }
@@ -132,7 +132,7 @@ export default class ProjectCard extends Component {
                   {this.calculateProgress(project) === 100 ?
                     <Icon name="check" size={35} color={"#059B79"} style={styles.actionButtonIcon} />
                     :
-                    <Text style={[{ fontSize: 22, color: themes[themeKey].accentColor, fontFamily: 'Roboto-Bold' }]}>
+                    <Text style={[{ fontSize: 22, color: themes[themeKey].accentColor, fontFamily: 'Lato-Black' }]}>
                       {
                         `${this.calculateProgress(project).toFixed(0)}%`
                       }
@@ -151,7 +151,7 @@ export default class ProjectCard extends Component {
 
 const styles = StyleSheet.create({
   projectCategory: {
-    fontFamily: 'Roboto-Medium',
+    fontFamily: 'Lato-Regular',
     color: '#949494'
   },
   projectContainer: {
@@ -172,18 +172,18 @@ const styles = StyleSheet.create({
     fontSize: 23,
     marginTop: 10,
     padding: 0,
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Lato-Black',
     width: '65%',
     lineHeight: 24
   },
   projectDate: {
     color: '#929699',
     fontSize: 14,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Lato-Regular',
   },
   projectTags: {
     color: '#8c7ae6',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Lato-Black',
     width: '60%',
     marginTop: 10
   },
