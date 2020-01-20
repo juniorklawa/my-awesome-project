@@ -155,7 +155,7 @@ export default class Edit extends Component {
         quality: 0.1,
         path: 'myawesomeproject',
       },
-    };
+  };
 
     ImagePicker.showImagePicker(options, response => {
       if (response.error) {
