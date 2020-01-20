@@ -1,5 +1,7 @@
 # My Awesome Idea (Projects/Ideas Tracker)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/26e1b2da27df415591a414604a1137a0)](https://app.codacy.com/manual/juniorklawa/MyAwesomeProject?utm_source=github.com&utm_medium=referral&utm_content=juniorklawa/MyAwesomeProject&utm_campaign=Badge_Grade_Settings)
+
 My Awesome Idea is an app that helps you to track and manage your project or idea.
 
 [My Awesome Idea](https://play.google.com/store/apps/details?id=com.myawesomeproject60&hl=pt_BR) - Google Play Link
