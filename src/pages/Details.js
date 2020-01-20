@@ -28,9 +28,8 @@ import { Backdrop } from "react-native-backdrop";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import * as Progress from 'react-native-progress';
-import { themes, theme } from '../components/themesProvider'
+import { themes } from '../providers/themesProvider'
 import moment from 'moment';
-import Banner from '../components/Banner';
 
 export default class Details extends React.Component {
 
@@ -442,7 +441,7 @@ export default class Details extends React.Component {
                 }}
                 isVisible={this.state.isVisible}>
                 <Text
-                  style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Roboto-Black' }]}>
+                  style={[{ color: '#4b4b4b', fontSize: 24, marginLeft: 10, fontFamily: 'Lato-Black' }]}>
                   New Todo
               </Text>
 
@@ -487,7 +486,7 @@ export default class Details extends React.Component {
                     <Animatable.View animation="fadeIn" duration={700}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text
-                          style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Roboto-Black', flex: 3 }]}>
+                          style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Lato-Black', flex: 3 }]}>
                           {this.state.project.title}
                         </Text>
                         <TouchableOpacity
@@ -501,7 +500,7 @@ export default class Details extends React.Component {
                         <Text
                           style={[
 
-                            { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Roboto-Regular' },
+                            { color: '#eeeeee', fontSize: 14, marginBottom: 20, fontFamily: 'Lato-Regular' },
                           ]}>
                           Created at {moment(date).format('ddd, D[th] MMMM/YYYY')}
                         </Text>
@@ -530,7 +529,7 @@ export default class Details extends React.Component {
                   </Text>
                         <Text
                           style={[
-                            { color: '#959595', fontSize: 16, marginTop: 5, fontFamily: 'Roboto-Regular' },
+                            { color: '#959595', fontSize: 16, marginTop: 5, fontFamily: 'Lato-Regular' },
                           ]}>
                           {shortDescription}
                         </Text>
@@ -541,7 +540,7 @@ export default class Details extends React.Component {
                     </Text>
 
                           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginRight: 10 }}>
-                            {tags && this.generateTags(tags).map((label,i) => (<Badge
+                            {tags && this.generateTags(tags).map((label, i) => (<Badge
                               key={i}
                               containerStyle={{ margin: 1 }}
                               value={label}
@@ -550,7 +549,7 @@ export default class Details extends React.Component {
                                 backgroundColor: themes[themeKey].accentColor,
                                 borderWidth: 0,
                               }}
-                              textStyle={{ fontFamily: 'Roboto-Medium' }}
+                              textStyle={{ fontFamily: 'Lato-Regular' }}
                             />))}
                           </View>
 
@@ -559,7 +558,7 @@ export default class Details extends React.Component {
                           style={styles.divTitle}>
                           Category
                   </Text>
-                        <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Roboto-Medium' },]}>{category}</Text>
+                        <Text style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Lato-Regular' },]}>{category}</Text>
                         {this.state.project.estimatedTime != '' ?
                           <View>
                             <Text
@@ -568,7 +567,7 @@ export default class Details extends React.Component {
                      </Text>
 
                             <Text
-                              style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Roboto-Regular' },]}>
+                              style={[{ color: '#9E9E9E', fontSize: 16, marginTop: 5, fontFamily: 'Lato-Regular' },]}>
                               {worktime}
                             </Text>
                           </View> : null}
@@ -577,7 +576,7 @@ export default class Details extends React.Component {
                         {this.state.project.priority != 'None' ?
                           <View>
                             <Text
-                              style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Roboto-Bold' }]}>
+                              style={[{ color: '#4b4b4b', fontSize: 16, marginTop: 8, fontFamily: 'Lato-Black' }]}>
                               Priority
                      </Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -585,7 +584,7 @@ export default class Details extends React.Component {
                                 this.switchLabel(priority)
                               }
                               <Text
-                                style={[styles.category, { marginLeft: 5, fontFamily: 'Roboto-Medium', color: themes[themeKey].accentColor }]}>
+                                style={[styles.category, { marginLeft: 5, fontFamily: 'Lato-Regular', color: themes[themeKey].accentColor }]}>
                                 {priority}
                               </Text>
                             </View>
@@ -625,7 +624,7 @@ export default class Details extends React.Component {
                                 style={styles.newPicture}
                                 onPress={() => this.handleSelectImage()}>
                                 <Icon name="image" size={35} color={themes[themeKey].accentColor} />
-                                <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Roboto-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                                <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Lato-Black', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                               </TouchableOpacity>
 
 
@@ -642,12 +641,12 @@ export default class Details extends React.Component {
 
                       <View style={{ margin: 20 }}>
                         <Text style={styles.divTitle}>To-do</Text>
-                        {this.state.todo.length === 0 && <Text style={{ fontFamily: 'Roboto-Regular', color: '#9e9e9e' }}>Your todo list is empty...</Text>}
+                        {this.state.todo.length === 0 && <Text style={{ fontFamily: 'Lato-Regular', color: '#9e9e9e' }}>Your todo list is empty...</Text>}
 
                         {this.state.todo && this.state.todo.map((task, i) => (
                           <CheckBox
                             key={i}
-                            fontFamily={'Roboto-Medium'}
+                            fontFamily={'Lato-Regular'}
                             style={{ width: '100%' }}
                             title={task.task}
                             containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
@@ -693,7 +692,7 @@ export default class Details extends React.Component {
                             alignItems: 'center'
                           }}>
                           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontFamily: 'Roboto-Medium', color: '#fff', fontSize: 16 }}>
+                            <Text style={{ fontFamily: 'Lato-Regular', color: '#fff', fontSize: 16 }}>
                               Add new to-do
                               </Text>
                             <View style={{ marginLeft: 8, height: 35, width: 35, justifyContent: 'center', alignItems: 'center' }}>
@@ -724,7 +723,7 @@ export default class Details extends React.Component {
                         <View style={{ margin: 20 }}>
                           <Text style={styles.divTitle}>Sections</Text>
 
-                          {this.state.project.sections.length === 0 && <Text style={{ fontFamily: 'Roboto-Regular', color: '#9e9e9e' }}>Your section list is empty...</Text>}
+                          {this.state.project.sections.length === 0 && <Text style={{ fontFamily: 'Lato-Regular', color: '#9e9e9e' }}>Your section list is empty...</Text>}
 
                           {this.state.project.sections.map((section, i) => (
                             <TouchableOpacity
@@ -736,8 +735,8 @@ export default class Details extends React.Component {
                               key={i}
                               style={{ marginTop: 10, backgroundColor: '#F5F5F5', borderRadius: 5, justifyContent: 'space-between', height: 60 }}>
                               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-                                <Text style={{ marginLeft: 15, fontFamily: 'Roboto-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
-                                <Text style={{ marginRight: 15, fontFamily: 'Roboto-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.filter(({ checked }) => checked === true).length}/${section.tasks.length} tasks`}</Text>
+                                <Text style={{ marginLeft: 15, fontFamily: 'Lato-Black', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                                <Text style={{ marginRight: 15, fontFamily: 'Lato-Regular', fontSize: 20, color: '#616161' }}>{`${section.tasks.filter(({ checked }) => checked === true).length}/${section.tasks.length} tasks`}</Text>
                               </View>
                               <View style={{ justifyContent: 'flex-end', marginTop: 0, width: '100%' }}>
                                 <Progress.Bar
@@ -765,7 +764,7 @@ export default class Details extends React.Component {
                               alignItems: 'center'
                             }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                              <Text style={{ fontFamily: 'Roboto-Medium', color: '#fff', fontSize: 16 }}>
+                              <Text style={{ fontFamily: 'Lato-Regular', color: '#fff', fontSize: 16 }}>
                                 Add new section
                               </Text>
                               <View style={{ marginLeft: 8, height: 35, width: 35, justifyContent: 'center', alignItems: 'center' }}>
@@ -789,17 +788,17 @@ export default class Details extends React.Component {
                 buttonColor={themes[themeKey].actionButtonColor}
               >
 
-                <ActionButton.Item buttonColor='#fbc531' textStyle={{ fontFamily: 'Roboto-Medium' }} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
+                <ActionButton.Item buttonColor='#fbc531' textStyle={{ fontFamily: 'Lato-Regular' }} title={this.state.project.isArchived ? 'Unarchive project' : 'Archive project'} onPress={() => this.archiveProject(key)}>
                   <Icon name="archive" style={styles.actionButtonIcon} />
                 </ActionButton.Item>
 
-                <ActionButton.Item buttonColor='#7f8fa6' textStyle={{ fontFamily: 'Roboto-Medium' }} title="Edit info" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
+                <ActionButton.Item buttonColor='#7f8fa6' textStyle={{ fontFamily: 'Lato-Regular' }} title="Edit info" onPress={() => this.props.navigation.navigate('Edit', { projectId: key, themeKey: themeKey })}>
                   <Icon name="circle-edit-outline" style={styles.actionButtonIcon} />
                 </ActionButton.Item>
               </ActionButton>
             </View>
             <View>
-              <Banner isPro={this.state.proVersion} />
+
             </View>
 
           </SafeAreaView>
@@ -978,7 +977,7 @@ export default class Details extends React.Component {
             <Animatable.View animation="fadeInLeft" style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginTop: 30 }}>
 
               {this.state.selectedSection && <Text
-                style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Roboto-Black', }]}>
+                style={[{ color: 'white', fontSize: 32, paddingHorizontal: 18, fontFamily: 'Lato-Black', }]}>
                 {this.state.selectedSection.title}
               </Text>}
 
@@ -992,12 +991,12 @@ export default class Details extends React.Component {
               <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 10, marginTop: 20, marginBottom: 20 }}>
                 <View style={{ margin: 20 }}>
                   <Text style={styles.divTitle}>Tasks</Text>
-                  {this.state.selectedSection && this.state.selectedSection.tasks.length === 0 && <Text style={{ fontFamily: 'Roboto-Regular', color: '#9e9e9e' }}>Your task list is empty...</Text>}
+                  {this.state.selectedSection && this.state.selectedSection.tasks.length === 0 && <Text style={{ fontFamily: 'Lato-Regular', color: '#9e9e9e' }}>Your task list is empty...</Text>}
                   {this.state.selectedSection !== null && this.state.selectedSection.tasks.map((task, i) => (
                     <View key={i}>
                       <CheckBox
                         key={i}
-                        fontFamily={'Roboto-Medium'}
+                        fontFamily={'Lato-Regular'}
                         style={{ width: '100%' }}
                         title={task.task}
                         containerStyle={{ margin: 5, padding: 10, marginLeft: 0, borderColor: 'transparent', width: '100%', }}
@@ -1072,7 +1071,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   category: {
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Lato-Black',
   },
   projectContainer: {
     padding: 20,
@@ -1095,7 +1094,7 @@ const styles = StyleSheet.create({
   fieldTitle: {
     color: '#4b4b4b',
     fontSize: 24,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Lato-Black'
   },
   newPicture: {
     borderColor: '#eee',
@@ -1109,7 +1108,7 @@ const styles = StyleSheet.create({
   },
   shareButtonText: {
     fontWeight: 'bold',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Lato-Black',
     fontSize: 16,
     color: '#FFF',
   },
@@ -1130,7 +1129,7 @@ const styles = StyleSheet.create({
     color: '#3F3E51',
     fontSize: 22,
     marginTop: 8,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Lato-Black'
   },
   shareButton: {
     borderRadius: 4,
@@ -1146,7 +1145,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     padding: 15,
     marginTop: 10,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: 'Lato-Regular',
     fontSize: 16,
   },
   placeHolder: {
@@ -1157,7 +1156,7 @@ const styles = StyleSheet.create({
     height: 150
   },
   tags: {
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Lato-Black'
   },
 
   actionButtonIcon: {

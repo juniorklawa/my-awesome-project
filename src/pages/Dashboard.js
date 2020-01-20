@@ -18,15 +18,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
-import { AdMobRewarded } from 'react-native-admob'
 import { NavigationEvents } from 'react-navigation';
 
 const height = Dimensions.get('window').height;
 import ProjectCard from '../components/ProjectCard'
 import Placeholder from '../components/Placeholder'
-import { themes } from '../components/themesProvider'
+import { themes } from '../providers/themesProvider'
 import ThemeButton from '../components/ThemeButton';
-import Banner from '../components/Banner';
 import moment from 'moment';
 
 
@@ -47,41 +45,13 @@ export default class Dashboard extends React.Component {
   };
 
   handleViewRef = ref => this.view = ref;
-
   fadeInUp = () => this.view.fadeInUp(500)
 
   static navigationOptions = {
     header: null,
   };
 
-  async rewarded() {
-    this.setState({ showLoadingAlert: true })
-    //dev
-    const adUnitId = "ca-app-pub-3940256099942544/5224354917"
-   
-    try {
-      await AdMobRewarded.setAdUnitID(adUnitId);
-      await AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
-      this.setState({ showLoadingAlert: false })
-    } catch (e) { this.setState({ showLoadingAlert: false }) }
-  }
-
-
-  async themeChange(key, isPro) {
-    const { proVersion } = this.state
-    if (isPro && !proVersion) {
-
-      Alert.alert(
-        'Ops!',
-        'Feature avaible on PRO Version!',
-        [
-          { text: 'OK' },
-        ],
-        { cancelable: false },
-      );
-      return
-    }
-
+  async themeChange(key) {
     try {
       await AsyncStorage.setItem(
         'themeKey',
@@ -98,30 +68,14 @@ export default class Dashboard extends React.Component {
 
 
   async componentDidMount() {
-
+    this.showAlert()
     const themeKeyData = await AsyncStorage.getItem('themeKey');
     const key = (await JSON.parse(themeKeyData)) || null
-    const proTimeLimit = await AsyncStorage.getItem('proTimeLimit');
-    const timeLimit = (await JSON.parse(proTimeLimit)) || null
-    const d1 = moment();
-    const d2 = timeLimit
-    const diff = moment(d2).diff(d1, 'seconds')
-
-    if (!timeLimit || diff <= 0) {
-      this.setState({ proVersion: false })
-    } else {
-      this.setState({
-        proVersion: true,
-        proEndTime: timeLimit
-      })
-    }
     if (key) {
       this.setState({ themeKey: key })
     } else {
       this.setState({ themeKey: 1 })
     }
-
-    this.showAlert()
     try {
       await this._retrieveData();
       this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
@@ -129,31 +83,11 @@ export default class Dashboard extends React.Component {
     } catch (e) {
       console.error(e)
     }
-
     this.hideAlert()
     this.fadeInUp()
-
-    AdMobRewarded.addEventListener('videoCompleted', async () => {
-      this.setState({ proVersion: true })
-      this.setState({ proTimeLimit: moment().add({ day: 1 }) })
-
-      this.state.proEndTime = this.state.proTimeLimit
-      this.forceUpdate()
-      try {
-        await AsyncStorage.setItem(
-          'proTimeLimit',
-          JSON.stringify(this.state.proTimeLimit),
-        );
-      } catch (e) {
-        console.error(e)
-      }
-
-    }
-    );
   }
 
   filterProjects() {
-
     if (!this.state.filterProjects) {
       this.setState({ hideIcon: 'eye-off' })
       this.state.displayProjects = this.state.projects.filter((project) => project.isArchived)
@@ -161,7 +95,6 @@ export default class Dashboard extends React.Component {
       this.setState({ hideIcon: 'eye' })
       this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
     }
-
     this.setState({
       filterProjects: !this.state.filterProjects,
     })
@@ -169,7 +102,6 @@ export default class Dashboard extends React.Component {
   }
 
   deleteAll() {
-
     Alert.alert(
       'Are you sure?',
       `You are going to delete all data`,
@@ -218,18 +150,19 @@ export default class Dashboard extends React.Component {
       this.setState({
         projects: newProjects,
       });
-
       await AsyncStorage.setItem(
         'keyProjects',
         JSON.stringify(this.state.projects),
       );
-    } catch (e) { }
+    } catch (e) {
+      console.error(e)
+    }
 
   }
 
   render() {
     StatusBar.setBarStyle('light-content', true);
-    const { showAlert, displayProjects, shouldReload, filterProjects, themeKey } = this.state;
+    const { showAlert, displayProjects, filterProjects, themeKey } = this.state;
 
     return (
       themeKey &&
@@ -245,8 +178,8 @@ export default class Dashboard extends React.Component {
                 if (param) {
                   this.setState({ hideIcon: 'eye' })
                   this.setState({ filterProjects: false })
-                  this.showAlert()
-                  this.hideAlert()
+                  // this.showAlert()
+                  // this.hideAlert()
                   this.fadeInUp()
                 }
               }}
@@ -288,12 +221,12 @@ export default class Dashboard extends React.Component {
                             <View style={styles.emptyContainer}>
 
                               <Text
-                                style={{ fontFamily: 'Roboto-Medium', fontSize: 60, color: '#fff' }}>
+                                style={{ fontFamily: 'Lato-Regular', fontSize: 60, color: '#fff' }}>
                                 ¯\_(ツ)_/¯
                              </Text>
 
                               <Text
-                                style={{ fontFamily: 'Roboto-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
+                                style={{ fontFamily: 'Lato-Regular', fontSize: 16, color: '#fff', marginTop: 16 }}>
                                 Your archived list is empty...
                               </Text>
 
@@ -327,7 +260,7 @@ export default class Dashboard extends React.Component {
             >
 
               <ActionButton.Item
-                textStyle={{ fontFamily: 'Roboto-Medium' }}
+                textStyle={{ fontFamily: 'Lato-Regular' }}
                 buttonColor='#455A64'
                 title='Settings'
                 onPress={() => this.setState({ modal: true })}>
@@ -335,7 +268,7 @@ export default class Dashboard extends React.Component {
               </ActionButton.Item>
 
               <ActionButton.Item
-                textStyle={{ fontFamily: 'Roboto-Medium' }}
+                textStyle={{ fontFamily: 'Lato-Regular' }}
                 buttonColor='#B00D17'
                 title='Delete all data'
                 onPress={() => this.deleteAll()}>
@@ -343,7 +276,7 @@ export default class Dashboard extends React.Component {
               </ActionButton.Item>
 
               <ActionButton.Item
-                textStyle={{ fontFamily: 'Roboto-Medium' }}
+                textStyle={{ fontFamily: 'Lato-Regular' }}
                 buttonColor='#4DB00D'
                 title="New Project"
                 onPress={() => this.props.navigation.navigate('Add', { themeKey: themeKey })}>
@@ -352,7 +285,7 @@ export default class Dashboard extends React.Component {
             </ActionButton>
           </View>
           <View>
-            <Banner isPro={this.state.proVersion} />
+
           </View>
         </SafeAreaView>
 
@@ -368,7 +301,7 @@ export default class Dashboard extends React.Component {
             <Animatable.View
               animation="fadeInLeft"
               style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', margin: 20 }}>
-              <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 32, color: '#fff' }}>
+              <Text style={{ fontFamily: 'Lato-Black', fontSize: 32, color: '#fff' }}>
                 Settings
               </Text>
               <TouchableOpacity
@@ -378,70 +311,40 @@ export default class Dashboard extends React.Component {
               </TouchableOpacity>
             </Animatable.View>
             <ScrollView>
-              <Animatable.View animation="fadeInUp"
-                duration={800}
-                style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
-                {!this.state.proVersion ?
-                  <View>
-                    <View style={{ margin: 20 }}>
-                      <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 24, color: '#4b4b4b' }}>Unlock PRO Version</Text>
-                      <Text style={{ fontFamily: 'Roboto-Medium' }}>Watch a video to Unlock new themes, and disable Advertisements for 1 day! </Text>
-                    </View>
-
-                    {!this.state.showLoadingAlert ?
-                      <TouchableOpacity style={{ backgroundColor: '#eb2f06', marginHorizontal: 20, marginBottom: 20, height: 50, borderRadius: 5, alignItems: 'center', flexDirection: 'row' }} onPress={() => this.rewarded()}>
-
-                        <Icon style={{ marginLeft: 10 }} name='play' color='#fff' size={32} />
-                        <Text style={{ color: '#fff', fontFamily: 'Roboto-Bold', fontSize: 14 }}>
-                          Watch a video
-                        </Text>
-
-                      </TouchableOpacity> :
-                      <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-                        <ActivityIndicator size="large" color="#eb2f06" />
-                      </View>}
-                  </View> :
-                  <View style={{ margin: 20 }}>
-                    <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 24, color: '#f6b93b' }}>PRO Version Unlocked</Text>
-                    <Text style={{ fontFamily: 'Roboto-Medium' }}>PRO themes unlocked and Advertisements disabled until {moment(this.state.proEndTime).format('DD/MM/YYYY hh:mm A')} </Text>
-                  </View>
-                }
-              </Animatable.View>
-
               <Animatable.View animation="fadeInUp" duration={800} style={{ backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 5, marginTop: 20, marginBottom: 20 }}>
                 <View style={{ margin: 20 }}>
-                  <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
+                  <Text style={{ fontFamily: 'Lato-Black', fontSize: 24, color: '#4b4b4b' }}>Theme</Text>
                 </View>
 
-                <TouchableOpacity onPress={() => this.themeChange(1, false)}>
-                  <ThemeButton color={'#0D4DB0'} title={'Default'} isPro={false} />
+                <TouchableOpacity onPress={() => this.themeChange(1)}>
+                  <ThemeButton color={'#0D4DB0'} title={'Default'} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.themeChange(2, true)}>
-                  <ThemeButton color={'#011627'} title={'Midnight Blue'} isPro={true} />
+                <TouchableOpacity onPress={() => this.themeChange(2)}>
+                  <ThemeButton color={'#011627'} title={'Midnight Blue'} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.themeChange(3, false)} >
-                  <ThemeButton color={'#5f27cd'} title={'Nasu Purple'} isPro={false} />
+                <TouchableOpacity onPress={() => this.themeChange(3)} >
+                  <ThemeButton color={'#5f27cd'} title={'Nasu Purple'} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.themeChange(4, false)}>
-                  <ThemeButton color={'#6ab04c'} title={'Pure Apple'} isPro={false} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => this.themeChange(5, true)}>
-                  <ThemeButton color={'#000'} title={'Black'} isPro={true} />
+                <TouchableOpacity onPress={() => this.themeChange(4)}>
+                  <ThemeButton color={'#6ab04c'} title={'Pure Apple'} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => this.themeChange(6, true)}>
-                  <ThemeButton color={'#ff7979'} title={'Pink Glamour'} isPro={true} />
+                  onPress={() => this.themeChange(5)}>
+                  <ThemeButton color={'#000'} title={'Black'} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => this.themeChange(7, true)}>
-                  <ThemeButton color={'#f9ca24'} title={'Turbo'} isPro={true} />
+                  onPress={() => this.themeChange(6)}>
+                  <ThemeButton color={'#ff7979'} title={'Pink Glamour'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => this.themeChange(7)}>
+                  <ThemeButton color={'#f9ca24'} title={'Turbo'} />
                 </TouchableOpacity>
               </Animatable.View>
             </ScrollView>
@@ -467,7 +370,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#FFF',
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Lato-Black',
     fontSize: 32,
     marginLeft: 18,
     marginTop: 32
@@ -526,7 +429,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 20,
     margin: 20,
-    fontFamily: 'Roboto-Thin',
+    fontFamily: 'Lato-Thin',
     alignContent: 'center',
     justifyContent: 'center',
     textAlign: 'center',

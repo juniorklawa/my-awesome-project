@@ -10,7 +10,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import LottieView from 'lottie-react-native';
 import * as Animatable from 'react-native-animatable'
 import { Backdrop } from "react-native-backdrop";
-import { themes, theme } from '../components/themesProvider'
+import { themes } from '../providers/themesProvider'
 import moment from 'moment';
 import {
   View,
@@ -277,7 +277,7 @@ export default class New extends Component {
                 <Picker
                   mode="dropdown"
                   iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
-                  style={{ width: '100%', fontFamily: 'Roboto-Medium' }}
+                  style={{ width: '100%', fontFamily: 'Lato-Regular' }}
                   value={estimatedInterval}
                   onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
                   placeholder="Select one option"
@@ -395,7 +395,7 @@ export default class New extends Component {
                     style={styles.newPicture}
                     onPress={() => this.handleSelectImage()}>
                     <Icon name="image" size={35} color={themes[themeKey].accentColor} style={styles.actionButtonIcon} />
-                    <Text style={{ color:themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Roboto-Bold', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
+                    <Text style={{ color: themes[themeKey].accentColor, fontSize: 12, fontFamily: 'Lato-Black', margin: 8, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>Add new picture</Text>
                   </TouchableOpacity>
                 </View>
               </ScrollView> :
@@ -430,7 +430,7 @@ export default class New extends Component {
                     <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
                       To-do
                 </Text>
-                    <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Roboto-Regular' }}>
+                    <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Lato-Regular' }}>
                       Simple, and general tasks
                   </Text>
                   </View>
@@ -487,7 +487,7 @@ export default class New extends Component {
               <Text style={[styles.fieldTitle, { marginBottom: 8 }]}>
                 Sections
                   </Text>
-              <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Roboto-Regular' }}>
+              <Text style={{ color: '#666', marginLeft: 3, fontFamily: 'Lato-Regular' }}>
                 Groups of tasks, like a version, or a step of your project/idea
                 </Text>
 
@@ -498,8 +498,8 @@ export default class New extends Component {
                   <TouchableOpacity
                     onLongPress={() => this.deleteSection(section)}
                     key={i} style={{ marginTop: 10, backgroundColor: '#F5F5F5', flexDirection: 'row', borderRadius: 5, minHeight: 60, alignItems: 'center', justifyContent: 'space-between' }} >
-                    <Text style={{ marginLeft: 15, fontFamily: 'Roboto-Bold', fontSize: 18, color: '#616161' }}>{section.title}</Text>
-                    <Text style={{ marginRight: 15, fontFamily: 'Roboto-Medium', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
+                    <Text style={{ marginLeft: 15, fontFamily: 'Lato-Black', fontSize: 18, color: '#616161' }}>{section.title}</Text>
+                    <Text style={{ marginRight: 15, fontFamily: 'Lato-Regular', fontSize: 20, color: '#616161' }}>{`${section.tasks.length} tasks`}</Text>
                   </TouchableOpacity>
                 ))}
 
@@ -515,7 +515,7 @@ export default class New extends Component {
                     alignItems: 'center'
                   }}>
                   <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontFamily: 'Roboto-Medium', color: '#fff', fontSize: 16 }}>
+                    <Text style={{ fontFamily: 'Lato-Regular', color: '#fff', fontSize: 16 }}>
                       Add new section
                    </Text>
                     <View style={{ marginLeft: 8, height: 35, width: 35, borderRadius: 35 / 2, backgroundColor: '#56B90E', justifyContent: 'center', alignItems: 'center' }}>
@@ -751,7 +751,7 @@ export default class New extends Component {
 
     return (
       themeKey &&
-      <LinearGradient style={{ flex: 1, backgroundColor:'#000' }
+      <LinearGradient style={{ flex: 1, backgroundColor: '#000' }
       } colors={[themes[themeKey].backgroundColor, themes[themeKey].backgroundColor, themes[themeKey].backgroundColor]} >
         <StatusBar backgroundColor={themes[themeKey].backgroundColor} barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
@@ -809,7 +809,7 @@ export default class New extends Component {
                     onPress={() => this.setState({
                       step: this.state.step + 1
                     })}>
-                    <Text style={{ fontFamily: 'Roboto-Black', color: '#84A9DC' }}>
+                    <Text style={{ fontFamily: 'Lato-Black', color: '#84A9DC' }}>
                       Skip
                   </Text>
                   </TouchableOpacity> : null
@@ -839,10 +839,10 @@ export default class New extends Component {
                 </View>
               </ScrollView>
               <TouchableOpacity
-                style={[styles.shareButton,{backgroundColor:themes[themeKey].secondaryColor, flexDirection:'row'}]}
+                style={[styles.shareButton, { backgroundColor: themes[themeKey].secondaryColor, flexDirection: 'row' }]}
                 onPress={() => this.handleSubmit()}>
                 <Text style={styles.shareButtonText}>{this.state.step < this.state.stepLength ? 'Next step' : 'Create new project'}</Text>
-                { this.state.step < this.state.stepLength ? <Icon name='chevron-right' size={24} color={"#fff"}/> : <Icon style={{marginLeft:10}} name='check' size={24} color={"#fff"}/>}
+                {this.state.step < this.state.stepLength ? <Icon name='chevron-right' size={24} color={"#fff"} /> : <Icon style={{ marginLeft: 10 }} name='check' size={24} color={"#fff"} />}
               </TouchableOpacity>
             </View>
             <Modal
@@ -852,7 +852,7 @@ export default class New extends Component {
               <View style={{ flex: 1, backgroundColor: themes[themeKey].backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
                 <LottieView style={{ height: 150, width: '50%' }} source={require('../icons/animation.json')} autoPlay />
                 <Animatable.View duration={800} animation='fadeInUpBig'>
-                  <Text style={{ fontFamily: 'Roboto-Bold', color: '#fff', fontSize: 25 }} animation='fadeIn'>Project created!</Text>
+                  <Text style={{ fontFamily: 'Lato-Black', color: '#fff', fontSize: 25 }} animation='fadeIn'>Project created!</Text>
                 </Animatable.View>
 
               </View>
@@ -972,7 +972,7 @@ const styles = StyleSheet.create({
   labelTitle: {
     color: '#1679D9',
     fontSize: 16,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Lato-Black',
     marginTop: 16
   },
   imgSlider: {
@@ -1031,7 +1031,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     paddingHorizontal: 18,
     marginBottom: 10,
-    fontFamily: 'Roboto-Black'
+    fontFamily: 'Lato-Black'
   },
   selectInput: {
     borderRadius: 4,
@@ -1055,7 +1055,7 @@ const styles = StyleSheet.create({
   fieldTitle: {
     color: '#4b4b4b',
     fontSize: 24,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Lato-Black'
   },
   heroImg: {
     width: '100%',
@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#F7F7F7",
     padding: 15,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: 'Lato-Regular',
     marginTop: 10,
     fontSize: 16,
   },
@@ -1103,7 +1103,7 @@ const styles = StyleSheet.create({
   },
 
   shareButtonText: {
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Lato-Black',
     fontSize: 16,
     borderRadius: 8,
     color: '#FFF',

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { showMessage, hideMessage } from "react-native-flash-message";
-import { ListItem, Overlay } from 'react-native-elements';
+import { showMessage } from "react-native-flash-message";
+import { Overlay } from 'react-native-elements';
 import { Picker } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import UUIDGenerator from 'react-native-uuid-generator';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
-import { themes, theme } from '../components/themesProvider'
+import { themes } from '../providers/themesProvider'
 import moment from 'moment';
 import {
   View,
@@ -156,7 +155,7 @@ export default class Edit extends Component {
         quality: 0.1,
         path: 'myawesomeproject',
       },
-    };
+  };
 
     ImagePicker.showImagePicker(options, response => {
       if (response.error) {
@@ -411,7 +410,7 @@ export default class Edit extends Component {
                             <Picker
                               mode="dropdown"
                               iosIcon={<Icon color={themes[themeKey].accentColor} name="chevron-down" />}
-                              style={{ width: '100%', fontFamily: 'Roboto-Medium' }}
+                              style={{ width: '100%', fontFamily: 'Lato-Regular' }}
                               value={estimatedInterval}
                               onChangeText={estimatedInterval => this.setState({ estimatedInterval })}
                               placeholder="Select one option"
@@ -530,7 +529,7 @@ const styles = StyleSheet.create({
   labelTitle: {
     color: '#8c7ae6',
     fontSize: 16,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Lato-Black',
     marginTop: 16
   },
   imgSlider: {
@@ -598,7 +597,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     paddingHorizontal: 18,
     marginBottom: 10,
-    fontFamily: 'Roboto-Black'
+    fontFamily: 'Lato-Black'
   },
   selectInput: {
     borderRadius: 4,
@@ -622,7 +621,7 @@ const styles = StyleSheet.create({
   fieldTitle: {
     color: '#4b4b4b',
     fontSize: 24,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Lato-Black'
   },
   heroImg: {
     width: '100%',
@@ -644,7 +643,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "#F7F7F7",
     padding: 15,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: 'Lato-Regular',
     marginTop: 10,
     fontSize: 16,
   },
@@ -660,7 +659,7 @@ const styles = StyleSheet.create({
   },
 
   shareButtonText: {
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Lato-Black',
     fontSize: 16,
     color: '#FFF',
   },
