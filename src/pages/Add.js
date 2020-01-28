@@ -91,19 +91,19 @@ export default class New extends Component {
 
       const data = await AsyncStorage.getItem('keyProjects');
       const projects = (await JSON.parse(data)) || [];
-      await this.setState({
+      this.setState({
         projects: projects,
         projectId: projectId,
       });
 
       const detail = await this.state.projects.find(obj => obj.key === projectId);
       const todoDetail = await detail.todo;
-      await this.setState({
+      this.setState({
         project: detail,
         todo: todoDetail,
       });
 
-      await this.setState({
+      this.setState({
         title: this.state.project.title,
         shortDescription: this.state.project.shortDescription,
         tags: this.state.project.tags,
@@ -117,7 +117,7 @@ export default class New extends Component {
     } else {
       const data = await AsyncStorage.getItem('keyProjects');
       const projects = (await JSON.parse(data)) || [];
-      await this.setState({
+      this.setState({
         projects: projects,
       });
 
@@ -671,9 +671,24 @@ export default class New extends Component {
   }
 
   handleSubmit = async () => {
+    const { title,
+      shortDescription,
+      category,
+      tags,
+      priority,
+      worktime,
+      estimatedTime,
+      estimatedInterval,
+      images,
+      todo,
+      sections,
+      doneTasks,
+      step,
+      stepLength,
+      projects,
+    } = this.state
 
-
-    if ((!this.state.title || !this.state.shortDescription) && this.state.step === 0) {
+    if ((!title || !shortDescription) && step === 0) {
       this.bounce()
       showMessage({
         message: 'Title and description are obligatory',
@@ -681,45 +696,28 @@ export default class New extends Component {
       });
       return
     }
-    if (this.state.step < this.state.stepLength) {
+
+    if (step < stepLength) {
       this.setState({
         step: this.state.step + 1
       })
       this.fadeInRight()
-
       return
     }
 
     const projectId = this.props.navigation.getParam('projectId', null);
     if (projectId !== null) {
-      this.state.projects
-        .filter(project => {
-          return project.key === this.state.projectId
-        })
-        .map(project => {
-          project.title = this.state.title
-          project.shortDescription = this.state.shortDescription,
-            project.category = this.state.category,
-            project.tags = this.state.tags,
-            project.worktime = this.state.estimatedTime + ' ' + this.state.estimatedInterval
-        });
+      projects.filter(project => {
+        return project.key === projectId
+      }).map(project => {
+        project.title = title
+        project.shortDescription = shortDescription,
+          project.category = category,
+          project.tags = tags,
+          project.worktime = estimatedTime + ' ' + estimatedInterval
+      });
 
     } else {
-
-      const { title,
-        shortDescription,
-        category,
-        tags,
-        priority,
-        worktime,
-        estimatedTime,
-        estimatedInterval,
-        images,
-        todo,
-        sections,
-        doneTasks
-      } = this.state
-
       const project = {
         title,
         shortDescription,
@@ -737,27 +735,7 @@ export default class New extends Component {
         isArchived: false,
         doneTasks
       }
-
-      await this.state.projects.unshift(project)
-
-      // await this.state.projects.unshift({
-      //   title: this.state.title,
-      //   shortDescription: this.state.shortDescription,
-      //   category: this.state.category,
-      //   tags: this.state.tags,
-      //   priority: this.state.priority,
-      //   worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
-      //   estimatedTime: this.state.estimatedTime,
-      //   estimatedInterval: this.state.estimatedInterval,
-      //   images: this.state.previews,
-      //   key: await UUIDGenerator.getRandomUUID(),
-      //   date: moment(),
-      //   todo: this.state.todo,
-      //   sections: this.state.sections,
-
-      //   doneTasks: this.state.doneTasks,
-      // });
-
+      this.state.projects.unshift(project)
     }
     this.save()
     this.setState({ finishModal: true })
@@ -768,9 +746,10 @@ export default class New extends Component {
   };
 
   async save() {
+    const { projects } = this.state
     await AsyncStorage.setItem(
       'keyProjects',
-      JSON.stringify(this.state.projects),
+      JSON.stringify(projects),
     );
   }
 

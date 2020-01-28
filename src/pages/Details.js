@@ -300,8 +300,6 @@ export default class Details extends React.Component {
   }
 
   generateTags(tags) {
-    console.log(tags)
-    //return ["Teste", "Android"]
     return tags.split(/,| /).filter((word) => word !== "")
   }
 
