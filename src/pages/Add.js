@@ -549,7 +549,6 @@ export default class New extends Component {
     const newTodoList = this.state.todoSection.filter((task, index) => index !== i)
     this.state.todoSection = newTodoList
     this.forceUpdate()
-    //AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
   }
 
   deleteImage(i) {
@@ -707,23 +706,57 @@ export default class New extends Component {
 
     } else {
 
-      await this.state.projects.unshift({
-        title: this.state.title,
-        shortDescription: this.state.shortDescription,
-        category: this.state.category,
-        tags: this.state.tags,
-        priority: this.state.priority,
-        worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
-        estimatedTime: this.state.estimatedTime,
-        estimatedInterval: this.state.estimatedInterval,
-        images: this.state.previews,
+      const { title,
+        shortDescription,
+        category,
+        tags,
+        priority,
+        worktime,
+        estimatedTime,
+        estimatedInterval,
+        images,
+        todo,
+        sections,
+        doneTasks
+      } = this.state
+
+      const project = {
+        title,
+        shortDescription,
+        category,
+        tags,
+        priority,
+        worktime,
+        estimatedTime,
+        estimatedInterval,
+        images,
         key: await UUIDGenerator.getRandomUUID(),
         date: moment(),
-        todo: this.state.todo,
-        sections: this.state.sections,
+        todo,
+        sections,
         isArchived: false,
-        doneTasks: this.state.doneTasks,
-      });
+        doneTasks
+      }
+
+      await this.state.projects.unshift(project)
+
+      // await this.state.projects.unshift({
+      //   title: this.state.title,
+      //   shortDescription: this.state.shortDescription,
+      //   category: this.state.category,
+      //   tags: this.state.tags,
+      //   priority: this.state.priority,
+      //   worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
+      //   estimatedTime: this.state.estimatedTime,
+      //   estimatedInterval: this.state.estimatedInterval,
+      //   images: this.state.previews,
+      //   key: await UUIDGenerator.getRandomUUID(),
+      //   date: moment(),
+      //   todo: this.state.todo,
+      //   sections: this.state.sections,
+
+      //   doneTasks: this.state.doneTasks,
+      // });
 
     }
     this.save()
