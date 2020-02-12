@@ -155,7 +155,7 @@ export default class New extends Component {
           <Text
             style={styles.headerTitle}>
             Your awesome To-do list...
-            </Text>
+          </Text>
         )
     }
   }
@@ -733,7 +733,8 @@ export default class New extends Component {
         todo,
         sections,
         isArchived: false,
-        doneTasks
+        doneTasks,
+        updatedAt: moment(),
       }
       this.state.projects.unshift(project)
     }

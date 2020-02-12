@@ -1,31 +1,18 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  StatusBar,
-  ScrollView,
-  TouchableOpacity,
-  Dimensions,
-  Alert,
-  Modal,
-  ActivityIndicator
-} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import React from 'react';
+import { Alert, Dimensions, Image, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import LinearGradient from 'react-native-linear-gradient';
-import { SafeAreaView } from 'react-navigation';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
-import { NavigationEvents } from 'react-navigation';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NavigationEvents, SafeAreaView } from 'react-navigation';
+import Placeholder from '../components/Placeholder';
+import ProjectCard from '../components/ProjectCard';
+import ThemeButton from '../components/ThemeButton';
+import { themes } from '../providers/themesProvider'
+import sort from 'fast-sort';
 
 const height = Dimensions.get('window').height;
-import ProjectCard from '../components/ProjectCard'
-import Placeholder from '../components/Placeholder'
-import { themes } from '../providers/themesProvider'
-import ThemeButton from '../components/ThemeButton';
-import moment from 'moment';
 
 
 export default class Dashboard extends React.Component {
@@ -78,13 +65,32 @@ export default class Dashboard extends React.Component {
     }
     try {
       await this._retrieveData();
+      this.setState({
+        projects: sort(this.state.projects).desc(project => project.updatedAt)
+      })
       this.state.displayProjects = this.state.projects.filter((project) => !project.isArchived)
       this.forceUpdate()
     } catch (e) {
       console.error(e)
     }
+    this.state.projects.map((project) => {
+      if (!project.updatedAt) {
+        project.updatedAt = project.date
+      }
+    })
+    this.save();
+    const arrayTeste = sort(this.state.projects).desc(project => project.updatedAt)
+    console.log('projects: ', arrayTeste)
     this.hideAlert()
     this.fadeInUp()
+  }
+
+  async save() {
+    const { projects } = this.state
+    await AsyncStorage.setItem(
+      'keyProjects',
+      JSON.stringify(projects),
+    );
   }
 
   filterProjects() {
@@ -98,7 +104,6 @@ export default class Dashboard extends React.Component {
     this.setState({
       filterProjects: !this.state.filterProjects,
     })
-
   }
 
   deleteAll() {
@@ -175,6 +180,9 @@ export default class Dashboard extends React.Component {
                 const param = this.props.navigation.getParam('isFirst');
                 this.setState({ shouldReload: param })
                 this._retrieveData()
+                this.setState({
+                  projects: sort(this.state.projects).desc(project => project.updatedAt)
+                })
                 if (param) {
                   this.setState({ hideIcon: 'eye' })
                   this.setState({ filterProjects: false })
@@ -366,6 +374,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 20,
     justifyContent: 'space-between'
   },
   headerTitle: {

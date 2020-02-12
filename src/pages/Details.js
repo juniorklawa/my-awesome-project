@@ -1,35 +1,22 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  Alert,
-  Image,
-  Modal
-} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { CheckBox } from 'react-native-elements';
-import * as Animatable from 'react-native-animatable';
-import { SafeAreaView } from 'react-navigation';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ActionButton from 'react-native-action-button';
-import LinearGradient from 'react-native-linear-gradient';
-import { Overlay, ListItem } from 'react-native-elements';
-import UUIDGenerator from 'react-native-uuid-generator';
-import AwesomeAlert from 'react-native-awesome-alerts';
-import ImageViewer from 'react-native-image-zoom-viewer';
-import ImagePicker from 'react-native-image-picker';
-import { Badge } from 'react-native-elements'
-import { Backdrop } from "react-native-backdrop";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
-import * as Progress from 'react-native-progress';
-import { themes } from '../providers/themesProvider'
 import moment from 'moment';
+import React from 'react';
+import { Alert, Image, Modal, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import ActionButton from 'react-native-action-button';
+import * as Animatable from 'react-native-animatable';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { Backdrop } from "react-native-backdrop";
+import { Badge, CheckBox, ListItem, Overlay } from 'react-native-elements';
+import { showMessage } from "react-native-flash-message";
+import ImagePicker from 'react-native-image-picker';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import LinearGradient from 'react-native-linear-gradient';
+import * as Progress from 'react-native-progress';
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import UUIDGenerator from 'react-native-uuid-generator';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SafeAreaView } from 'react-navigation';
+import { themes } from '../providers/themesProvider';
 
 export default class Details extends React.Component {
 
@@ -66,14 +53,6 @@ export default class Details extends React.Component {
     const key = this.props.navigation.getParam('themeKey', 'NO-THEME-KEY')
     this.setState({ themeKey: key })
 
-    const isPro = await AsyncStorage.getItem('proTimeLimit')
-
-    if (isPro) {
-      this.setState({ proVersion: true })
-    } else {
-      this.setState({ proVersion: false })
-    }
-
     this.showAlert()
     const projectId = this.props.navigation.getParam('projectId', 'NO-ID');
     const data = await AsyncStorage.getItem('keyProjects');
@@ -89,6 +68,7 @@ export default class Details extends React.Component {
       todo: todoDetail,
     });
     this.state.images = detail.images
+
     this.forceUpdate()
     this.hideAlert()
   }
