@@ -43,6 +43,7 @@ export default class Edit extends Component {
     currentHeight: null,
     isVisible: false,
     visibleModal: false,
+    updatedAt: moment(),
     imgViewerUri: '',
     previews: [],
     defaultCategory: true,
@@ -94,7 +95,7 @@ export default class Edit extends Component {
         worktime: this.state.worktime,
         category: this.state.project.category,
         priority: this.state.project.priority,
-        previews: this.state.project.images
+        previews: this.state.project.images,
       });
     } else {
       const data = await AsyncStorage.getItem('keyProjects');
@@ -155,7 +156,7 @@ export default class Edit extends Component {
         quality: 0.1,
         path: 'myawesomeproject',
       },
-  };
+    };
 
     ImagePicker.showImagePicker(options, response => {
       if (response.error) {
@@ -176,6 +177,8 @@ export default class Edit extends Component {
   }
 
   handleSubmit = async () => {
+
+
     if (!this.state.title || !this.state.shortDescription) {
       Alert.alert(
         'Ops!',
@@ -189,38 +192,56 @@ export default class Edit extends Component {
     }
 
     const projectId = this.props.navigation.getParam('projectId', null);
+    const {
+      title,
+      shortDescription,
+      category,
+      tags,
+      priority,
+      worktime,
+      estimatedTime,
+      estimatedInterval,
+      images,
+      date,
+      todo,
+      doneTasks,
+      updatedAt
+    } = this.state
+
     if (projectId !== null) {
       this.state.projects
         .filter(project => {
           return project.key === this.state.projectId
         })
         .map(project => {
-          project.title = this.state.title
-          project.shortDescription = this.state.shortDescription,
-            project.category = this.state.category,
-            project.tags = this.state.tags,
-            project.worktime = this.state.estimatedTime + ' ' + this.state.estimatedInterval
-          project.priority = this.state.priority
+          project.title = title
+          project.shortDescription = shortDescription,
+            project.category = category,
+            project.tags = tags,
+            project.worktime = estimatedTime + ' ' + estimatedInterval,
+            project.priority = priority,
+            project.updatedAt = moment()
         });
 
     } else {
-
-      await this.state.projects.unshift({
-        title: this.state.title,
-        shortDescription: this.state.shortDescription,
-        category: this.state.category,
-        tags: this.state.tags,
-        priority: this.state.priority,
-        worktime: this.state.estimatedTime + ' ' + this.state.estimatedInterval,
-        estimatedTime: this.state.estimatedTime,
-        estimatedInterval: this.state.estimatedInterval,
-        images: this.state.previews,
+      const updatedProject = {
+        title,
+        shortDescription,
+        category,
+        tags,
+        priority,
+        worktime,
+        estimatedTime,
+        estimatedInterval,
+        images,
         key: await UUIDGenerator.getRandomUUID(),
-        date: this.state.date,
-        todo: this.state.todo,
+        date,
+        todo,
         isArchived: false,
-        doneTasks: this.state.doneTasks,
-      });
+        doneTasks,
+        updatedAt: moment()
+      }
+      this.state.projects.unshift(updatedProject);
 
     }
 
