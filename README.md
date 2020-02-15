@@ -36,6 +36,5 @@ This project is licensed under the MIT License
 
 ## To-do
 
-- [ ] Use PouchDB or Realm instead of Async Storage
 - [ ] Refactor spaghetti code
 - [ ] Separate components style from component
