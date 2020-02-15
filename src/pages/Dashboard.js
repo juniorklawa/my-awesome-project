@@ -79,8 +79,6 @@ export default class Dashboard extends React.Component {
       }
     })
     this.save();
-    const arrayTeste = sort(this.state.projects).desc(project => project.updatedAt)
-    console.log('projects: ', arrayTeste)
     this.hideAlert()
     this.fadeInUp()
   }
