@@ -39,4 +39,3 @@ This project is licensed under the MIT License
 - [ ] Use PouchDB or Realm instead of Async Storage
 - [ ] Refactor spaghetti code
 - [ ] Separate components style from component
-- [ ] Add tests
