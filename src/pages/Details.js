@@ -250,6 +250,7 @@ export default class Details extends React.Component {
       this.state.project.doneTasks--
     }
     this.state.project.todo = this.state.todo
+    this.didChanged()
     this.save()
   }
 
@@ -257,12 +258,14 @@ export default class Details extends React.Component {
     const newTodoList = this.state.selectedSection.tasks.filter((task, index) => index !== i)
     this.state.selectedSection.tasks = newTodoList
     this.forceUpdate()
+    this.didChanged()
     this.save()
   }
 
   deleteNewSectionTodo(i) {
     const newTodoList = this.state.todoSection.filter((task, index) => index !== i)
     this.state.todoSection = newTodoList
+    this.didChanged()
     this.forceUpdate()
   }
 
@@ -270,6 +273,7 @@ export default class Details extends React.Component {
     try {
       this.state.project.images = this.state.project.images.filter((imagePath, index) => index !== i)
       this.forceUpdate()
+      this.didChanged()
       this.save()
 
     } catch (e) { }
@@ -302,8 +306,13 @@ export default class Details extends React.Component {
     this.setState({
       todoSectionItem: '',
     });
+    this.didChanged();
     AsyncStorage.setItem('keyProjects', JSON.stringify(this.state.projects));
   };
+
+  didChanged() {
+    this.state.project.updatedAt = moment()
+  }
 
   addNewSectionTodo = async () => {
 
@@ -324,6 +333,7 @@ export default class Details extends React.Component {
     this.setState({
       todoSectionItem: '',
     });
+    this.didChanged();
     this.save()
   };
 
@@ -337,6 +347,7 @@ export default class Details extends React.Component {
             const newSectionList = this.state.project.sections.filter((section) => section.key !== clickedSection.key)
             this.state.project.sections = newSectionList
             this.forceUpdate()
+            this.didChanged();
             this.save()
           }
         },
@@ -381,6 +392,7 @@ export default class Details extends React.Component {
     this.setState({
       isVisible: false
     })
+    this.didChanged();
     this.save()
   };
 
@@ -399,6 +411,7 @@ export default class Details extends React.Component {
       worktime,
       date,
       images,
+      updatedAt
     } = this.state.project;
 
 
@@ -648,7 +661,7 @@ export default class Details extends React.Component {
                                   project.todo = this.state.project.todo;
                                   project.doneTasks = trueArray;
                                 });
-
+                              this.didChanged()
                               AsyncStorage.setItem(
                                 'keyProjects',
                                 JSON.stringify(this.state.projects),

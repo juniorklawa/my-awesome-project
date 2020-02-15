@@ -137,10 +137,12 @@ export default class Dashboard extends React.Component {
 
   async _retrieveData() {
     try {
+      console.log('_retrieveData')
       const data = await AsyncStorage.getItem('keyProjects');
-      const projects = (await JSON.parse(data)) || [];
-      const filteredProjects = projects.filter((project) => !project.isArchived)
-      await this.setState({
+      const projects = sort((await JSON.parse(data))).desc(project => project.updatedAt) || [];
+      console.log('projects', projects)
+      const filteredProjects = sort(projects.filter((project) => !project.isArchived)).desc(project => project.updatedAt)
+      this.setState({
         projects: projects,
         displayProjects: filteredProjects,
       });

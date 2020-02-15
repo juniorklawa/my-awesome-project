@@ -220,7 +220,7 @@ export default class Edit extends Component {
             project.tags = tags,
             project.worktime = estimatedTime + ' ' + estimatedInterval,
             project.priority = priority,
-            project.updatedAt = updatedAt
+            project.updatedAt = moment()
         });
 
     } else {
